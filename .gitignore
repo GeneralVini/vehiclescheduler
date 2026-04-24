@@ -1,0 +1,33 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Logs / temp
+*.log
+*.tmp
+*.swp
+*.swo
+
+# Backup files
+*.bk
+*.bak
+
+# Node
+node_modules/
+
+# Tests / reports / cache
+coverage/
+.phpunit.result.cache
+.php-cs-fixer.cache
+phpstan-baseline.neon
+
+# Local env
+.env
+.env.local
+
+# Archive / build output
+*.zip
+dist/
+build/

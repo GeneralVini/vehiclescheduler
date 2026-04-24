@@ -1,0 +1,428 @@
+/* =========================================================
+   Vehiclescheduler - Management page
+   Fieldset toolbar + compact controls
+   ========================================================= */
+
+.vs-page-management .vs-dashboard-wrap {
+    max-width: 1680px;
+    margin: 10px auto 18px;
+    padding: 0 10px 14px;
+}
+
+.vs-page-management .vs-dashboard-hero {
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    border-radius: 20px;
+}
+
+.vs-page-management .vs-mgmt-toolbar {
+    margin: 0;
+    padding: 8px 12px 12px;
+    border: 1px solid var(--vs-dashboard-border);
+    border-radius: 18px;
+    background: var(--vs-dashboard-card-bg);
+}
+
+.vs-page-management .vs-mgmt-toolbar legend {
+    padding: 0 8px;
+}
+
+.vs-page-management .vs-mgmt-toolbar__legend {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--vs-dashboard-text);
+    font-size: 1rem;
+    font-weight: 900;
+}
+
+.vs-page-management .vs-mgmt-toolbar__legend i {
+    color: var(--vs-primary);
+}
+
+.vs-page-management .vs-mgmt-toolbar__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.vs-page-management .vs-dashboard-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.vs-page-management .vs-action-btn {
+    height: 38px;
+    padding: 0 18px;
+    border-radius: 14px;
+    font-size: .97rem;
+    font-weight: 850;
+    gap: 8px;
+    box-shadow: 0 10px 22px rgba(59, 130, 246, 0.18);
+}
+
+.vs-page-management .vs-action-btn:hover {
+    box-shadow: 0 12px 24px rgba(59, 130, 246, 0.22);
+}
+
+.vs-page-management .vs-visual-controls {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.vs-page-management .vs-control-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    border-radius: 14px;
+}
+
+.vs-page-management .vs-control-btn {
+    min-width: 30px;
+    height: 30px;
+    padding: 0 8px;
+    border-radius: 9px;
+    font-size: .84rem;
+    font-weight: 800;
+}
+
+.vs-page-management .vs-control-btn--label {
+    min-width: auto;
+    height: 38px;
+    padding: 0 14px;
+    border-radius: 14px;
+    background: var(--vs-dashboard-card-bg);
+    border: 1px solid var(--vs-dashboard-border);
+    box-shadow: var(--vs-dashboard-shadow-soft);
+}
+
+.vs-page-management .vs-control-btn--label:hover {
+    background: var(--vs-primary-soft);
+}
+
+.vs-page-management .vs-theme-toggle label {
+    width: 88px;
+    height: 32px;
+}
+
+.vs-page-management .vs-theme-toggle label:after {
+    width: 28px;
+    height: 28px;
+    top: 1px;
+    left: 2px;
+}
+
+.vs-page-management .vs-theme-toggle input:checked+label:after {
+    left: 86px;
+    transform: translateX(-100%);
+}
+
+.vs-page-management .vs-theme-toggle label svg {
+    width: 15px;
+    top: 8px;
+}
+
+.vs-page-management .vs-theme-toggle label svg.sun {
+    left: 9px;
+}
+
+.vs-page-management .vs-theme-toggle label svg.moon {
+    left: 63px;
+}
+
+/* KPI cards */
+.vs-page-management .vs-ops-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.vs-page-management .vs-kpi-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    padding: 14px 14px 12px;
+    min-height: 84px;
+    text-decoration: none;
+}
+
+.vs-page-management .vs-kpi-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 4px;
+    background: var(--vs-primary);
+    opacity: .95;
+}
+
+.vs-page-management .vs-kpi-card::after {
+    content: "";
+    position: absolute;
+    right: -20px;
+    bottom: -24px;
+    width: 72px;
+    height: 72px;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(59, 130, 246, .10), rgba(59, 130, 246, 0));
+    pointer-events: none;
+}
+
+.vs-page-management .vs-kpi-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 28px rgba(2, 8, 23, .08);
+    text-decoration: none;
+}
+
+.vs-page-management .vs-kpi-value {
+    position: relative;
+    z-index: 1;
+    margin: 0 0 8px;
+    font-size: 2.15rem;
+    line-height: 1;
+    font-weight: 950;
+    color: var(--vs-primary);
+}
+
+.vs-page-management .vs-kpi-label {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    font-size: .8rem;
+    line-height: 1.15rem;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+    font-weight: 900;
+    color: var(--vs-dashboard-muted);
+}
+
+.vs-page-management .vs-ops-grid> :nth-child(3)::before {
+    background: var(--vs-danger);
+}
+
+.vs-page-management .vs-ops-grid> :nth-child(3) .vs-kpi-value {
+    color: var(--vs-danger);
+}
+
+.vs-page-management .vs-ops-grid> :nth-child(5)::before {
+    background: var(--vs-warning);
+}
+
+.vs-page-management .vs-ops-grid> :nth-child(5) .vs-kpi-value {
+    color: #d97706;
+}
+
+.vs-page-management .vs-kpi-card--static::before {
+    background: var(--vs-neutral);
+}
+
+.vs-page-management .vs-kpi-card--static .vs-kpi-value {
+    color: var(--vs-neutral);
+}
+
+/* Module cards */
+.vs-page-management .vs-link-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.vs-page-management .vs-link-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 134px;
+    padding: 14px;
+    border-radius: 16px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.vs-page-management .vs-link-card:hover {
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 16px 30px rgba(2, 8, 23, .08);
+    border-color: color-mix(in srgb, var(--vs-primary) 22%, var(--vs-dashboard-border));
+}
+
+.vs-page-management .vs-link-card__head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    flex-wrap: nowrap;
+}
+
+.vs-page-management .vs-link-card__icon {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    border-radius: 12px;
+    font-size: 1.15rem;
+    color: var(--vs-primary);
+    background: var(--vs-dashboard-card-bg-soft);
+    border: 1px solid var(--vs-dashboard-border);
+}
+
+.vs-page-management .vs-link-card__title {
+    margin: 0;
+    min-width: 0;
+    font-size: 1.08rem;
+    line-height: 1.2;
+    font-weight: 900;
+    color: var(--vs-dashboard-text);
+}
+
+.vs-page-management .vs-link-card__desc {
+    margin: 0;
+    min-height: 2.8em;
+    font-size: .95rem;
+    line-height: 1.42rem;
+    color: var(--vs-dashboard-muted);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Widgets */
+.vs-page-management .vs-main-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.vs-page-management .vs-main-grid:first-of-type {
+    grid-template-columns: 1fr;
+}
+
+.vs-page-management .vs-card {
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.vs-page-management .vs-card-header {
+    padding: 12px 16px;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.vs-page-management .vs-card-title {
+    font-size: 1rem;
+    gap: 8px;
+}
+
+.vs-page-management .vs-card-link {
+    font-size: .96rem;
+    font-weight: 900;
+}
+
+.vs-page-management .vs-empty-state {
+    padding: 18px 16px;
+    font-size: .95rem;
+}
+
+.vs-page-management .vs-table th {
+    padding: 10px 12px;
+    font-size: .72rem;
+    letter-spacing: .04em;
+}
+
+.vs-page-management .vs-table td {
+    padding: 10px 12px;
+    font-size: .95rem;
+}
+
+.vs-page-management .vs-table tbody tr:nth-child(even) {
+    background: rgba(148, 163, 184, .05);
+}
+
+.vs-page-management .vs-table tbody tr:hover {
+    background: rgba(59, 130, 246, .06);
+}
+
+.vs-page-management .vs-btn-sm,
+.vs-page-management .vs-icon-link {
+    height: 32px;
+    min-width: 32px;
+    border-radius: 10px;
+}
+
+.vs-page-management .vs-badge {
+    min-width: 82px;
+    height: 26px;
+    font-size: .74rem;
+}
+
+/* Responsive */
+@media (max-width: 1500px) {
+
+    .vs-page-management .vs-ops-grid,
+    .vs-page-management .vs-link-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 980px) {
+    .vs-page-management .vs-mgmt-toolbar__row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .vs-page-management .vs-dashboard-actions,
+    .vs-page-management .vs-visual-controls {
+        width: 100%;
+        justify-content: flex-start;
+        margin-left: 0;
+    }
+
+    .vs-page-management .vs-main-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 720px) {
+    .vs-page-management .vs-dashboard-wrap {
+        padding: 0 8px 12px;
+    }
+
+    .vs-page-management .vs-dashboard-hero {
+        padding: 8px 10px;
+    }
+
+    .vs-page-management .vs-ops-grid,
+    .vs-page-management .vs-link-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .vs-page-management .vs-dashboard-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .vs-page-management .vs-action-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .vs-page-management .vs-visual-controls {
+        justify-content: space-between;
+    }
+}

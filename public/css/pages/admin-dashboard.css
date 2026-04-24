@@ -1,0 +1,192 @@
+.vs-page-admin-dashboard .vs-wallboard-shell {
+    max-width: 1780px;
+    margin: 6px auto 18px;
+    padding: 0 10px 16px;
+}
+
+.vs-page-admin-dashboard .vs-exec-hero {
+    position: relative;
+    overflow: hidden;
+    border-radius: 22px;
+    background:
+        radial-gradient(460px 200px at 0% 0%, rgba(59, 130, 246, 0.16), transparent 60%),
+        radial-gradient(520px 220px at 100% 0%, rgba(34, 197, 94, 0.10), transparent 62%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(247, 250, 252, 0.96));
+    border: 1px solid color-mix(in srgb, var(--vs-dashboard-border) 88%, transparent);
+    box-shadow: 0 16px 34px rgba(2, 8, 23, 0.10);
+}
+
+.vs-page-admin-dashboard .vs-wallboard-hero__top {
+    margin-bottom: 0;
+    justify-content: flex-end;
+}
+
+.vs-page-admin-dashboard .vs-wallboard-hero__content {
+    align-items: stretch;
+}
+
+.vs-page-admin-dashboard .vs-wallboard-hero__main--signals {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.vs-page-admin-dashboard .vs-exec-signal-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.vs-page-admin-dashboard .vs-exec-signal {
+    padding: 12px 14px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.76);
+    border: 1px solid color-mix(in srgb, var(--vs-dashboard-border) 82%, transparent);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+.vs-page-admin-dashboard .vs-exec-signal__label {
+    display: block;
+    font-size: 0.73rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--vs-dashboard-muted);
+    margin-bottom: 4px;
+}
+
+.vs-page-admin-dashboard .vs-exec-signal__value {
+    font-size: 1.15rem;
+    font-weight: 950;
+    line-height: 1.1;
+    color: var(--vs-dashboard-text);
+}
+
+.vs-page-admin-dashboard .vs-exec-lane {
+    display: grid;
+    grid-template-columns: 1.08fr 0.92fr;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.vs-page-admin-dashboard .vs-exec-lane__card {
+    border-radius: 16px;
+    background: var(--vs-dashboard-card-bg);
+    border: 1px solid var(--vs-dashboard-border);
+    box-shadow: var(--vs-dashboard-shadow-soft);
+    overflow: hidden;
+}
+
+.vs-page-admin-dashboard .vs-exec-alert-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding: 12px;
+}
+
+.vs-page-admin-dashboard .vs-exec-alert {
+    border-radius: 16px;
+    padding: 14px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    background: rgba(255, 255, 255, 0.72);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.vs-page-admin-dashboard .vs-exec-alert__label {
+    font-size: 0.75rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    opacity: 0.78;
+}
+
+.vs-page-admin-dashboard .vs-exec-alert__value {
+    font-size: 1.3rem;
+    font-weight: 950;
+    line-height: 1;
+}
+
+.vs-page-admin-dashboard .vs-exec-alert.is-ok {
+    color: #166534;
+    background: rgba(34, 197, 94, 0.10);
+    border-color: rgba(34, 197, 94, 0.22);
+}
+
+.vs-page-admin-dashboard .vs-exec-alert.is-warning {
+    color: #b45309;
+    background: rgba(245, 158, 11, 0.11);
+    border-color: rgba(245, 158, 11, 0.22);
+}
+
+.vs-page-admin-dashboard .vs-exec-alert.is-danger {
+    color: #b91c1c;
+    background: rgba(239, 68, 68, 0.10);
+    border-color: rgba(239, 68, 68, 0.22);
+}
+
+.vs-page-admin-dashboard .vs-exec-alert.is-info {
+    color: #1d4ed8;
+    background: rgba(59, 130, 246, 0.10);
+    border-color: rgba(59, 130, 246, 0.22);
+}
+
+.vs-page-admin-dashboard .vs-wallboard-main {
+    grid-template-columns: 1.12fr 0.88fr;
+}
+
+.vs-page-admin-dashboard .vs-wallboard-side {
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+}
+
+.vs-page-admin-dashboard .vs-card {
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.vs-page-admin-dashboard .vs-card-header {
+    padding: 11px 14px;
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(8px);
+}
+
+.vs-page-admin-dashboard .vs-table tbody tr:nth-child(even) td {
+    background: rgba(248, 250, 252, 0.52);
+}
+
+.vs-page-admin-dashboard .vs-table tbody tr:hover td {
+    background: color-mix(in srgb, var(--vs-primary) 6%, rgba(255, 255, 255, 0.96));
+}
+
+.vs-page-admin-dashboard.vs-dark-mode .vs-exec-hero {
+    background:
+        radial-gradient(460px 200px at 0% 0%, rgba(96, 165, 250, 0.18), transparent 60%),
+        radial-gradient(520px 220px at 100% 0%, rgba(74, 222, 128, 0.12), transparent 62%),
+        linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.94));
+}
+
+.vs-page-admin-dashboard.vs-dark-mode .vs-exec-signal,
+.vs-page-admin-dashboard.vs-dark-mode .vs-exec-alert,
+.vs-page-admin-dashboard.vs-dark-mode .vs-card-header {
+    background: rgba(15, 23, 42, 0.48);
+}
+
+@media (max-width: 1380px) {
+    .vs-page-admin-dashboard .vs-exec-lane {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 980px) {
+    .vs-page-admin-dashboard .vs-exec-signal-strip {
+        grid-template-columns: 1fr;
+    }
+
+    .vs-page-admin-dashboard .vs-exec-alert-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .vs-page-admin-dashboard .vs-wallboard-hero__top {
+        justify-content: stretch;
+    }
+}

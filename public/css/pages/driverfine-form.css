@@ -1,0 +1,140 @@
+.vs-driverfine-page {
+    max-width: 980px;
+    margin: 24px auto 32px;
+    padding: 0 20px;
+}
+
+.vs-driverfine-card {
+    border: 1px solid rgba(15, 23, 42, .08);
+    border-radius: 24px;
+    background: var(--vs-card-bg, rgba(255, 255, 255, .94));
+    box-shadow: 0 16px 40px rgba(15, 23, 42, .10);
+    overflow: hidden;
+}
+
+.vs-driverfine-card__header {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 28px 30px;
+    background: linear-gradient(135deg, #dc2626, #ef4444);
+    color: #fff;
+}
+
+.vs-driverfine-card__eyebrow {
+    margin: 0 0 8px;
+    font-size: .78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    opacity: .86;
+}
+
+.vs-driverfine-card__header h1 {
+    margin: 0;
+    font-size: 1.7rem;
+    font-weight: 900;
+}
+
+.vs-driverfine-card__header p {
+    margin: 8px 0 0;
+    max-width: 620px;
+    opacity: .92;
+}
+
+.vs-driverfine-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px 18px;
+    height: fit-content;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, .16);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+}
+
+.vs-driverfine-back:hover {
+    color: #fff;
+}
+
+.vs-driverfine-form {
+    padding: 24px;
+}
+
+.vs-driverfine-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.vs-driverfine-grid__full {
+    grid-column: 1 / -1;
+}
+
+.vs-driverfine-label {
+    display: block;
+    margin-bottom: 8px;
+    color: #475569;
+    font-size: .84rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+}
+
+.vs-driverfine-textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px 14px;
+    border: 1px solid #d8e0ea;
+    border-radius: 14px;
+    background: #fff;
+    color: #1e293b;
+    resize: vertical;
+}
+
+.vs-driverfine-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(15, 23, 42, .06);
+}
+
+.vs-driverfine-actions__primary {
+    margin-left: auto;
+}
+
+.vs-driverfine-btn {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--vs-primary, #3b82f6), var(--vs-secondary, #22c55e));
+    color: #fff;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.vs-driverfine-btn--danger {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+@media (max-width: 820px) {
+    .vs-driverfine-card__header,
+    .vs-driverfine-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .vs-driverfine-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .vs-driverfine-actions__primary {
+        margin-left: 0;
+    }
+}
