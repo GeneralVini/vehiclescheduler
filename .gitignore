@@ -3,6 +3,7 @@
 Thumbs.db
 .idea/
 .vscode/
+.Identifier
 
 # Logs / temp
 *.log
@@ -13,6 +14,7 @@ Thumbs.db
 # Backup files
 *.bk
 *.bak
+*.sh
 
 # Node
 node_modules/

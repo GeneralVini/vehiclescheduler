@@ -132,6 +132,9 @@ plugins/vehiclescheduler/
 ├── vendor/
 ├── CHANGELOG.md
 ├── composer.json
+├── glpi-root.conf.example
+├── glpi-subdir.conf.example
+├── glpi.conf
 ├── hook.php
 ├── LICENSE
 ├── README.md
@@ -147,6 +150,43 @@ plugins/vehiclescheduler/
 3. Open GLPI.
 4. Go to **Setup > Plugins**.
 5. Install and enable **SisViaturas**.
+
+## Apache deployment examples
+
+The repository may include Apache configuration examples to help administrators publish GLPI either at the web root or under a subdirectory.
+
+### `glpi-root.conf.example`
+Use this example when GLPI is published at the host root, for example:
+- `http://server/`
+
+This is the preferred option in environments where administrators want GLPI directly at the base URL.
+
+### `glpi-subdir.conf.example`
+Use this example when GLPI is published under a subdirectory, for example:
+- `http://server/glpi/`
+
+This is useful for environments where GLPI shares the same virtual host with other applications or where `/glpi` is the chosen canonical path.
+
+### `glpi.conf`
+This file represents the effective or current Apache virtual host configuration used in the target environment.
+
+It can be used as:
+- a working deployment reference
+- a baseline for local adjustments
+- a practical comparison point against the example configurations
+
+## Root path compatibility
+
+SisViaturas is designed to work with GLPI installations published either:
+- at the web root, such as `http://server/`
+- under a subdirectory, such as `http://server/glpi/`
+
+For this reason, plugin URLs should rely on GLPI-aware helpers instead of hardcoded assumptions about `/glpi`.
+
+Recommended approach:
+- use `plugin_vehiclescheduler_get_root_doc()` for GLPI core URLs
+- use `plugin_vehiclescheduler_get_front_url()` for plugin front controllers
+- use `plugin_vehiclescheduler_get_public_url()` or the project equivalent for public assets
 
 ## Development guidelines
 
