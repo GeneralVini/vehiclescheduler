@@ -6,15 +6,39 @@
 
 #vs-schedule-form-root {
     min-height: 100%;
+    display: grid;
+    gap: 10px;
+}
+
+#vs-schedule-form-root .vs-page-header {
+    margin-bottom: 0;
+}
+
+#vs-schedule-form-root .vs-header-content {
+    padding: 18px 22px;
+    border-radius: 16px;
+    background: #111827;
+    box-shadow: 0 16px 34px rgba(15, 23, 42, .16);
+}
+
+#vs-schedule-form-root .vs-header-icon-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+}
+
+#vs-schedule-form-root .vs-page-subtitle {
+    color: rgba(226, 232, 240, .86);
+    font-size: .92rem;
 }
 
 #vs-schedule-form-root .vs-content-card,
 #vs-schedule-form-root .vs-content-card--compact {
     background: #ffffff;
-    border: 1px solid rgba(148, 163, 184, 0.16);
-    border-radius: 16px;
-    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
-    padding: 12px 14px;
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    border-radius: 12px;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.045);
+    padding: 14px;
 }
 
 #vs-schedule-form-root .vs-schedule-form-shell {
@@ -27,12 +51,14 @@
     align-items: flex-start;
     justify-content: space-between;
     gap: 8px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.14);
 }
 
 #vs-schedule-form-root .vs-form-section-header h3 {
     margin: 0 0 2px;
-    font-size: 1.05rem;
+    font-size: 1rem;
     font-weight: 900;
     color: #0f172a;
 }
@@ -41,7 +67,7 @@
     margin: 0;
     color: #64748b;
     line-height: 1.35;
-    font-size: 0.88rem;
+    font-size: 0.86rem;
     max-width: none;
 }
 
@@ -56,9 +82,9 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    min-height: 30px;
+    min-height: 28px;
     padding: 5px 9px;
-    border-radius: 999px;
+    border-radius: 9px;
     background: rgba(148, 163, 184, 0.10);
     color: #334155;
     font-weight: 700;
@@ -220,7 +246,7 @@
 #vs-schedule-form-root .vs-form-field .vs-input-glass {
     width: 100%;
     min-height: 38px;
-    border-radius: 10px;
+    border-radius: 9px;
     box-sizing: border-box;
     font-size: 0.92rem;
     padding-top: 7px;
@@ -296,8 +322,8 @@
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    min-height: 24px;
-    padding: 3px 9px;
+    min-height: 26px;
+    padding: 4px 9px;
     border-radius: 999px;
     font-size: 0.7rem;
     font-weight: 900;
@@ -324,8 +350,8 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    margin-top: 12px;
-    padding-top: 10px;
+    margin-top: 14px;
+    padding-top: 12px;
     border-top: 1px solid rgba(148, 163, 184, 0.14);
 }
 
@@ -365,10 +391,10 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    min-height: 36px;
+    min-height: 34px;
     padding: 0 12px;
     border: 0;
-    border-radius: 9px;
+    border-radius: 8px;
     font-size: 0.82rem;
     font-weight: 800;
     cursor: pointer;
@@ -378,13 +404,14 @@
 
 #vs-schedule-form-root .vs-btn-save {
     color: #ffffff;
-    background: linear-gradient(135deg, #2563eb, #1d4ed8);
-    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.16);
+    background: #2563eb;
+    box-shadow: none;
 }
 
 #vs-schedule-form-root .vs-btn-save:hover {
     transform: translateY(-1px);
-    box-shadow: 0 12px 24px rgba(37, 99, 235, 0.22);
+    background: #1d4ed8;
+    box-shadow: none;
 }
 
 #vs-schedule-form-root .vs-btn-delete {
@@ -399,9 +426,9 @@
 
 /* aprovação */
 #vs-schedule-form-root .vs-approval-card {
-    margin-top: 8px;
-    padding: 10px 12px;
-    border-radius: 14px;
+    margin: 0 0 10px;
+    padding: 12px;
+    border-radius: 12px;
     background: #ffffff;
     border: 1px solid rgba(148, 163, 184, 0.16);
     box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
@@ -453,7 +480,7 @@
     min-height: 34px;
     padding: 7px 11px;
     border: 0;
-    border-radius: 9px;
+    border-radius: 8px;
     font-weight: 800;
     cursor: pointer;
     transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
@@ -470,15 +497,15 @@
 
 #vs-schedule-form-root .vs-btn-approve {
     color: #ffffff;
-    background: linear-gradient(135deg, #16a34a, #15803d);
-    box-shadow: 0 10px 24px rgba(22, 163, 74, 0.22);
+    background: #16a34a;
+    box-shadow: none;
 }
 
 #vs-schedule-form-root .vs-btn-reject-toggle,
 #vs-schedule-form-root .vs-btn-reject {
     color: #ffffff;
-    background: linear-gradient(135deg, #dc2626, #b91c1c);
-    box-shadow: 0 10px 24px rgba(220, 38, 38, 0.20);
+    background: #dc2626;
+    box-shadow: none;
 }
 
 #vs-schedule-form-root .vs-btn-reject-cancel {
@@ -681,4 +708,46 @@
         width: 100%;
         justify-content: center;
     }
+}
+
+/* Final page-standard lock */
+#vs-schedule-form-root .vs-header-content {
+    padding: 18px 22px;
+    border-radius: 16px;
+    background: #111827;
+}
+
+#vs-schedule-form-root .vs-page-subtitle {
+    color: rgba(226, 232, 240, .86);
+}
+
+#vs-schedule-form-root .vs-content-card,
+#vs-schedule-form-root .vs-content-card--compact {
+    border-radius: 12px;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, .045);
+}
+
+#vs-schedule-form-root .vs-btn-save {
+    background: #2563eb;
+    box-shadow: none;
+}
+
+#vs-schedule-form-root .vs-btn-save:hover {
+    background: #1d4ed8;
+    box-shadow: none;
+}
+
+#vs-schedule-form-root .vs-btn-approve {
+    background: #16a34a;
+    box-shadow: none;
+}
+
+#vs-schedule-form-root .vs-btn-reject-toggle,
+#vs-schedule-form-root .vs-btn-reject {
+    background: #dc2626;
+    box-shadow: none;
+}
+
+.vs-page.vs-dark-mode #vs-schedule-form-root .vs-btn-save {
+    background: #2563eb;
 }

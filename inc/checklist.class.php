@@ -32,6 +32,67 @@ class PluginVehicleschedulerChecklist extends CommonDBTM
         ];
     }
 
+    public static function getActiveChecklistForType(int $type): ?array
+    {
+        global $DB;
+
+        foreach (
+            $DB->request([
+                'FROM'  => self::getTable(),
+                'WHERE' => [
+                    'is_active' => 1,
+                    'OR'        => [
+                        ['checklist_type' => $type],
+                        ['checklist_type' => self::TYPE_BOTH],
+                    ],
+                ],
+                'ORDER' => ['id ASC'],
+                'LIMIT' => 1,
+            ]) as $row
+        ) {
+            return $row;
+        }
+
+        return null;
+    }
+
+    public static function getChecklistResponseUrl(int $scheduleId, string $type = 'departure'): string
+    {
+        return plugin_vehiclescheduler_get_front_url('checklistresponse.form.php')
+            . '?schedule_id=' . $scheduleId
+            . '&type=' . ($type === 'arrival' ? 'arrival' : 'departure');
+    }
+
+    public static function maybeOpenDepartureChecklistAfterApproval(PluginVehicleschedulerSchedule $schedule): void
+    {
+        if (!PluginVehicleschedulerConfig::shouldAutoOpenDepartureChecklistAfterApproval()) {
+            return;
+        }
+
+        $scheduleId = (int) $schedule->fields['id'];
+        $checklist = self::getActiveChecklistForType(self::TYPE_DEPARTURE);
+        if (!$checklist) {
+            return;
+        }
+
+        $followup = new ITILFollowup();
+        $ticketId = (int) ($schedule->fields['tickets_id'] ?? 0);
+        if ($ticketId <= 0) {
+            return;
+        }
+
+        $followup->add([
+            'itemtype'   => 'Ticket',
+            'items_id'   => $ticketId,
+            'users_id'   => (int) Session::getLoginUserID(),
+            'content'    => "📋 CHECKLIST DE SAÍDA DISPONÍVEL\n\n"
+                . "A reserva foi aprovada e o primeiro checklist operacional já pode ser preenchido.\n\n"
+                . "Acesse: " . self::getChecklistResponseUrl($scheduleId, 'departure') . "\n\n"
+                . "Checklist: " . (string) ($checklist['name'] ?? 'Checklist de saída'),
+            'is_private' => 0,
+        ]);
+    }
+
     public function prepareInputForAdd($input)
     {
         $input = $this->normalizeInput($input);

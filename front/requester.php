@@ -84,21 +84,22 @@ plugin_vehiclescheduler_enhance_ui();
                 </span>
             </article>
 
-            <article class="vs-requester-card is-disabled">
+            <article class="vs-requester-card">
                 <div class="vs-requester-icon">
                     <i class="ti ti-alert-triangle"></i>
                 </div>
 
-                <h3>Reportar Incidente</h3>
+                <h3>Informar Sinistro</h3>
 
                 <p>
-                    Registre avarias, ocorrências e problemas relacionados ao uso da viatura em um fluxo dedicado.
+                    Registre acidentes, avarias e ocorrências relacionadas ao uso da viatura.
                 </p>
 
-                <span class="vs-requester-btn vs-requester-btn--secondary" aria-disabled="true">
-                    <i class="ti ti-clock"></i>
-                    <span>Em breve</span>
-                </span>
+                <a class="vs-requester-btn vs-requester-btn--primary"
+                    href="<?php echo $escape(plugin_vehiclescheduler_get_front_url('incident.form.php')); ?>">
+                    <i class="ti ti-arrow-right"></i>
+                    <span>Acessar formulário</span>
+                </a>
             </article>
         </section>
 

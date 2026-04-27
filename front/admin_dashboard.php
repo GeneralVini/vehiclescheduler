@@ -13,6 +13,10 @@
 include_once(__DIR__ . '/../inc/common.inc.php');
 include_once(__DIR__ . '/../inc/dashboard.class.php');
 
+if (!headers_sent()) {
+    header('Content-Type: text/html; charset=UTF-8');
+}
+
 Session::checkRight('plugin_vehiclescheduler_management', READ);
 
 $root_doc = plugin_vehiclescheduler_get_root_doc();
@@ -32,14 +36,18 @@ $normal_url     = plugin_vehiclescheduler_get_front_url('admin_dashboard.php');
 $standalone_url = plugin_vehiclescheduler_get_front_url('admin_dashboard.php') . '?standalone=1';
 
 if ($standalone) {
-    Html::nullHeader('VisÃ£o Executiva da Frota', $management_url);
+    Html::nullHeader('Visão Executiva da Frota', $management_url);
+    echo "<script>document.body.classList.add('vs-wallboard-standalone-body');</script>";
 } else {
-    Html::header('VisÃ£o Executiva da Frota', $_SERVER['PHP_SELF'], 'tools');
+    Html::header('Visão Executiva da Frota', $_SERVER['PHP_SELF'], 'tools');
 }
 
 plugin_vehiclescheduler_load_css();
 plugin_vehiclescheduler_enhance_ui();
-plugin_vehiclescheduler_load_script('js/admin-dashboard.js');
+
+$js_file = GLPI_ROOT . '/plugins/vehiclescheduler/public/js/admin-dashboard.js';
+$js_ver  = is_file($js_file) ? filemtime($js_file) : PLUGIN_VEHICLESCHEDULER_VERSION;
+$js_url  = plugin_vehiclescheduler_get_public_url('js/admin-dashboard.js') . '?v=' . $js_ver;
 
 $page_classes = 'vs-page vs-page-admin-dashboard';
 if ($standalone) {
@@ -92,7 +100,7 @@ if ($standalone) {
                         <?php if (!$standalone): ?>
                             <a href="<?php echo htmlspecialchars($standalone_url, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" class="vs-action-btn">
                                 <i class="ti ti-screen-share"></i>
-                                <span>Abrir telÃ£o</span>
+                                <span>Abrir telão</span>
                             </a>
 
                             <a href="<?php echo htmlspecialchars($management_url, ENT_QUOTES, 'UTF-8'); ?>" class="vs-action-btn">
@@ -113,16 +121,16 @@ if ($standalone) {
                 <div class="vs-wallboard-hero__main">
                     <h1 class="vs-dashboard-title">
                         <i class="ti ti-layout-dashboard"></i>
-                        <span>TelÃ£o Executivo da Frota</span>
+                        <span>Telão Executivo da Frota</span>
                     </h1>
                     <p class="vs-dashboard-subtitle">
-                        VisÃ£o contÃ­nua da disponibilidade, solicitaÃ§Ãµes, viagens, incidentes e operaÃ§Ã£o da frota.
+                        Visão contínua da disponibilidade, solicitações, viagens, incidentes e operação da frota.
                     </p>
                 </div>
 
                 <div class="vs-wallboard-status">
                     <div class="vs-wallboard-clock">
-                        <div class="vs-wallboard-clock__label">RelÃ³gio</div>
+                        <div class="vs-wallboard-clock__label">Relógio</div>
                         <div id="vsWallClock" class="vs-wallboard-clock__value">--:--:--</div>
                     </div>
 
@@ -132,7 +140,7 @@ if ($standalone) {
                     </div>
 
                     <div class="vs-wallboard-status-pill">
-                        <strong>Ãšltima atualizaÃ§Ã£o</strong>
+                        <strong>Última atualização</strong>
                         <span><?php echo htmlspecialchars((string) $realtime['generated_at'], ENT_QUOTES, 'UTF-8'); ?></span>
                     </div>
                 </div>
@@ -150,7 +158,7 @@ if ($standalone) {
 
             <div class="vs-wallboard-kpi vs-wallboard-kpi--warning">
                 <div class="vs-wallboard-kpi__head">
-                    <div class="vs-wallboard-kpi__label">SolicitaÃ§Ãµes pendentes</div>
+                    <div class="vs-wallboard-kpi__label">Solicitações pendentes</div>
                     <div class="vs-wallboard-kpi__icon"><i class="ti ti-calendar-plus"></i></div>
                 </div>
                 <div class="vs-wallboard-kpi__value"><?php echo (int) $summary['pending_requests']; ?></div>
@@ -166,7 +174,7 @@ if ($standalone) {
 
             <div class="vs-wallboard-kpi vs-wallboard-kpi--neutral">
                 <div class="vs-wallboard-kpi__head">
-                    <div class="vs-wallboard-kpi__label">Viaturas indisponÃ­veis</div>
+                    <div class="vs-wallboard-kpi__label">Viaturas indisponíveis</div>
                     <div class="vs-wallboard-kpi__icon"><i class="ti ti-car-off"></i></div>
                 </div>
                 <div class="vs-wallboard-kpi__value"><?php echo (int) $summary['vehicles_unavailable']; ?></div>
@@ -174,7 +182,7 @@ if ($standalone) {
 
             <div class="vs-wallboard-kpi vs-wallboard-kpi--warning">
                 <div class="vs-wallboard-kpi__head">
-                    <div class="vs-wallboard-kpi__label">CNHs crÃ­ticas</div>
+                    <div class="vs-wallboard-kpi__label">CNHs críticas</div>
                     <div class="vs-wallboard-kpi__icon"><i class="ti ti-id-badge"></i></div>
                 </div>
                 <div class="vs-wallboard-kpi__value"><?php echo (int) $summary['cnh_critical']; ?></div>
@@ -241,11 +249,11 @@ if ($standalone) {
             <div class="vs-wallboard-side">
                 <div class="vs-card">
                     <div class="vs-card-header">
-                        <span class="vs-card-title"><i class="ti ti-timeline-event"></i> Ãšltimas solicitaÃ§Ãµes</span>
+                        <span class="vs-card-title"><i class="ti ti-timeline-event"></i> Últimas solicitações</span>
                     </div>
 
                     <?php if (empty($recent_requests)): ?>
-                        <div class="vs-empty-state">Nenhuma solicitaÃ§Ã£o registrada.</div>
+                        <div class="vs-empty-state">Nenhuma solicitação registrada.</div>
                     <?php else: ?>
                         <table class="vs-table">
                             <thead>
@@ -281,7 +289,7 @@ if ($standalone) {
                                 <tr>
                                     <th>Viatura</th>
                                     <th>Reservas</th>
-                                    <th>Ãšltimo uso</th>
+                                    <th>Último uso</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -289,7 +297,7 @@ if ($standalone) {
                                     <tr>
                                         <td><?php echo htmlspecialchars((string) $vehicle['vehicle_name'], ENT_QUOTES, 'UTF-8'); ?></td>
                                         <td><?php echo (int) $vehicle['total_reservations']; ?></td>
-                                        <td><?php echo !empty($vehicle['last_use']) ? Html::convDateTime((string) $vehicle['last_use']) : 'â€”'; ?></td>
+                                        <td><?php echo !empty($vehicle['last_use']) ? Html::convDateTime((string) $vehicle['last_use']) : '—'; ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -302,6 +310,8 @@ if ($standalone) {
 </div>
 
 <?php
+echo "<script src='" . htmlspecialchars($js_url, ENT_QUOTES, 'UTF-8') . "' defer></script>";
+
 if ($standalone) {
     Html::nullFooter();
 } else {

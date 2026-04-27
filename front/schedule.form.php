@@ -475,7 +475,29 @@ if (isset($_POST['add'])) {
     echo "<script src='" . $h($feedback_js_url) . "' defer></script>";
     echo "<script src='" . $h($js_url) . "' defer></script>";
 
+    $page_title = $id > 0 ? 'Reserva #' . (int)$id : 'Nova solicitação';
+    $page_subtitle = $can_show_assignment_focus
+        ? 'Revise os dados e atribua viatura e motorista antes da decisão.'
+        : 'Dados da viagem, solicitante, período e finalidade.';
+
     echo "<div id='vs-schedule-form-root' class='vs-page vs-page-schedule-form'>";
+    echo "    <div class='vs-page-header'>";
+    echo "        <div class='vs-header-content'>";
+    echo "            <div class='vs-header-title'>";
+    echo "                <div class='vs-header-icon-wrapper'>";
+    echo "                    <i class='ti ti-calendar-event vs-header-icon'></i>";
+    echo "                </div>";
+    echo "                <div>";
+    echo "                    <h2>" . $h($page_title) . "</h2>";
+    echo "                    <p class='vs-page-subtitle'>" . $h($page_subtitle) . "</p>";
+    echo "                </div>";
+    echo "            </div>";
+    echo "            <span class='vs-status-badge " . $h($status_meta['class']) . "'>";
+    echo "                <i class='" . $h($status_meta['icon']) . "'></i>";
+    echo "                <span>" . $h($status_meta['label']) . "</span>";
+    echo "            </span>";
+    echo "        </div>";
+    echo "    </div>";
 
     $content_classes = 'vs-content-card vs-content-card--compact';
     if ($can_show_assignment_focus) {

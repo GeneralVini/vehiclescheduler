@@ -4,7 +4,7 @@
  * Vehicle Scheduler plugin setup.
  */
 
-define('PLUGIN_VEHICLESCHEDULER_VERSION', '2.0.3');
+define('PLUGIN_VEHICLESCHEDULER_VERSION', '2.0.5');
 define('PLUGIN_VEHICLESCHEDULER_MIN_GLPI_VERSION', '11.0.0');
 define('PLUGIN_VEHICLESCHEDULER_MAX_GLPI_VERSION', '12.0.0');
 
@@ -51,6 +51,7 @@ function plugin_init_vehiclescheduler(): void
     Plugin::registerClass('PluginVehicleschedulerChecklistitem');
     Plugin::registerClass('PluginVehicleschedulerVehiclereport');
     Plugin::registerClass('PluginVehicleschedulerTheme');
+    Plugin::registerClass('PluginVehicleschedulerConfig');
 }
 
 /**

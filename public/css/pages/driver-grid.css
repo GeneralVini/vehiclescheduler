@@ -107,6 +107,35 @@
     line-height: 1.2;
 }
 
+.vs-config-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    min-height: 44px;
+}
+
+.vs-config-toggle input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #2563eb;
+}
+
+.vs-config-toggle strong {
+    display: block;
+    color: #0f172a;
+    font-size: 0.96rem;
+    line-height: 1.15;
+}
+
+.vs-config-toggle small {
+    display: block;
+    margin-top: 0.15rem;
+    color: #64748b;
+    font-size: 0.78rem;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
 .vs-driver-grid__clear {
     display: inline-flex;
     align-items: center;

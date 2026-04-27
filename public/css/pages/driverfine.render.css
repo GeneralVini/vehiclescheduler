@@ -355,3 +355,96 @@
         padding: 9px 10px 10px;
     }
 }
+
+/* Operational tab override */
+.vs-driverfine-wrap {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+}
+
+.vs-driverfine-surface {
+    padding: 0;
+    border-radius: 12px;
+}
+
+.vs-driverfine-surface::before,
+.vs-driverfine-surface::after {
+    display: none;
+}
+
+.vs-driverfine-wrap .vs-driverfine-card {
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.045);
+    backdrop-filter: none;
+}
+
+.vs-driverfine-head {
+    min-height: 44px;
+    padding: 0.7rem 0.85rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+    background: #f8fafc;
+}
+
+.vs-driverfine-title {
+    color: #0f172a;
+    font-size: 0.95rem;
+}
+
+.vs-driverfine-sub {
+    color: #64748b;
+    font-size: 0.8rem;
+}
+
+.vs-driverfine-tab-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    min-height: 32px;
+    padding: 0.4rem 0.7rem;
+    border-radius: 8px;
+    background: #2563eb;
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 850;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.vs-driverfine-tab-action:hover {
+    background: #1d4ed8;
+    color: #fff;
+    text-decoration: none;
+}
+
+.vs-driverfine-summary-grid {
+    padding: 0.75rem 0.85rem 0;
+    gap: 0.55rem;
+}
+
+.vs-driverfine-summary-card {
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: none;
+}
+
+.vs-driverfine-progress {
+    padding: 0.7rem 0.85rem 0;
+}
+
+.vs-driverfine-table-wrap {
+    padding: 0.75rem 0.85rem 0.85rem;
+}
+
+.vs-driverfine-table thead th {
+    color: #475569;
+    font-size: 0.68rem;
+    font-weight: 900;
+}
+
+.vs-driverfine-table tbody td {
+    font-size: 0.86rem;
+}

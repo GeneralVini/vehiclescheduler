@@ -52,8 +52,7 @@
     }
 
     function getNextRefreshDeadline() {
-        var now = Date.now();
-        return Math.ceil(now / REFRESH_INTERVAL_MS) * REFRESH_INTERVAL_MS;
+        return Date.now() + REFRESH_INTERVAL_MS;
     }
 
     function formatTime(date) {
@@ -84,7 +83,7 @@
         var remainingSeconds = Math.ceil(remainingMs / 1000);
 
         countdownEl.textContent = remainingSeconds + 's';
-        countdownEl.title = 'PrÃ³xima atualizaÃ§Ã£o Ã s ' + formatTime(new Date(refreshDeadline));
+        countdownEl.title = 'Próxima atualização às ' + formatTime(new Date(refreshDeadline));
     }
 
     function resyncDeadline() {

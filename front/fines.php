@@ -2,25 +2,29 @@
 
 include_once __DIR__ . '/../inc/common.inc.php';
 
-Session::checkRight('plugin_vehiclescheduler_management', READ);
-plugin_vehiclescheduler_redirect_future_plan('MULTAS', 'EM OBRAS !!!');
-exit;
+PluginVehicleschedulerDriverfine::requireAdminFines();
 
-global $DB;
-
-Session::checkRight('plugin_vehiclescheduler', READ);
-
-function vs_fines_escape(?string $value): string
-{
+$h = static function ($value): string {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+};
+
+$self = filter_input(INPUT_SERVER, 'PHP_SELF', FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?: '';
+$statusFilter = PluginVehicleschedulerInput::int($_GET, 'status', PluginVehicleschedulerDriverfine::STATUS_OPEN, 0);
+$validStatuses = array_keys(PluginVehicleschedulerDriverfine::getAllStatus());
+
+if ($statusFilter > 0 && !in_array($statusFilter, $validStatuses, true)) {
+    $statusFilter = PluginVehicleschedulerDriverfine::STATUS_OPEN;
 }
 
 if (isset($_POST['quick_fine_action'])) {
-    $fineId      = PluginVehicleschedulerInput::int($_POST, 'fine_id', 0, 1);
-    $action      = PluginVehicleschedulerInput::enum($_POST, 'quick_fine_action', ['paid', 'cancel'], '');
-    $statusMap   = [
-        'paid'   => PluginVehicleschedulerDriverfine::STATUS_PAID,
-        'cancel' => PluginVehicleschedulerDriverfine::STATUS_CANCELLED,
+    PluginVehicleschedulerDriverfine::requireAdminFines();
+
+    $fineId = PluginVehicleschedulerInput::int($_POST, 'fine_id', 0, 1);
+    $action = PluginVehicleschedulerInput::enum($_POST, 'quick_fine_action', ['paid', 'appealed', 'cancel'], '');
+    $statusMap = [
+        'paid'    => PluginVehicleschedulerDriverfine::STATUS_PAID,
+        'appealed' => PluginVehicleschedulerDriverfine::STATUS_APPEALED,
+        'cancel'  => PluginVehicleschedulerDriverfine::STATUS_CANCELLED,
     ];
 
     if ($fineId > 0 && isset($statusMap[$action])) {
@@ -34,104 +38,101 @@ if (isset($_POST['quick_fine_action'])) {
         }
     }
 
-    Html::redirect($_SERVER['PHP_SELF']);
+    Html::redirect(plugin_vehiclescheduler_get_front_url('fines.php') . '?status=' . $statusFilter);
 }
 
-Html::header('Multas de Trânsito', $_SERVER['PHP_SELF'], 'tools', 'PluginVehicleschedulerMenug', 'fines');
-
-plugin_vehiclescheduler_load_css();
-plugin_vehiclescheduler_enhance_ui();
-
-$openFines = iterator_to_array($DB->request([
-    'SELECT'    => [
-        'glpi_plugin_vehiclescheduler_driverfines.*',
-        'glpi_plugin_vehiclescheduler_drivers.name AS driver_name',
-        'glpi_plugin_vehiclescheduler_vehicles.name AS vehicle_name',
-        'glpi_plugin_vehiclescheduler_vehicles.plate AS vehicle_plate',
-    ],
-    'FROM'      => 'glpi_plugin_vehiclescheduler_driverfines',
-    'LEFT JOIN' => [
-        'glpi_plugin_vehiclescheduler_drivers'  => [
-            'FKEY' => [
-                'glpi_plugin_vehiclescheduler_driverfines' => 'plugin_vehiclescheduler_drivers_id',
-                'glpi_plugin_vehiclescheduler_drivers'     => 'id',
-            ],
-        ],
-        'glpi_plugin_vehiclescheduler_vehicles' => [
-            'FKEY' => [
-                'glpi_plugin_vehiclescheduler_driverfines' => 'plugin_vehiclescheduler_vehicles_id',
-                'glpi_plugin_vehiclescheduler_vehicles'    => 'id',
-            ],
-        ],
-    ],
-    'WHERE'     => [
-        'glpi_plugin_vehiclescheduler_driverfines.status' => PluginVehicleschedulerDriverfine::STATUS_OPEN,
-    ],
-    'ORDER'     => ['glpi_plugin_vehiclescheduler_driverfines.fine_date DESC'],
-]));
-
-$pointsMap  = PluginVehicleschedulerDriverfine::getSeverityPoints();
+$rows = PluginVehicleschedulerDriverfine::getManagementRows($statusFilter);
+$summary = PluginVehicleschedulerDriverfine::buildManagementSummary(
+    PluginVehicleschedulerDriverfine::getManagementRows(0)
+);
 $severities = PluginVehicleschedulerDriverfine::getAllSeverities();
-$totalPoints = 0;
+$statuses = PluginVehicleschedulerDriverfine::getAllStatus();
+$pointsMap = PluginVehicleschedulerDriverfine::getSeverityPoints();
 
-foreach ($openFines as $fine) {
-    $totalPoints += $pointsMap[(int) $fine['severity']] ?? 0;
-}
+Html::header('Multas', $self, 'tools', PluginVehicleschedulerMenu::class, 'management');
 
-$riskTone = 'normal';
-if ($totalPoints >= 20) {
-    $riskTone = 'critical';
-} elseif ($totalPoints >= 10) {
-    $riskTone = 'attention';
-}
+plugin_vehiclescheduler_load_css([
+    'css/pages/fines.css',
+]);
+plugin_vehiclescheduler_enhance_ui();
+plugin_vehiclescheduler_render_back_to_management();
 
-$totalValue = count($openFines) * 195.23;
+$filters = [
+    0 => ['label' => 'Todas', 'count' => $summary['total']],
+    PluginVehicleschedulerDriverfine::STATUS_OPEN => ['label' => 'Em aberto', 'count' => $summary['open']],
+    PluginVehicleschedulerDriverfine::STATUS_APPEALED => ['label' => 'Recurso', 'count' => $summary['appealed']],
+    PluginVehicleschedulerDriverfine::STATUS_PAID => ['label' => 'Pagas', 'count' => $summary['paid']],
+    PluginVehicleschedulerDriverfine::STATUS_CANCELLED => ['label' => 'Canceladas', 'count' => $summary['cancelled']],
+];
+
 ?>
 <div class="vs-fines-page">
-    <section class="vs-fines-hero">
-        <div>
-            <p class="vs-fines-hero__eyebrow">Operação diária</p>
-            <h1>Gestão de multas de trânsito</h1>
-            <p class="vs-fines-hero__subtitle">
-                Veja o backlog de infrações em aberto, priorize o que precisa de ação e acompanhe o impacto na CNH.
-            </p>
+    <div class="vs-page-header">
+        <div class="vs-header-content">
+            <div class="vs-header-title">
+                <div class="vs-header-icon-wrapper">
+                    <i class="ti ti-file-alert vs-header-icon"></i>
+                </div>
+                <div>
+                    <h2>Gestão de Multas</h2>
+                    <p class="vs-page-subtitle">Controle administrativo de infrações, pontuação e status de tratamento.</p>
+                </div>
+            </div>
+
+            <a href="<?= $h(plugin_vehiclescheduler_get_front_url('driverfine.form.php')) ?>" class="vs-btn-add">
+                <i class="ti ti-plus"></i>
+                <span>Nova Multa</span>
+            </a>
         </div>
-        <div class="vs-fines-hero__actions">
-            <a href="driver.php" class="vs-fines-hero__link">Ver motoristas</a>
+    </div>
+
+    <section class="vs-fines-status-grid" aria-label="Resumo de multas">
+        <a href="<?= $h(plugin_vehiclescheduler_get_front_url('fines.php') . '?status=' . PluginVehicleschedulerDriverfine::STATUS_OPEN) ?>" class="vs-fines-status-card">
+            <span class="vs-fines-status-card__icon"><i class="ti ti-alert-triangle"></i></span>
+            <strong><?= (int) $summary['open'] ?></strong>
+            <span>Em aberto</span>
+        </a>
+        <div class="vs-fines-status-card">
+            <span class="vs-fines-status-card__icon"><i class="ti ti-id-badge"></i></span>
+            <strong><?= (int) $summary['activePoints'] ?></strong>
+            <span>Pontos ativos</span>
         </div>
+        <a href="<?= $h(plugin_vehiclescheduler_get_front_url('fines.php') . '?status=' . PluginVehicleschedulerDriverfine::STATUS_APPEALED) ?>" class="vs-fines-status-card">
+            <span class="vs-fines-status-card__icon"><i class="ti ti-file-pencil"></i></span>
+            <strong><?= (int) $summary['appealed'] ?></strong>
+            <span>Em recurso</span>
+        </a>
+        <a href="<?= $h(plugin_vehiclescheduler_get_front_url('fines.php') . '?status=' . PluginVehicleschedulerDriverfine::STATUS_PAID) ?>" class="vs-fines-status-card">
+            <span class="vs-fines-status-card__icon"><i class="ti ti-circle-check"></i></span>
+            <strong><?= (int) $summary['paid'] ?></strong>
+            <span>Pagas</span>
+        </a>
     </section>
 
-    <section class="vs-fines-kpis">
-        <article class="vs-fines-kpi">
-            <span class="vs-fines-kpi__label">Multas abertas</span>
-            <strong class="vs-fines-kpi__value"><?= count($openFines) ?></strong>
-            <p class="vs-fines-kpi__hint">Itens que ainda exigem pagamento, recurso ou cancelamento.</p>
-        </article>
-        <article class="vs-fines-kpi vs-fines-kpi--<?= $riskTone ?>">
-            <span class="vs-fines-kpi__label">Pontos em aberto</span>
-            <strong class="vs-fines-kpi__value"><?= $totalPoints ?></strong>
-            <p class="vs-fines-kpi__hint">Atenção maior quando a pontuação acumulada começa a crescer.</p>
-        </article>
-        <article class="vs-fines-kpi">
-            <span class="vs-fines-kpi__label">Valor estimado</span>
-            <strong class="vs-fines-kpi__value">R$ <?= number_format($totalValue, 2, ',', '.') ?></strong>
-            <p class="vs-fines-kpi__hint">Estimativa rápida para leitura gerencial do passivo atual.</p>
-        </article>
+    <section class="vs-fines-toolbar">
+        <div class="vs-fines-filter-list">
+            <?php foreach ($filters as $status => $filter): ?>
+                <?php $url = plugin_vehiclescheduler_get_front_url('fines.php') . '?status=' . (int) $status; ?>
+                <a href="<?= $h($url) ?>" class="vs-fines-filter<?= (int) $status === (int) $statusFilter ? ' is-active' : '' ?>">
+                    <span><?= $h($filter['label']) ?></span>
+                    <strong><?= (int) $filter['count'] ?></strong>
+                </a>
+            <?php endforeach; ?>
+        </div>
+
+        <span class="vs-fines-results"><?= count($rows) ?> registro(s)</span>
     </section>
 
     <section class="vs-fines-table-card">
         <div class="vs-fines-table-card__header">
-            <div>
-                <h2>Fila de multas em aberto</h2>
-                <p>As ações rápidas ficam no fim da linha para reduzir navegação desnecessária.</p>
-            </div>
+            <span class="vs-fines-table-card__title"><i class="ti ti-list-details"></i> Multas cadastradas</span>
         </div>
 
-        <?php if (empty($openFines)): ?>
+        <?php if ($rows === []): ?>
             <div class="vs-fines-empty">
-                <div class="vs-fines-empty__icon">✅</div>
-                <h3>Nenhuma multa em aberto</h3>
-                <p>A operação está limpa neste momento.</p>
+                <div class="vs-fines-empty__icon"><i class="ti ti-file-alert"></i></div>
+                <h3>Nenhuma multa encontrada</h3>
+                <p>Não há registros para o filtro selecionado.</p>
             </div>
         <?php else: ?>
             <div class="vs-fines-table-wrap">
@@ -139,61 +140,80 @@ $totalValue = count($openFines) * 195.23;
                     <thead>
                         <tr>
                             <th>Data</th>
+                            <th>Código</th>
                             <th>Motorista</th>
                             <th>Veículo</th>
                             <th>Gravidade</th>
                             <th>Pontos</th>
-                            <th>Descrição</th>
                             <th>Status</th>
+                            <th>Descrição</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($openFines as $fine): ?>
+                        <?php foreach ($rows as $fine): ?>
                             <?php
-                            $points = $pointsMap[(int) $fine['severity']] ?? 0;
-                            $vehicleDisplay = '—';
-                            if (!empty($fine['vehicle_name'])) {
-                                $vehicleDisplay = vs_fines_escape(
-                                    (string) $fine['vehicle_name'] . ' (' . (string) $fine['vehicle_plate'] . ')'
-                                );
-                            }
-
+                            $severity = (int) ($fine['severity'] ?? 0);
+                            $status = (int) ($fine['status'] ?? 0);
+                            $driverId = (int) ($fine['plugin_vehiclescheduler_drivers_id'] ?? 0);
+                            $violationCode = trim((string) ($fine['violation_code'] ?? ''));
+                            $violationSplit = trim((string) ($fine['violation_split'] ?? ''));
+                            $violationDisplay = $violationCode !== ''
+                                ? $violationCode . ($violationSplit !== '' ? '-' . $violationSplit : '')
+                                : 'Manual';
+                            $vehicleName = trim((string) ($fine['vehicle_name'] ?? ''));
+                            $vehiclePlate = trim((string) ($fine['vehicle_plate'] ?? ''));
+                            $vehicleDisplay = $vehicleName !== ''
+                                ? trim($vehicleName . ($vehiclePlate !== '' ? ' / ' . $vehiclePlate : ''))
+                                : 'Não vinculado';
                             $description = PluginVehicleschedulerInput::text(
                                 ['description' => $fine['description'] ?? ''],
                                 'description',
-                                120,
+                                160,
                                 ''
                             );
                             ?>
                             <tr>
-                                <td><?= Html::convDate($fine['fine_date']) ?></td>
+                                <td><?= $h(Html::convDate((string) ($fine['fine_date'] ?? ''))) ?></td>
+                                <td><span class="vs-fines-code"><?= $h($violationDisplay) ?></span></td>
                                 <td>
-                                    <a href="driver.form.php?id=<?= (int) $fine['plugin_vehiclescheduler_drivers_id'] ?>" class="vs-fines-driver-link">
-                                        <?= vs_fines_escape((string) $fine['driver_name']) ?>
-                                    </a>
+                                    <?php if ($driverId > 0): ?>
+                                        <a href="<?= $h(plugin_vehiclescheduler_get_front_url('driver.form.php') . '?id=' . $driverId) ?>" class="vs-fines-driver-link">
+                                            <?= $h((string) ($fine['driver_name'] ?? 'Não informado')) ?>
+                                        </a>
+                                    <?php else: ?>
+                                        Não informado
+                                    <?php endif; ?>
                                 </td>
-                                <td><?= $vehicleDisplay ?></td>
-                                <td><?= vs_fines_escape((string) ($severities[(int) $fine['severity']] ?? '?')) ?></td>
-                                <td><span class="vs-fines-points"><?= $points ?></span></td>
-                                <td><?= vs_fines_escape($description) ?></td>
-                                <td><span class="vs-fines-badge">Em aberto</span></td>
+                                <td><?= $h($vehicleDisplay) ?></td>
                                 <td>
-                                    <form method="post" class="vs-fines-actions">
-                                        <input type="hidden" name="fine_id" value="<?= (int) $fine['id'] ?>">
-                                        <input type="hidden" name="_glpi_csrf_token" value="<?= Session::getNewCSRFToken() ?>">
-                                        <button type="submit" name="quick_fine_action" value="paid" class="vs-fines-action vs-fines-action--success">
-                                            Pagar
-                                        </button>
-                                        <button
-                                            type="submit"
-                                            name="quick_fine_action"
-                                            value="cancel"
-                                            class="vs-fines-action vs-fines-action--neutral"
-                                            data-confirm-message="Cancelar esta multa?">
-                                            Cancelar
-                                        </button>
-                                    </form>
+                                    <span class="vs-driverfine-badge vs-driverfine-badge--<?= $h(PluginVehicleschedulerDriverfine::getSeverityModifier($severity)) ?>">
+                                        <?= $h($severities[$severity] ?? 'Não definida') ?>
+                                    </span>
+                                </td>
+                                <td><span class="vs-fines-points"><?= (int) ($pointsMap[$severity] ?? 0) ?></span></td>
+                                <td>
+                                    <span class="vs-driverfine-badge vs-driverfine-badge--<?= $h(PluginVehicleschedulerDriverfine::getStatusModifier($status)) ?>">
+                                        <?= $h($statuses[$status] ?? 'Sem status') ?>
+                                    </span>
+                                </td>
+                                <td><?= $h($description) ?></td>
+                                <td>
+                                    <div class="vs-fines-actions">
+                                        <a href="<?= $h(plugin_vehiclescheduler_get_front_url('driverfine.form.php') . '?id=' . (int) $fine['id']) ?>" class="vs-fines-action">
+                                            <i class="ti ti-pencil"></i>
+                                            <span>Abrir</span>
+                                        </a>
+                                        <?php if ($status === PluginVehicleschedulerDriverfine::STATUS_OPEN || $status === PluginVehicleschedulerDriverfine::STATUS_APPEALED): ?>
+                                            <form method="post">
+                                                <input type="hidden" name="fine_id" value="<?= (int) $fine['id'] ?>">
+                                                <input type="hidden" name="_glpi_csrf_token" value="<?= Session::getNewCSRFToken() ?>">
+                                                <button type="submit" name="quick_fine_action" value="paid" class="vs-fines-action vs-fines-action--success">
+                                                    Pagar
+                                                </button>
+                                            </form>
+                                        <?php endif; ?>
+                                    </div>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -203,4 +223,5 @@ $totalValue = count($openFines) * 195.23;
         <?php endif; ?>
     </section>
 </div>
-<?php Html::footer(); ?>
+<?php
+Html::footer();

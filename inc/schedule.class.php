@@ -712,6 +712,16 @@ class PluginVehicleschedulerSchedule extends \CommonDBTM
         $this->getFromDB((int)$this->fields['id']);
         $this->syncLinkedTicket();
         $this->createAssignmentFollowup();
+
+        $previousStatus = (int) ($this->preUpdateSnapshot['status'] ?? 0);
+        $currentStatus = (int) ($this->fields['status'] ?? 0);
+
+        if (
+            $previousStatus !== self::STATUS_APPROVED
+            && $currentStatus === self::STATUS_APPROVED
+        ) {
+            PluginVehicleschedulerChecklist::maybeOpenDepartureChecklistAfterApproval($this);
+        }
     }
 
     public function approveReservation(int $id): bool

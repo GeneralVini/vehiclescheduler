@@ -5,12 +5,6 @@ if (!defined('GLPI_ROOT')) {
     die("Sorry. You can't access this file directly");
 }
 
-
-include_once __DIR__ . '/../inc/common.inc.php';
-
-Session::checkRight('plugin_vehiclescheduler_management', READ);
-plugin_vehiclescheduler_redirect_future_plan('MULTAS', 'EM OBRAS !!!');
-exit;
 /**
  * Escapes HTML output for safe rendering.
  *
@@ -57,25 +51,7 @@ function vs_driverfine_format_date(?string $value): string
 function vs_driverfine_render_severity_badge(int $severity): string
 {
     $labels = PluginVehicleschedulerDriverfine::getAllSeverities();
-    $class = 'vs-driverfine-badge--neutral';
-
-    switch ($severity) {
-        case PluginVehicleschedulerDriverfine::SEVERITY_MILD:
-            $class = 'vs-driverfine-badge--mild';
-            break;
-
-        case PluginVehicleschedulerDriverfine::SEVERITY_MEDIUM:
-            $class = 'vs-driverfine-badge--medium';
-            break;
-
-        case PluginVehicleschedulerDriverfine::SEVERITY_SEVERE:
-            $class = 'vs-driverfine-badge--severe';
-            break;
-
-        case PluginVehicleschedulerDriverfine::SEVERITY_VERYSEVERE:
-            $class = 'vs-driverfine-badge--verysevere';
-            break;
-    }
+    $class = 'vs-driverfine-badge--' . PluginVehicleschedulerDriverfine::getSeverityModifier($severity);
 
     return '<span class="vs-driverfine-badge ' . vs_driverfine_escape($class) . '">'
         . vs_driverfine_escape($labels[$severity] ?? 'Não definida')
@@ -92,25 +68,7 @@ function vs_driverfine_render_severity_badge(int $severity): string
 function vs_driverfine_render_status_badge(int $status): string
 {
     $labels = PluginVehicleschedulerDriverfine::getAllStatus();
-    $class = 'vs-driverfine-badge--neutral';
-
-    switch ($status) {
-        case PluginVehicleschedulerDriverfine::STATUS_OPEN:
-            $class = 'vs-driverfine-badge--open';
-            break;
-
-        case PluginVehicleschedulerDriverfine::STATUS_PAID:
-            $class = 'vs-driverfine-badge--closed';
-            break;
-
-        case PluginVehicleschedulerDriverfine::STATUS_APPEALED:
-            $class = 'vs-driverfine-badge--review';
-            break;
-
-        case PluginVehicleschedulerDriverfine::STATUS_CANCELLED:
-            $class = 'vs-driverfine-badge--neutral';
-            break;
-    }
+    $class = 'vs-driverfine-badge--' . PluginVehicleschedulerDriverfine::getStatusModifier($status);
 
     return '<span class="vs-driverfine-badge ' . vs_driverfine_escape($class) . '">'
         . vs_driverfine_escape($labels[$status] ?? 'Sem status')
@@ -126,6 +84,10 @@ function vs_driverfine_render_status_badge(int $status): string
  */
 function vs_render_driverfine_tab(PluginVehicleschedulerDriver $driver): void
 {
+    if (!PluginVehicleschedulerDriverfine::canAdminFines()) {
+        return;
+    }
+
     $driverId = (int) $driver->getID();
     $fines = PluginVehicleschedulerDriverfine::getFinesForDriver($driverId);
     $summary = PluginVehicleschedulerDriverfine::buildDriverSummary($fines);
@@ -138,13 +100,11 @@ function vs_render_driverfine_tab(PluginVehicleschedulerDriver $driver): void
     echo '            <div class="vs-driverfine-head">';
     echo '                <div>';
     echo '                    <h3 class="vs-driverfine-title"><i class="ti ti-file-alert"></i> Infrações de Trânsito</h3>';
-    echo '                    <div class="vs-driverfine-sub">Resumo operacional de pontuação, autuações em aberto e histórico do condutor.</div>';
+    echo '                    <div class="vs-driverfine-sub">Pontuação, autuações em aberto e histórico administrativo do condutor.</div>';
     echo '                </div>';
-    echo '                <div class="vs-driverfine-pill"><span class="dot"></span> Infrações</div>';
-    echo '            </div>';
-
-    echo '            <div class="vs-driverfine-note">';
-    echo '                Esta aba usa o modelo atual da classe de infrações: data, descrição, severidade, status e veículo vinculado.';
+    echo '                <a class="vs-driverfine-tab-action" href="' . vs_driverfine_escape(plugin_vehiclescheduler_get_front_url('driverfine.form.php') . '?plugin_vehiclescheduler_drivers_id=' . $driverId) . '">';
+    echo '                    <i class="ti ti-plus"></i><span>Nova multa</span>';
+    echo '                </a>';
     echo '            </div>';
 
     echo '            <div class="vs-driverfine-summary-grid">';
@@ -189,6 +149,7 @@ function vs_render_driverfine_tab(PluginVehicleschedulerDriver $driver): void
     echo '                    <thead>';
     echo '                        <tr>';
     echo '                            <th>Data</th>';
+    echo '                            <th>Código</th>';
     echo '                            <th>Descrição</th>';
     echo '                            <th>Severidade</th>';
     echo '                            <th>Status</th>';
@@ -202,9 +163,15 @@ function vs_render_driverfine_tab(PluginVehicleschedulerDriver $driver): void
         $vehicleLabel = $vehicleId > 0
             ? ($vehicleLabels[$vehicleId] ?? ('Veículo #' . $vehicleId))
             : 'Não vinculado';
+        $violationCode = trim((string) ($fine['violation_code'] ?? ''));
+        $violationSplit = trim((string) ($fine['violation_split'] ?? ''));
+        $violationDisplay = $violationCode !== ''
+            ? $violationCode . ($violationSplit !== '' ? '-' . $violationSplit : '')
+            : 'Manual';
 
         echo '                    <tr>';
         echo '                        <td>' . vs_driverfine_escape(vs_driverfine_format_date((string) ($fine['fine_date'] ?? ''))) . '</td>';
+        echo '                        <td><span class="vs-fines-code">' . vs_driverfine_escape($violationDisplay) . '</span></td>';
         echo '                        <td>' . vs_driverfine_escape((string) ($fine['description'] ?? '')) . '</td>';
         echo '                        <td>' . vs_driverfine_render_severity_badge((int) ($fine['severity'] ?? 0)) . '</td>';
         echo '                        <td>' . vs_driverfine_render_status_badge((int) ($fine['status'] ?? 0)) . '</td>';

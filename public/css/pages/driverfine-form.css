@@ -1,72 +1,32 @@
 .vs-driverfine-page {
-    max-width: 980px;
-    margin: 24px auto 32px;
-    padding: 0 20px;
+    display: grid;
+    gap: 0.75rem;
+    width: 100%;
+    min-width: 0;
 }
 
 .vs-driverfine-card {
-    border: 1px solid rgba(15, 23, 42, .08);
-    border-radius: 24px;
-    background: var(--vs-card-bg, rgba(255, 255, 255, .94));
-    box-shadow: 0 16px 40px rgba(15, 23, 42, .10);
     overflow: hidden;
-}
-
-.vs-driverfine-card__header {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    padding: 28px 30px;
-    background: linear-gradient(135deg, #dc2626, #ef4444);
-    color: #fff;
-}
-
-.vs-driverfine-card__eyebrow {
-    margin: 0 0 8px;
-    font-size: .78rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: .08em;
-    opacity: .86;
-}
-
-.vs-driverfine-card__header h1 {
-    margin: 0;
-    font-size: 1.7rem;
-    font-weight: 900;
-}
-
-.vs-driverfine-card__header p {
-    margin: 8px 0 0;
-    max-width: 620px;
-    opacity: .92;
-}
-
-.vs-driverfine-back {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 11px 18px;
-    height: fit-content;
+    border: 1px solid rgba(148, 163, 184, 0.2);
     border-radius: 12px;
-    background: rgba(255, 255, 255, .16);
-    color: #fff;
-    text-decoration: none;
-    font-weight: 800;
-}
-
-.vs-driverfine-back:hover {
-    color: #fff;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.045);
 }
 
 .vs-driverfine-form {
-    padding: 24px;
+    padding: 0.9rem;
 }
 
 .vs-driverfine-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
+    gap: 0.75rem;
+}
+
+.vs-driverfine-field {
+    display: grid;
+    gap: 0.35rem;
+    min-width: 0;
 }
 
 .vs-driverfine-grid__full {
@@ -74,34 +34,232 @@
 }
 
 .vs-driverfine-label {
-    display: block;
-    margin-bottom: 8px;
-    color: #475569;
-    font-size: .84rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: .06em;
+    margin: 0;
+    color: #0f172a;
+    font-size: 0.78rem;
+    font-weight: 850;
+}
+
+.vs-driverfine-field input[type="text"],
+.vs-driverfine-field input[type="date"],
+.vs-driverfine-field textarea,
+.vs-driverfine-field select,
+.vs-driverfine-field .select2-container,
+.vs-driverfine-field span[class*="select2"] {
+    width: 100% !important;
+    max-width: 100%;
 }
 
 .vs-driverfine-textarea {
     width: 100%;
     min-height: 120px;
-    padding: 12px 14px;
-    border: 1px solid #d8e0ea;
-    border-radius: 14px;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid rgba(148, 163, 184, 0.28);
+    border-radius: 9px;
     background: #fff;
-    color: #1e293b;
+    color: #0f172a;
+    font-size: 0.9rem;
     resize: vertical;
+}
+
+.vs-renainf-picker {
+    display: grid;
+    gap: 0.5rem;
+    min-width: 0;
+    position: relative;
+}
+
+.vs-renainf-search-row {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 42px;
+    padding: 0 0.65rem;
+    border: 1px solid rgba(148, 163, 184, 0.28);
+    border-radius: 10px;
+    background: #fff;
+    color: #475569;
+}
+
+.vs-renainf-search-row i {
+    color: #2563eb;
+    font-size: 1rem;
+}
+
+.vs-renainf-search {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: #0f172a;
+    font-size: 0.9rem;
+}
+
+.vs-renainf-clear {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 30px;
+    padding: 0.35rem 0.55rem;
+    border: 1px solid rgba(148, 163, 184, 0.24);
+    border-radius: 8px;
+    background: #f8fafc;
+    color: #334155;
+    font-size: 0.78rem;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.vs-renainf-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    min-height: 42px;
+    width: 100%;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid rgba(148, 163, 184, 0.28);
+    border-radius: 10px;
+    background: #fff;
+    color: #0f172a;
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-align: left;
+    cursor: pointer;
+}
+
+.vs-renainf-trigger span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vs-renainf-trigger i {
+    color: #64748b;
+    flex: 0 0 auto;
+}
+
+.vs-renainf-readonly {
+    display: flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid rgba(148, 163, 184, 0.24);
+    border-radius: 10px;
+    background: #f8fafc;
+    color: #0f172a;
+    font-size: 0.88rem;
+    font-weight: 850;
+}
+
+.vs-renainf-selected {
+    display: grid;
+    gap: 0.15rem;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid rgba(37, 99, 235, 0.16);
+    border-radius: 10px;
+    background: rgba(37, 99, 235, 0.06);
+    color: #334155;
+}
+
+.vs-renainf-selected strong {
+    color: #1d4ed8;
+    font-size: 0.86rem;
+}
+
+.vs-renainf-selected span {
+    color: #0f172a;
+    font-size: 0.9rem;
+    font-weight: 750;
+}
+
+.vs-renainf-selected small {
+    color: #64748b;
+    font-size: 0.78rem;
+}
+
+.vs-renainf-results {
+    display: none;
+    gap: 0.35rem;
+    max-height: 320px;
+    overflow: auto;
+    padding: 0.35rem;
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 14px 28px rgba(15, 23, 42, 0.12);
+}
+
+.vs-renainf-results.is-open {
+    display: grid;
+}
+
+.vs-renainf-option {
+    display: grid;
+    grid-template-columns: 78px minmax(0, 1fr);
+    gap: 0.65rem;
+    width: 100%;
+    padding: 0.5rem 0.6rem;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 10px;
+    background: #fff;
+    color: #0f172a;
+    text-align: left;
+    cursor: pointer;
+}
+
+.vs-renainf-option:hover,
+.vs-renainf-option:focus {
+    border-color: rgba(37, 99, 235, 0.36);
+    background: #eff6ff;
+}
+
+.vs-renainf-option__code {
+    align-self: start;
+    padding: 0.2rem 0.35rem;
+    border-radius: 7px;
+    background: #e0f2fe;
+    color: #075985;
+    font-size: 0.78rem;
+    font-weight: 900;
+    text-align: center;
+}
+
+.vs-renainf-option__body {
+    display: grid;
+    gap: 0.15rem;
+    min-width: 0;
+}
+
+.vs-renainf-option__body strong {
+    color: #0f172a;
+    font-size: 0.82rem;
+    line-height: 1.3;
+}
+
+.vs-renainf-option__body small,
+.vs-renainf-empty {
+    color: #64748b;
+    font-size: 0.78rem;
+}
+
+.vs-renainf-empty {
+    padding: 0.75rem;
+    border: 1px dashed rgba(148, 163, 184, 0.3);
+    border-radius: 10px;
+    background: #f8fafc;
 }
 
 .vs-driverfine-actions {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    gap: 14px;
-    margin-top: 22px;
-    padding-top: 18px;
-    border-top: 1px solid rgba(15, 23, 42, .06);
+    justify-content: space-between;
+    gap: 0.7rem;
+    margin-top: 0.9rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid rgba(148, 163, 184, 0.14);
 }
 
 .vs-driverfine-actions__primary {
@@ -109,32 +267,75 @@
 }
 
 .vs-driverfine-btn {
-    padding: 12px 18px;
-    border: none;
-    border-radius: 12px;
-    background: linear-gradient(135deg, var(--vs-primary, #3b82f6), var(--vs-secondary, #22c55e));
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    min-height: 36px;
+    padding: 0.48rem 0.85rem;
+    border: 0;
+    border-radius: 9px;
+    background: #2563eb;
     color: #fff;
-    font-weight: 800;
+    font-size: 0.84rem;
+    font-weight: 850;
     cursor: pointer;
 }
 
+.vs-driverfine-btn:hover {
+    background: #1d4ed8;
+}
+
 .vs-driverfine-btn--danger {
-    background: #fee2e2;
+    border: 1px solid rgba(220, 38, 38, 0.2);
+    background: rgba(239, 68, 68, 0.1);
     color: #991b1b;
 }
 
-@media (max-width: 820px) {
-    .vs-driverfine-card__header,
-    .vs-driverfine-actions {
-        flex-direction: column;
-        align-items: stretch;
-    }
+.vs-driverfine-btn--danger:hover {
+    background: rgba(239, 68, 68, 0.16);
+}
 
+@media (max-width: 780px) {
     .vs-driverfine-grid {
         grid-template-columns: 1fr;
     }
 
+    .vs-driverfine-actions,
     .vs-driverfine-actions__primary {
+        align-items: stretch;
+        flex-direction: column;
         margin-left: 0;
     }
+
+    .vs-driverfine-btn {
+        width: 100%;
+    }
+
+    .vs-renainf-search-row {
+        align-items: stretch;
+        flex-direction: column;
+        padding: 0.6rem;
+    }
+
+    .vs-renainf-search {
+        width: 100%;
+    }
+
+    .vs-renainf-clear {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .vs-renainf-option {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Keep the standalone form isolated from the driver tab stylesheet. */
+.vs-driverfine-page > .vs-driverfine-card {
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.045);
 }

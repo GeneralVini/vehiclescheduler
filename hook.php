@@ -123,6 +123,7 @@ function plugin_vehiclescheduler_install()
         CREATE TABLE IF NOT EXISTS `glpi_plugin_vehiclescheduler_incidents` (
             `id` int unsigned NOT NULL AUTO_INCREMENT,
             `name` varchar(255) NOT NULL DEFAULT '',
+            `plugin_vehiclescheduler_schedules_id` int unsigned NOT NULL DEFAULT '0',
             `plugin_vehiclescheduler_vehicles_id` int unsigned NOT NULL DEFAULT '0',
             `plugin_vehiclescheduler_drivers_id` int unsigned NOT NULL DEFAULT '0',
             `users_id` int unsigned NOT NULL DEFAULT '0',
@@ -141,6 +142,7 @@ function plugin_vehiclescheduler_install()
             `date_mod` timestamp NULL DEFAULT NULL,
             PRIMARY KEY (`id`),
             KEY `name` (`name`),
+            KEY `plugin_vehiclescheduler_schedules_id` (`plugin_vehiclescheduler_schedules_id`),
             KEY `plugin_vehiclescheduler_vehicles_id` (`plugin_vehiclescheduler_vehicles_id`),
             KEY `users_id` (`users_id`),
             KEY `entities_id` (`entities_id`),
@@ -217,6 +219,11 @@ function plugin_vehiclescheduler_install()
             `plugin_vehiclescheduler_drivers_id` int unsigned NOT NULL DEFAULT '0',
             `plugin_vehiclescheduler_vehicles_id` int unsigned NOT NULL DEFAULT '0',
             `fine_date` date DEFAULT NULL,
+            `violation_code` varchar(20) NOT NULL DEFAULT '',
+            `violation_split` varchar(20) NOT NULL DEFAULT '',
+            `legal_basis` varchar(255) NOT NULL DEFAULT '',
+            `offender` varchar(100) NOT NULL DEFAULT '',
+            `authority` varchar(100) NOT NULL DEFAULT '',
             `severity` int NOT NULL DEFAULT '1',
             `status` int NOT NULL DEFAULT '1',
             `description` text,
@@ -225,6 +232,7 @@ function plugin_vehiclescheduler_install()
             PRIMARY KEY (`id`),
             KEY `plugin_vehiclescheduler_drivers_id` (`plugin_vehiclescheduler_drivers_id`),
             KEY `plugin_vehiclescheduler_vehicles_id` (`plugin_vehiclescheduler_vehicles_id`),
+            KEY `violation_code` (`violation_code`),
             KEY `status` (`status`),
             KEY `fine_date` (`fine_date`)
         ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation};
@@ -242,6 +250,21 @@ function plugin_vehiclescheduler_install()
             `date_mod` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (`id`),
             UNIQUE KEY `users_id` (`users_id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation};
+    ");
+
+    // =========================================================
+    // CONFIGURAÇÕES
+    // =========================================================
+    $DB->doQuery("
+        CREATE TABLE IF NOT EXISTS `glpi_plugin_vehiclescheduler_configs` (
+            `id` int unsigned NOT NULL AUTO_INCREMENT,
+            `config_key` varchar(100) NOT NULL,
+            `config_value` varchar(255) NOT NULL DEFAULT '',
+            `date_creation` timestamp NULL DEFAULT NULL,
+            `date_mod` timestamp NULL DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `config_key` (`config_key`)
         ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation};
     ");
 
@@ -332,6 +355,12 @@ function plugin_vehiclescheduler_install()
     // =========================================================
 
     // schedules
+    plugin_vehiclescheduler_add_column_if_missing(
+        'glpi_plugin_vehiclescheduler_incidents',
+        'plugin_vehiclescheduler_schedules_id',
+        "`plugin_vehiclescheduler_schedules_id` int unsigned NOT NULL DEFAULT '0' AFTER `name`"
+    );
+
     plugin_vehiclescheduler_add_column_if_missing(
         'glpi_plugin_vehiclescheduler_vehicles',
         'required_cnh_category',
@@ -457,6 +486,46 @@ function plugin_vehiclescheduler_install()
         "`recurrence_days` int unsigned NOT NULL DEFAULT '0' AFTER `recurrence_km`"
     );
 
+    // driver fines / RENAINF reference fields
+    plugin_vehiclescheduler_add_column_if_missing(
+        'glpi_plugin_vehiclescheduler_driverfines',
+        'violation_code',
+        "`violation_code` varchar(20) NOT NULL DEFAULT '' AFTER `fine_date`"
+    );
+
+    plugin_vehiclescheduler_add_column_if_missing(
+        'glpi_plugin_vehiclescheduler_driverfines',
+        'violation_split',
+        "`violation_split` varchar(20) NOT NULL DEFAULT '' AFTER `violation_code`"
+    );
+
+    plugin_vehiclescheduler_add_column_if_missing(
+        'glpi_plugin_vehiclescheduler_driverfines',
+        'legal_basis',
+        "`legal_basis` varchar(255) NOT NULL DEFAULT '' AFTER `violation_split`"
+    );
+
+    plugin_vehiclescheduler_add_column_if_missing(
+        'glpi_plugin_vehiclescheduler_driverfines',
+        'offender',
+        "`offender` varchar(100) NOT NULL DEFAULT '' AFTER `legal_basis`"
+    );
+
+    plugin_vehiclescheduler_add_column_if_missing(
+        'glpi_plugin_vehiclescheduler_driverfines',
+        'authority',
+        "`authority` varchar(100) NOT NULL DEFAULT '' AFTER `offender`"
+    );
+
+    if (
+        $DB->tableExists('glpi_plugin_vehiclescheduler_driverfines')
+        && !plugin_vehiclescheduler_index_exists('glpi_plugin_vehiclescheduler_driverfines', 'violation_code')
+    ) {
+        $DB->doQuery(
+            "ALTER TABLE `glpi_plugin_vehiclescheduler_driverfines` ADD KEY `violation_code` (`violation_code`)"
+        );
+    }
+
     // =========================================================
     // ACL V2
     // =========================================================
@@ -483,6 +552,7 @@ function plugin_vehiclescheduler_uninstall()
         'glpi_plugin_vehiclescheduler_checklistresponses',
         'glpi_plugin_vehiclescheduler_checklistitems',
         'glpi_plugin_vehiclescheduler_checklists',
+        'glpi_plugin_vehiclescheduler_configs',
         'glpi_plugin_vehiclescheduler_themes',
         'glpi_plugin_vehiclescheduler_driverfines',
         'glpi_plugin_vehiclescheduler_insuranceclaims',

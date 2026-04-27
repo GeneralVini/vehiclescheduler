@@ -8,7 +8,7 @@
         return;
     }
 
-    var form = root.querySelector('[data-vs-incident-form-body]');
+    var form = root.closest('form') || root.querySelector('form');
     var typeSelect = root.querySelector('[data-incident-type]');
     var alertBox = root.querySelector('[data-incident-alert]');
     var validationBox = root.querySelector('[data-incident-validation]');

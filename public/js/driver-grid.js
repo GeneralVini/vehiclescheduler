@@ -23,6 +23,9 @@ document.addEventListener('DOMContentLoaded', function () {
     let clearButton = root.querySelector('[data-driver-clear-filters]');
     let resultCount = root.querySelector('[data-driver-result-count]');
     let emptyState = root.querySelector('[data-driver-empty]');
+    let resultLabel = resultCount && resultCount.dataset.resultLabel
+        ? resultCount.dataset.resultLabel
+        : 'motoristas';
 
     /**
      * Normalizes a string for accent-insensitive and case-insensitive matching.
@@ -84,11 +87,11 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         if (visibleCount === totalCount) {
-            resultCount.textContent = 'Exibindo ' + totalCount + ' motoristas';
+            resultCount.textContent = 'Exibindo ' + totalCount + ' ' + resultLabel;
             return;
         }
 
-        resultCount.textContent = 'Exibindo ' + visibleCount + ' de ' + totalCount + ' motoristas';
+        resultCount.textContent = 'Exibindo ' + visibleCount + ' de ' + totalCount + ' ' + resultLabel;
     }
 
     /**

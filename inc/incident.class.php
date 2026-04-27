@@ -88,6 +88,33 @@ class PluginVehicleschedulerIncident extends CommonDBTM
         ];
     }
 
+    public function can($ID, int $right, ?array &$input = null): bool
+    {
+        switch ($right) {
+            case READ:
+                return PluginVehicleschedulerProfile::canViewManagement()
+                    || $this->isCurrentUserRequester((int) $ID);
+
+            case CREATE:
+                return (int) Session::getLoginUserID() > 0;
+
+            case UPDATE:
+                return PluginVehicleschedulerProfile::canEditManagement()
+                    || $this->canCurrentUserUpdateOwnOpenIncident((int) $ID);
+
+            case DELETE:
+            case PURGE:
+                return PluginVehicleschedulerProfile::canEditManagement();
+        }
+
+        return false;
+    }
+
+    public static function canCreate(): bool
+    {
+        return (int) Session::getLoginUserID() > 0;
+    }
+
     public function defineTabs($options = []): array
     {
         $tabs = [];
@@ -97,9 +124,132 @@ class PluginVehicleschedulerIncident extends CommonDBTM
         return $tabs;
     }
 
+    public function showForm($ID, array $options = [])
+    {
+        $this->initForm($ID, $options);
+
+        if ((int) $ID <= 0) {
+            $scheduleId = (int) ($_REQUEST['schedule_id'] ?? 0);
+            $this->fields = array_replace([
+                'users_id'                            => (int) Session::getLoginUserID(),
+                'groups_id'                           => 0,
+                'plugin_vehiclescheduler_schedules_id' => $scheduleId,
+                'plugin_vehiclescheduler_vehicles_id' => 0,
+                'plugin_vehiclescheduler_drivers_id'  => 0,
+                'incident_type'                       => self::TYPE_ACCIDENT,
+                'incident_date'                       => date('Y-m-d H:i:s'),
+                'location'                            => '',
+                'contact_phone'                       => '',
+                'status'                              => self::STATUS_OPEN,
+                'needs_maintenance'                   => 0,
+                'needs_insurance'                     => 0,
+                'description'                         => '',
+                'entities_id'                         => (int) ($_SESSION['glpiactive_entity'] ?? 0),
+            ], $this->fields);
+
+            if ($scheduleId > 0) {
+                $this->applyScheduleContextToInput($this->fields, $scheduleId);
+            }
+        }
+
+        $this->showFormHeader($options);
+
+        require_once GLPI_ROOT . '/plugins/vehiclescheduler/front/incident.render.php';
+
+        echo "<tr><td colspan='4'>";
+        plugin_vehiclescheduler_render_incident_form($this, (int) $ID);
+        echo '</td></tr>';
+
+        $this->showFormButtons([
+            'candel'      => PluginVehicleschedulerProfile::canEditManagement(),
+            'canedit'     => $ID > 0
+                ? $this->can((int) $ID, UPDATE)
+                : $this->can(-1, CREATE),
+            'addbuttons'  => [],
+        ] + $options);
+
+        return true;
+    }
+
+    public static function getManagementGridRows(): array
+    {
+        global $DB;
+
+        $rows = [];
+        $table = (new self())->getTable();
+        $types = self::getAllTypes();
+        $statuses = self::getAllStatus();
+
+        $iterator = $DB->request([
+            'FROM'  => $table,
+            'ORDER' => [
+                'incident_date DESC',
+                'id DESC',
+            ],
+        ]);
+
+        foreach ($iterator as $row) {
+            $vehicleId = (int) ($row['plugin_vehiclescheduler_vehicles_id'] ?? 0);
+            $driverId = (int) ($row['plugin_vehiclescheduler_drivers_id'] ?? 0);
+            $scheduleId = (int) ($row['plugin_vehiclescheduler_schedules_id'] ?? 0);
+            $requesterId = (int) ($row['users_id'] ?? 0);
+            $status = (int) ($row['status'] ?? self::STATUS_OPEN);
+            $scheduleSummary = $scheduleId > 0 ? self::getScheduleSummary($scheduleId) : '';
+
+            $vehicleName = '';
+            $vehiclePlate = '';
+            if ($vehicleId > 0) {
+                $vehicle = new PluginVehicleschedulerVehicle();
+                if ($vehicle->getFromDB($vehicleId)) {
+                    $vehicleName = (string) ($vehicle->fields['name'] ?? '');
+                    $vehiclePlate = (string) ($vehicle->fields['plate'] ?? '');
+                }
+            }
+
+            $driverName = '';
+            if ($driverId > 0) {
+                $driver = new PluginVehicleschedulerDriver();
+                if ($driver->getFromDB($driverId)) {
+                    $driverName = (string) ($driver->fields['name'] ?? '');
+                }
+            }
+
+            $rows[] = [
+                'id'             => (int) ($row['id'] ?? 0),
+                'name'           => (string) ($row['name'] ?? ''),
+                'type'           => (int) ($row['incident_type'] ?? self::TYPE_OTHER),
+                'type_label'     => $types[(int) ($row['incident_type'] ?? self::TYPE_OTHER)] ?? 'Incidente',
+                'schedule_id'    => $scheduleId,
+                'schedule_label'  => $scheduleSummary,
+                'status'         => $status,
+                'status_label'   => $statuses[$status] ?? 'Aberto',
+                'status_modifier' => self::getStatusModifier($status),
+                'incident_date'  => (string) ($row['incident_date'] ?? ''),
+                'location'       => (string) ($row['location'] ?? ''),
+                'vehicle_id'     => $vehicleId,
+                'vehicle_name'   => $vehicleName,
+                'vehicle_plate'  => $vehiclePlate,
+                'driver_id'      => $driverId,
+                'driver_name'    => $driverName,
+                'requester_id'   => $requesterId,
+                'requester_name' => $requesterId > 0 ? (string) getUserName($requesterId) : '',
+                'date_mod'       => (string) ($row['date_mod'] ?? ''),
+            ];
+        }
+
+        return $rows;
+    }
+
     public function prepareInputForAdd($input)
     {
         $input = $this->normalizeInput($input);
+
+        if ((int) ($input['plugin_vehiclescheduler_vehicles_id'] ?? 0) <= 0) {
+            $scheduleId = (int) ($input['plugin_vehiclescheduler_schedules_id'] ?? 0);
+            if ($scheduleId > 0) {
+                $this->applyScheduleContextToInput($input, $scheduleId);
+            }
+        }
 
         if ((int) ($input['plugin_vehiclescheduler_vehicles_id'] ?? 0) <= 0) {
             Session::addMessageAfterRedirect('Veiculo e obrigatorio.', false, ERROR);
@@ -125,6 +275,18 @@ class PluginVehicleschedulerIncident extends CommonDBTM
 
         if (!isset($input['users_id']) || (int) $input['users_id'] <= 0) {
             $input['users_id'] = (int) Session::getLoginUserID();
+        }
+
+        $scheduleId = (int) ($input['plugin_vehiclescheduler_schedules_id'] ?? 0);
+        if ($scheduleId > 0) {
+            $this->applyScheduleContextToInput($input, $scheduleId);
+        }
+
+        if (!PluginVehicleschedulerProfile::canEditManagement()) {
+            $input['users_id'] = (int) Session::getLoginUserID();
+            $input['status'] = self::STATUS_OPEN;
+            $input['needs_maintenance'] = 0;
+            $input['needs_insurance'] = 0;
         }
 
         if ($input['incident_date'] === '') {
@@ -154,6 +316,21 @@ class PluginVehicleschedulerIncident extends CommonDBTM
             Session::addMessageAfterRedirect('Descricao e obrigatoria.', false, ERROR);
 
             return false;
+        }
+
+        $scheduleId = (int) ($input['plugin_vehiclescheduler_schedules_id'] ?? 0);
+        if ($scheduleId > 0) {
+            $this->applyScheduleContextToInput($input, $scheduleId);
+        }
+
+        if (!PluginVehicleschedulerProfile::canEditManagement()) {
+            $current = new self();
+            if ($current->getFromDB((int) $input['id'])) {
+                $input['users_id'] = (int) ($current->fields['users_id'] ?? Session::getLoginUserID());
+                $input['status'] = (int) ($current->fields['status'] ?? self::STATUS_OPEN);
+                $input['needs_maintenance'] = (int) ($current->fields['needs_maintenance'] ?? 0);
+                $input['needs_insurance'] = (int) ($current->fields['needs_insurance'] ?? 0);
+            }
         }
 
         return $input;
@@ -286,6 +463,12 @@ class PluginVehicleschedulerIncident extends CommonDBTM
         $input['name'] = PluginVehicleschedulerInput::string($input, 'name', 255);
         $input['users_id'] = PluginVehicleschedulerInput::int($input, 'users_id', 0, 0);
         $input['groups_id'] = PluginVehicleschedulerInput::int($input, 'groups_id', 0, 0);
+        $input['plugin_vehiclescheduler_schedules_id'] = PluginVehicleschedulerInput::int(
+            $input,
+            'plugin_vehiclescheduler_schedules_id',
+            0,
+            0
+        );
         $input['plugin_vehiclescheduler_vehicles_id'] = PluginVehicleschedulerInput::int(
             $input,
             'plugin_vehiclescheduler_vehicles_id',
@@ -345,5 +528,96 @@ class PluginVehicleschedulerIncident extends CommonDBTM
         }
 
         return date('Y-m-d H:i:s', $timestamp);
+    }
+
+    private function applyScheduleContextToInput(array &$input, int $scheduleId): void
+    {
+        if ($scheduleId <= 0) {
+            return;
+        }
+
+        $schedule = new PluginVehicleschedulerSchedule();
+        if (!$schedule->getFromDB($scheduleId)) {
+            return;
+        }
+
+        $input['plugin_vehiclescheduler_schedules_id'] = $scheduleId;
+        $input['plugin_vehiclescheduler_vehicles_id'] = (int) ($schedule->fields['plugin_vehiclescheduler_vehicles_id'] ?? 0);
+        $input['plugin_vehiclescheduler_drivers_id'] = (int) ($schedule->fields['plugin_vehiclescheduler_drivers_id'] ?? 0);
+        $input['users_id'] = (int) ($schedule->fields['users_id'] ?? Session::getLoginUserID());
+        $input['groups_id'] = (int) ($schedule->fields['groups_id'] ?? 0);
+
+        if (trim((string) ($input['incident_date'] ?? '')) === '') {
+            $input['incident_date'] = (string) ($schedule->fields['end_date'] ?? $schedule->fields['begin_date'] ?? '');
+        }
+
+        if (trim((string) ($input['location'] ?? '')) === '') {
+            $input['location'] = (string) ($schedule->fields['destination'] ?? '');
+        }
+    }
+
+    private static function getScheduleSummary(int $scheduleId): string
+    {
+        if ($scheduleId <= 0) {
+            return '';
+        }
+
+        $schedule = new PluginVehicleschedulerSchedule();
+        if (!$schedule->getFromDB($scheduleId)) {
+            return '';
+        }
+
+        $begin = Html::convDateTime((string) ($schedule->fields['begin_date'] ?? ''));
+        $end = Html::convDateTime((string) ($schedule->fields['end_date'] ?? ''));
+        $destination = trim((string) ($schedule->fields['destination'] ?? ''));
+        $requester = (int) ($schedule->fields['users_id'] ?? 0) > 0 ? getUserName((int) $schedule->fields['users_id']) : '';
+
+        $parts = [
+            '#' . $scheduleId,
+            $destination !== '' ? $destination : 'Sem destino',
+            $begin !== '' && $end !== '' ? $begin . ' - ' . $end : '',
+            $requester !== '' ? $requester : '',
+        ];
+
+        return trim(implode(' | ', array_filter($parts, static fn ($part) => trim((string) $part) !== '')));
+    }
+
+    private function isCurrentUserRequester(int $id): bool
+    {
+        if ($id <= 0) {
+            return false;
+        }
+
+        $incident = new self();
+        if (!$incident->getFromDB($id)) {
+            return false;
+        }
+
+        return (int) ($incident->fields['users_id'] ?? 0) === (int) Session::getLoginUserID();
+    }
+
+    private function canCurrentUserUpdateOwnOpenIncident(int $id): bool
+    {
+        if (!$this->isCurrentUserRequester($id)) {
+            return false;
+        }
+
+        $incident = new self();
+        if (!$incident->getFromDB($id)) {
+            return false;
+        }
+
+        return (int) ($incident->fields['status'] ?? self::STATUS_OPEN) === self::STATUS_OPEN;
+    }
+
+    private static function getStatusModifier(int $status): string
+    {
+        return match ($status) {
+            self::STATUS_OPEN => 'pending',
+            self::STATUS_ANALYZING => 'active',
+            self::STATUS_RESOLVED => 'approved',
+            self::STATUS_CLOSED => 'inactive',
+            default => 'active',
+        };
     }
 }

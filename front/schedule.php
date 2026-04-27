@@ -7,7 +7,6 @@ include_once __DIR__ . '/../inc/ui-helpers.php';
 global $CFG_GLPI;
 
 $self = filter_input(INPUT_SERVER, 'PHP_SELF', FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?: '';
-include_once(__DIR__ . '/../inc/common.inc.php');
 $root_doc = plugin_vehiclescheduler_get_root_doc();
 
 $can_request = \PluginVehicleschedulerProfile::canAccessRequester();
@@ -174,10 +173,9 @@ plugin_vehiclescheduler_render_back_to_management();
                     <i class="ti ti-calendar-event vs-header-icon"></i>
                 </div>
                 <div>
-                    <h2>Fila de Aprovação de Reservas</h2>
+                    <h2>Reservas</h2>
                     <p class="vs-page-subtitle">
-                        Filtro atual: <strong><?php echo $h($status_label); ?></strong>.
-                        Revise as solicitações, atribua recursos e siga para aprovação ou recusa.
+                        Fila operacional para análise, atribuição de recursos e aprovação de solicitações.
                     </p>
                 </div>
             </div>

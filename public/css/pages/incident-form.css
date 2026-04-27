@@ -208,6 +208,19 @@
     border-color: color-mix(in srgb, var(--vs-primary, #3b82f6) 45%, var(--vs-border, rgba(15, 23, 42, 0.1)));
 }
 
+.vs-incident-form-readonly {
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 2px solid #e2e8f0;
+    background: color-mix(in srgb, var(--vs-card-bg, rgba(255, 255, 255, 0.92)) 70%, transparent);
+    color: var(--vs-text-color, #0f172a);
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
 .vs-incident-form-actions {
     padding: 16px 18px;
     border-top: 1px solid color-mix(in srgb, var(--vs-border, rgba(15, 23, 42, 0.1)) 80%, transparent);
