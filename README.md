@@ -17,13 +17,14 @@ Additional operational modules may be present or evolving, including maintenance
 
 - [INSTALL.md](INSTALL.md): installation, update, GLPI activation, and Apache deployment
 - [INSTALL_pt-BR.md](INSTALL_pt-BR.md): Brazilian Portuguese installation guide
-- [INSTALL_fr-FR.md](INSTALL_fr-FR.md): French installation guide
+- [INSTALL_fr.md](INSTALL_fr.md): French installation guide
 - [INSTALL_es.md](INSTALL_es.md): Spanish installation guide
 - [README_vehiclescheduler_pt-BR.md](README_vehiclescheduler_pt-BR.md): Brazilian Portuguese README
-- [README_vehiclescheduler_fr-FR.md](README_vehiclescheduler_fr-FR.md): French README
+- [README_vehiclescheduler_fr.md](README_vehiclescheduler_fr.md): French README
+- [README_vehiclescheduler_es.md](README_vehiclescheduler_es.md): Spanish README
 - [CHANGELOG.md](CHANGELOG.md): release history and notable changes
 - [CHANGELOG_pt-BR.md](CHANGELOG_pt-BR.md): Brazilian Portuguese changelog
-- [CHANGELOG_fr-FR.md](CHANGELOG_fr-FR.md): French changelog
+- [CHANGELOG_fr.md](CHANGELOG_fr.md): French changelog
 - [CHANGELOG_es.md](CHANGELOG_es.md): Spanish changelog
 - [AGENTS.md](AGENTS.md): normative rules for AI/code generation
 - [CODEX_HANDOFF.md](CODEX_HANDOFF.md): practical implementation guidance for Codex
@@ -71,6 +72,10 @@ The repository includes two Apache examples. Keep only one active in the server 
 
 Plugin URLs must rely on GLPI-aware helpers instead of hardcoded assumptions about `/glpi`.
 
-## License
+## License and Attribution
 
-GPL v2+
+SisViaturas / Vehiclescheduler is licensed under the [PolyForm Noncommercial License 1.0.0](LICENSE).
+
+The project is maintained by Vinicius Lopes (`generalvini@gmail.com`, Telegram `@ViniciusHonorato`) and originated as a fork of work by Telegram user `@mendesmarcio`. Attribution to both must be preserved in forks, redistributions, and derivative works. Commercial use is not permitted without prior written permission from Vinicius Lopes.
+
+See [NOTICE](NOTICE) for required attribution notices.

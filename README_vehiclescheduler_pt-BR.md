@@ -17,13 +17,14 @@ Módulos operacionais adicionais podem estar presentes ou em evolução, incluin
 
 - [INSTALL_pt-BR.md](INSTALL_pt-BR.md): instalação, atualização, ativação no GLPI e publicação Apache
 - [INSTALL.md](INSTALL.md): guia de instalação em inglês
-- [INSTALL_fr-FR.md](INSTALL_fr-FR.md): guia de instalação em francês
+- [INSTALL_fr.md](INSTALL_fr.md): guia de instalação em francês
 - [INSTALL_es.md](INSTALL_es.md): guia de instalação em espanhol
 - [README.md](README.md): README em inglês
-- [README_vehiclescheduler_fr-FR.md](README_vehiclescheduler_fr-FR.md): README em francês
+- [README_vehiclescheduler_fr.md](README_vehiclescheduler_fr.md): README em francês
+- [README_vehiclescheduler_es.md](README_vehiclescheduler_es.md): README em espanhol
 - [CHANGELOG_pt-BR.md](CHANGELOG_pt-BR.md): histórico de mudanças em português brasileiro
 - [CHANGELOG.md](CHANGELOG.md): histórico de mudanças em inglês
-- [CHANGELOG_fr-FR.md](CHANGELOG_fr-FR.md): histórico de mudanças em francês
+- [CHANGELOG_fr.md](CHANGELOG_fr.md): histórico de mudanças em francês
 - [CHANGELOG_es.md](CHANGELOG_es.md): histórico de mudanças em espanhol
 - [AGENTS.md](AGENTS.md): regras normativas para IA/geração de código
 - [CODEX_HANDOFF.md](CODEX_HANDOFF.md): orientação prática de implementação para Codex
@@ -71,6 +72,10 @@ O repositório inclui dois exemplos Apache. Mantenha apenas um ativo no diretór
 
 As URLs do plugin devem usar helpers compatíveis com GLPI em vez de assumir caminhos fixos como `/glpi`.
 
-## Licença
+## Licença e Atribuição
 
-GPL v2+
+SisViaturas / Vehiclescheduler é licenciado sob a [PolyForm Noncommercial License 1.0.0](LICENSE).
+
+O projeto é mantido por Vinicius Lopes (`generalvini@gmail.com`, Telegram `@ViniciusHonorato`) e se originou como um fork de um trabalho do usuário Telegram `@mendesmarcio`. A atribuição a ambos deve ser preservada em forks, redistribuições e trabalhos derivados. Uso comercial não é permitido sem autorização prévia por escrito de Vinicius Lopes.
+
+Consulte [NOTICE](NOTICE) para os avisos de atribuição obrigatórios.

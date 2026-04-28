@@ -15,15 +15,16 @@ Des modules operationnels supplementaires peuvent etre presents ou en cours d'ev
 
 ## Documentation
 
-- [INSTALL_fr-FR.md](INSTALL_fr-FR.md) : installation, mise a jour, activation GLPI et deploiement Apache
+- [INSTALL_fr.md](INSTALL_fr.md) : installation, mise a jour, activation GLPI et deploiement Apache
 - [INSTALL.md](INSTALL.md) : guide d'installation en anglais
 - [INSTALL_pt-BR.md](INSTALL_pt-BR.md) : guide d'installation en portugais bresilien
 - [INSTALL_es.md](INSTALL_es.md) : guide d'installation en espagnol
 - [README.md](README.md) : README en anglais
 - [README_vehiclescheduler_pt-BR.md](README_vehiclescheduler_pt-BR.md) : README en portugais bresilien
+- [README_vehiclescheduler_es.md](README_vehiclescheduler_es.md) : README en espagnol
 - [CHANGELOG.md](CHANGELOG.md) : historique des versions et changements notables
 - [CHANGELOG_pt-BR.md](CHANGELOG_pt-BR.md) : changelog en portugais bresilien
-- [CHANGELOG_fr-FR.md](CHANGELOG_fr-FR.md) : changelog en francais
+- [CHANGELOG_fr.md](CHANGELOG_fr.md) : changelog en francais
 - [CHANGELOG_es.md](CHANGELOG_es.md) : changelog en espagnol
 - [AGENTS.md](AGENTS.md) : regles normatives pour l'IA/la generation de code
 - [CODEX_HANDOFF.md](CODEX_HANDOFF.md) : guide pratique d'implementation pour Codex
@@ -46,7 +47,7 @@ composer install
 
 Ensuite, ouvrez GLPI, allez dans **Configuration > Plugins**, installez **SisViaturas / Vehicle Scheduler** et activez le plugin.
 
-Pour les exemples Apache et les etapes completes, consultez [INSTALL_fr-FR.md](INSTALL_fr-FR.md).
+Pour les exemples Apache et les etapes completes, consultez [INSTALL_fr.md](INSTALL_fr.md).
 
 ## Orientation technique
 
@@ -71,6 +72,10 @@ Le depot inclut deux exemples Apache. Gardez un seul fichier actif dans le reper
 
 Les URLs du plugin doivent s'appuyer sur des helpers compatibles GLPI au lieu d'hypotheses codees en dur sur `/glpi`.
 
-## Licence
+## Licence et attribution
 
-GPL v2+
+SisViaturas / Vehiclescheduler est distribue sous la [PolyForm Noncommercial License 1.0.0](LICENSE).
+
+Le projet est maintenu par Vinicius Lopes (`generalvini@gmail.com`, Telegram `@ViniciusHonorato`) et provient d'un fork d'un travail de l'utilisateur Telegram `@mendesmarcio`. L'attribution aux deux doit etre preservee dans les forks, redistributions et travaux derives. L'utilisation commerciale n'est pas autorisee sans permission ecrite prealable de Vinicius Lopes.
+
+Voir [NOTICE](NOTICE) pour les avis d'attribution obligatoires.

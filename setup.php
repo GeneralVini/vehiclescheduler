@@ -64,8 +64,8 @@ function plugin_version_vehiclescheduler(): array
     return [
         'name'         => 'Vehicle Scheduler',
         'version'      => PLUGIN_VEHICLESCHEDULER_VERSION,
-        'author'       => 'SisViaturas',
-        'license'      => 'GPLv3',
+        'author'       => 'Vinicius Lopes <generalvini@gmail.com> (@ViniciusHonorato)',
+        'license'      => 'PolyForm Noncommercial 1.0.0',
         'homepage'     => '',
         'requirements' => [
             'glpi' => [

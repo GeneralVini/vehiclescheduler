@@ -8,7 +8,7 @@
  * @category Plugin
  * @package  VehicleScheduler
  * @author   Plugin Development Team
- * @license  GPLv3+
+ * @license  PolyForm Noncommercial License 1.0.0
  */
 
 $LANG['plugin_vehiclescheduler'] = [

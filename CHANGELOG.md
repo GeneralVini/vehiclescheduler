@@ -29,13 +29,21 @@ The format is based on **Keep a Changelog** principles and the project should pr
 
 - Removed the duplicate repository-level `glpi.conf` copy to avoid confusion with the two deployment examples.
 
-- Split installation and Apache setup instructions into dedicated `INSTALL.md`, `INSTALL_pt-BR.md`, and `INSTALL_fr-FR.md` files.
+- Split installation and Apache setup instructions into dedicated `INSTALL.md`, `INSTALL_pt-BR.md`, `INSTALL_fr.md`, and `INSTALL_es.md` files.
 
 - Added Spanish installation documentation in `INSTALL_es.md`.
 
-- Added French changelog documentation in `CHANGELOG_fr-FR.md`.
+- Added French changelog documentation in `CHANGELOG_fr.md`.
+
+- Added Spanish README documentation in `README_vehiclescheduler_es.md`.
+
+- Standardized French documentation file suffixes from `_fr-FR` to `_fr`.
 
 - Reduced README files to GitHub-facing project overviews with relative links to the language-specific install guides.
+
+- Changed project licensing metadata and documentation to PolyForm Noncommercial License 1.0.0.
+
+- Added `NOTICE` attribution for Vinicius Lopes (`generalvini@gmail.com`, Telegram `@ViniciusHonorato`) and the original fork source, Telegram user `@mendesmarcio`.
 
 ### 28ABR26 Fixed
 

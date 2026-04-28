@@ -29,13 +29,21 @@ Le format suit les principes de **Keep a Changelog** et le projet doit privilegi
 
 - Suppression de la copie dupliquee `glpi.conf` au niveau du depot afin d'eviter la confusion avec les deux exemples de deploiement.
 
-- Separation des instructions d'installation et de configuration Apache dans les fichiers dedies `INSTALL.md`, `INSTALL_pt-BR.md` et `INSTALL_fr-FR.md`.
+- Separation des instructions d'installation et de configuration Apache dans les fichiers dedies `INSTALL.md`, `INSTALL_pt-BR.md`, `INSTALL_fr.md` et `INSTALL_es.md`.
 
 - Ajout de la documentation d'installation en espagnol dans `INSTALL_es.md`.
 
-- Ajout de la documentation du changelog en francais dans `CHANGELOG_fr-FR.md`.
+- Ajout de la documentation du changelog en francais dans `CHANGELOG_fr.md`.
+
+- Ajout de la documentation README en espagnol dans `README_vehiclescheduler_es.md`.
+
+- Standardisation des suffixes des fichiers de documentation en francais de `_fr-FR` vers `_fr`.
 
 - Reduction des fichiers README a des vues d'ensemble orientees GitHub avec des liens relatifs vers les guides d'installation par langue.
+
+- Modification des metadonnees et de la documentation de licence du projet vers PolyForm Noncommercial License 1.0.0.
+
+- Ajout de `NOTICE` avec attribution a Vinicius Lopes (`generalvini@gmail.com`, Telegram `@ViniciusHonorato`) et a la source originale du fork, l'utilisateur Telegram `@mendesmarcio`.
 
 ### 28ABR26 Corrige
 

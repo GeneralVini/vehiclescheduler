@@ -90,7 +90,7 @@ SisViaturas é um plugin de gestão de frotas para GLPI 11 com foco em reservas 
    <changelog>https://raw.githubusercontent.com/GeneralVini/vehiclescheduler/main/CHANGELOG.md</changelog>
 
    <authors>
-      <author>Vinicius Lopes</author>
+      <author>Vinicius Lopes &lt;generalvini@gmail.com&gt; (@ViniciusHonorato)</author>
    </authors>
 
    <versions>
@@ -106,7 +106,7 @@ SisViaturas é um plugin de gestão de frotas para GLPI 11 com foco em reservas 
       <lang>pt_BR</lang>
    </langs>
 
-   <license>GPL v2+</license>
+   <license>PolyForm Noncommercial License 1.0.0</license>
 
    <tags>
       <en>
