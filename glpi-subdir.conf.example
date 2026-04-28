@@ -5,6 +5,7 @@
     ErrorLog /var/log/httpd/glpi_error.log
     CustomLog /var/log/httpd/glpi_access.log combined
 
+    RedirectMatch 302 ^/$ /glpi/
     RedirectMatch 302 ^/glpi$ /glpi/
 
     Alias /glpi/ /var/www/glpi/public/

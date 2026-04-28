@@ -13,6 +13,42 @@ The format is based on **Keep a Changelog** principles and the project should pr
 
 - Populate release sections below once actual tagged versions are confirmed.
 
+## [28ABR26] - CSS asset loading and GLPI subdirectory config
+
+### 28ABR26 Changed
+
+- Restored GLPI-aware plugin URL generation so root deployments use `/plugins/...` and subdirectory deployments use `/glpi/plugins/...`.
+
+- Reworked plugin CSS loading to expand `public/css/app.css` and page-specific stylesheet imports before rendering.
+
+- Added filesystem-based public asset resolution for plugin CSS files, keeping imported styles restricted to the plugin `public/` directory.
+
+- Clarified Apache deployment examples so `glpi-root.conf.example` is for `http://server/` and `glpi-subdir.conf.example` is for `http://server/glpi/`.
+
+- Added a root URL redirect from `/` to `/glpi/` for the subdirectory deployment scenario.
+
+- Removed the duplicate repository-level `glpi.conf` copy to avoid confusion with the two deployment examples.
+
+- Split installation and Apache setup instructions into dedicated `INSTALL.md`, `INSTALL_pt-BR.md`, and `INSTALL_fr-FR.md` files.
+
+- Added Spanish installation documentation in `INSTALL_es.md`.
+
+- Added French changelog documentation in `CHANGELOG_fr-FR.md`.
+
+- Reduced README files to GitHub-facing project overviews with relative links to the language-specific install guides.
+
+### 28ABR26 Fixed
+
+- Fixed stylesheet resolution issues caused by nested CSS `@import` paths while keeping compatibility with deployments under `/glpi/plugins/vehiclescheduler`.
+
+- Fixed the `http://IP/` scenario returning Apache 403 when `/var/www/html` has no index file.
+
+### 28ABR26 Technical
+
+- Added recursive local CSS import expansion with duplicate-file protection to avoid loading the same stylesheet more than once.
+
+- Preserved the previous `<link rel="stylesheet">` loading path as a fallback when CSS files cannot be resolved from disk.
+
 ## [27ABR26] - MVP hardening and fleet operations polish
 
 ### 27ABR26 Added
@@ -38,8 +74,6 @@ The format is based on **Keep a Changelog** principles and the project should pr
   - `glpi-root.conf.example`
 
   - `glpi-subdir.conf.example`
-
-  - documentation references for `glpi.conf`
 
 - Root path compatibility guidance in project documentation for environments using either `/` or `/glpi`.
 

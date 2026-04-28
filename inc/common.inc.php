@@ -1,27 +1,16 @@
 <?php
 
-/**
- * Get the GLPI root document path for URL prefix usage.
- * Returns an empty string for root installations and "/subdir"
- * for subdirectory installations.
- *
- * Examples:
- * - GLPI at http://host/      => ''
- * - GLPI at http://host/glpi  => '/glpi'
- *
- * @return string
- */
 function plugin_vehiclescheduler_get_root_doc(): string
 {
     global $CFG_GLPI;
 
-    $root_doc = (string) ($CFG_GLPI['root_doc'] ?? '');
+    $rootDoc = (string) ($CFG_GLPI['root_doc'] ?? '');
 
-    if ($root_doc === '' || $root_doc === '/') {
+    if ($rootDoc === '' || $rootDoc === '/') {
         return '';
     }
 
-    return rtrim($root_doc, '/');
+    return rtrim($rootDoc, '/');
 }
 
 /**
@@ -68,7 +57,94 @@ function plugin_vehiclescheduler_get_public_asset_url(string $relativePath): str
     return $root_doc . '/plugins/vehiclescheduler/public/' . ltrim($relativePath, '/') . '?v=' . $version;
 }
 
-// inc/common.inc.php or the file where plugin_vehiclescheduler_load_css() is defined
+/**
+ * Resolve a public plugin asset to an absolute filesystem path.
+ */
+function plugin_vehiclescheduler_get_public_asset_path(string $relativePath): ?string
+{
+    $basePath = realpath(GLPI_ROOT . '/plugins/vehiclescheduler/public');
+
+    if ($basePath === false) {
+        return null;
+    }
+
+    $path = realpath($basePath . '/' . ltrim($relativePath, '/'));
+
+    if ($path === false || !is_file($path)) {
+        return null;
+    }
+
+    if (!str_starts_with($path, $basePath . DIRECTORY_SEPARATOR)) {
+        return null;
+    }
+
+    return $path;
+}
+
+/**
+ * Expand a CSS file and its local @import dependencies.
+ *
+ * GLPI installations behind different roots/proxies can fail to resolve nested
+ * @import paths from plugin assets. Keeping CSS in public/css and flattening it
+ * here makes page rendering independent from that URL resolution detail.
+ *
+ * @param string              $relativePath Public asset path inside public/.
+ * @param array<string, bool> $loadedFiles  Absolute paths already expanded.
+ */
+function plugin_vehiclescheduler_expand_css_asset(string $relativePath, array &$loadedFiles = []): string
+{
+    $path = plugin_vehiclescheduler_get_public_asset_path($relativePath);
+
+    if ($path === null || isset($loadedFiles[$path])) {
+        return '';
+    }
+
+    $loadedFiles[$path] = true;
+    $css = file_get_contents($path);
+
+    if ($css === false) {
+        return '';
+    }
+
+    $basePublicPath = realpath(GLPI_ROOT . '/plugins/vehiclescheduler/public');
+    $currentDir = dirname($path);
+
+    $css = preg_replace_callback(
+        '/@import\s+(?:url\()?["\']?([^"\')\s;]+)["\']?\)?\s*;/i',
+        static function (array $matches) use ($basePublicPath, $currentDir, &$loadedFiles): string {
+            if ($basePublicPath === false) {
+                return '';
+            }
+
+            $import = trim((string) ($matches[1] ?? ''));
+
+            if (
+                $import === ''
+                || preg_match('/^(?:[a-z][a-z0-9+.-]*:|\/\/)/i', $import) === 1
+            ) {
+                return '';
+            }
+
+            $importPath = realpath($currentDir . '/' . $import);
+
+            if (
+                $importPath === false
+                || !is_file($importPath)
+                || !str_starts_with($importPath, $basePublicPath . DIRECTORY_SEPARATOR)
+            ) {
+                return '';
+            }
+
+            $relativeImportPath = ltrim(substr($importPath, strlen($basePublicPath)), DIRECTORY_SEPARATOR);
+            $relativeImportPath = str_replace(DIRECTORY_SEPARATOR, '/', $relativeImportPath);
+
+            return "\n" . plugin_vehiclescheduler_expand_css_asset($relativeImportPath, $loadedFiles) . "\n";
+        },
+        $css
+    );
+
+    return $css ?? '';
+}
 
 /**
  * Loads the base plugin stylesheet and optional page-specific stylesheets.
@@ -79,20 +155,31 @@ function plugin_vehiclescheduler_get_public_asset_url(string $relativePath): str
  */
 function plugin_vehiclescheduler_load_css(array $extra_css = []): void
 {
-    $css_url = plugin_vehiclescheduler_get_public_asset_url('css/app.css');
-
-    echo "<link rel='stylesheet' href='" . htmlspecialchars($css_url, ENT_QUOTES, 'UTF-8') . "'>";
+    $loadedCss = [];
+    $css = plugin_vehiclescheduler_expand_css_asset('css/app.css', $loadedCss);
 
     foreach ($extra_css as $css_asset) {
-        $css_asset = trim($css_asset);
+        $css .= "\n" . plugin_vehiclescheduler_expand_css_asset(trim($css_asset), $loadedCss);
+    }
 
-        if ($css_asset === '') {
-            continue;
+    if (trim($css) !== '') {
+        echo "<style id='vs-app-css'>\n" . str_ireplace('</style', '<\/style', $css) . "\n</style>";
+    } else {
+        $css_url = plugin_vehiclescheduler_get_public_asset_url('css/app.css');
+
+        echo "<link rel='stylesheet' href='" . htmlspecialchars($css_url, ENT_QUOTES, 'UTF-8') . "'>";
+
+        foreach ($extra_css as $css_asset) {
+            $css_asset = trim($css_asset);
+
+            if ($css_asset === '') {
+                continue;
+            }
+
+            $extra_css_url = plugin_vehiclescheduler_get_public_asset_url($css_asset);
+
+            echo "<link rel='stylesheet' href='" . htmlspecialchars($extra_css_url, ENT_QUOTES, 'UTF-8') . "'>";
         }
-
-        $extra_css_url = plugin_vehiclescheduler_get_public_asset_url($css_asset);
-
-        echo "<link rel='stylesheet' href='" . htmlspecialchars($extra_css_url, ENT_QUOTES, 'UTF-8') . "'>";
     }
 
     plugin_vehiclescheduler_load_theme_css();

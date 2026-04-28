@@ -2,282 +2,74 @@
 
 Plugin de gestão de frota e agendamento de veículos para **GLPI 11**.
 
-**SisViaturas** (`vehiclescheduler`) é um plugin do GLPI focado em solicitações de reserva de veículos, fluxo de aprovação, alocação operacional, validação de conflitos e visibilidade por dashboards para a operação diária da frota.
+**SisViaturas** (`vehiclescheduler`) apoia solicitações de reserva de veículos, fluxo de aprovação, alocação operacional, validação de conflitos e visibilidade por dashboards para a operação diária da frota.
 
 ## Escopo Atual do MVP
 
-A versão atual do projeto é um MVP funcional com:
-
 - CRUD de veículos
 - CRUD de motoristas
-- solicitação de pedidos/reservas
+- fluxo de solicitação/reserva
 - dashboard
 
-O código também contém módulos operacionais adicionais que podem estar presentes ou em evolução, como manutenção, incidentes, relatórios, checklists, multas, sinistros e ajustes de tema/interface.
+Módulos operacionais adicionais podem estar presentes ou em evolução, incluindo manutenção, incidentes, relatórios, checklists, multas, sinistros e helpers de tema/interface.
+
+## Documentação
+
+- [INSTALL_pt-BR.md](INSTALL_pt-BR.md): instalação, atualização, ativação no GLPI e publicação Apache
+- [INSTALL.md](INSTALL.md): guia de instalação em inglês
+- [INSTALL_fr-FR.md](INSTALL_fr-FR.md): guia de instalação em francês
+- [INSTALL_es.md](INSTALL_es.md): guia de instalação em espanhol
+- [README.md](README.md): README em inglês
+- [README_vehiclescheduler_fr-FR.md](README_vehiclescheduler_fr-FR.md): README em francês
+- [CHANGELOG_pt-BR.md](CHANGELOG_pt-BR.md): histórico de mudanças em português brasileiro
+- [CHANGELOG.md](CHANGELOG.md): histórico de mudanças em inglês
+- [CHANGELOG_fr-FR.md](CHANGELOG_fr-FR.md): histórico de mudanças em francês
+- [CHANGELOG_es.md](CHANGELOG_es.md): histórico de mudanças em espanhol
+- [AGENTS.md](AGENTS.md): regras normativas para IA/geração de código
+- [CODEX_HANDOFF.md](CODEX_HANDOFF.md): orientação prática de implementação para Codex
 
 ## Requisitos
 
 - GLPI 11 instalado e funcionando
 - PHP 8.1 ou superior
 - Composer
-- Servidor web configurado para o GLPI
+- Apache ou outro servidor web configurado para o GLPI
 
-## Instalação
-
-Coloque o plugin no diretório de plugins do GLPI:
+## Instalação Rápida
 
 ```bash
 cd /var/www/glpi/plugins
 git clone https://github.com/GeneralVini/vehiclescheduler.git vehiclescheduler
 cd vehiclescheduler
-```
-
-Instale as dependências PHP. O repositório não depende de um diretório `vendor/` versionado:
-
-```bash
 composer install
 ```
 
-Se o `composer.lock` não existir ou se for necessário atualizar intencionalmente as versões das dependências, execute:
+Depois, abra o GLPI, acesse **Configurar > Plugins**, instale **SisViaturas / Vehicle Scheduler** e habilite o plugin.
 
-```bash
-composer update
-```
-
-Depois, instale e habilite o plugin no GLPI:
-
-1. Abra o GLPI no navegador.
-2. Acesse **Configurar > Plugins**.
-3. Instale o **SisViaturas / Vehicle Scheduler**.
-4. Habilite o plugin.
-
-## Atualização
-
-A partir do diretório do plugin:
-
-```bash
-git pull
-composer install
-```
-
-Use `composer update` somente quando a intenção for atualizar versões de dependências.
-
-## Configuração de Perfil
-
-As permissões de solicitante e administrador/aprovador são configuradas na tela nativa de Perfil do GLPI.
-
-Abra o perfil desejado no GLPI e use a aba **Gestão de Frota** adicionada pelo plugin. O formulário é renderizado por `PluginVehicleschedulerProfile` e salvo por `front/profile.form.php`.
-
-As permissões disponíveis do plugin são:
-
-- **Acesso ao Portal de Reservas**: permite solicitar reservas e reportar incidentes.
-- **Acesso à Gestão de Frota**: permite acessar dashboard, veículos, motoristas, manutenções, relatórios e cadastros. Pode ser configurado como sem acesso, leitura ou escrita/CRUD.
-- **Aprovar/Rejeitar Reservas**: permite aprovar ou rejeitar solicitações de reserva.
+Para exemplos Apache e passos completos, consulte [INSTALL_pt-BR.md](INSTALL_pt-BR.md).
 
 ## Direção Técnica
 
-O projeto segue uma separação rígida entre lógica de negócio e renderização de interface.
+O projeto segue separação rígida entre lógica de negócio e renderização de interface:
 
-### Backend / Domínio
+- `src/`: local preferencial para backend/domínio novo ou refatorado
+- `front/`: entry points PHP finos e renderização de páginas
+- `ajax/`: endpoints assíncronos finos
+- `public/css/`: estilos
+- `public/js/`: comportamento no cliente
+- `locales/`: traduções
+- `inc/`: classes legadas/compatíveis enquanto a migração ocorre
 
-Local preferencial para código backend novo ou refatorado:
+Classes backend/domínio não devem conter layout de tela, CSS inline, JavaScript inline, composição de página ou marcação de botões.
 
-- `src/...`
+## Modos de Publicação Apache
 
-Classes de domínio legadas e compatíveis ainda estão em:
+O repositório inclui dois exemplos Apache. Mantenha apenas um ativo no diretório de configuração do Apache do servidor:
 
-- `inc/*.class.php`
+- [glpi-root.conf.example](glpi-root.conf.example): GLPI em `http://servidor/`
+- [glpi-subdir.conf.example](glpi-subdir.conf.example): GLPI em `http://servidor/glpi/`
 
-Isso significa que a lógica de negócio existente do MVP ainda pode estar em `inc/`, mas novos códigos de domínio e refatorações mais amplas devem caminhar para classes PSR-4 em `src/`.
-
-Responsabilidades típicas do backend:
-
-- ACL e autorização
-- validação
-- detecção de conflitos
-- regras de negócio
-- regras de persistência
-- lógica de serviços
-- integração com tickets
-- relatórios/agregações
-- lógica de cache
-- opções de busca
-
-Classes PHP de backend/domínio não devem conter layout de tela, CSS inline, JavaScript inline, composição de página ou marcação de botões.
-
-### Front / Renderização
-
-Local preferencial:
-
-- `front/*.php`
-
-Responsabilidades típicas:
-
-- renderização de páginas
-- composição de layout
-- botões e visibilidade de campos
-- fluxo dos entry points
-- orquestração do backend/serviços
-- carregamento de assets CSS/JS
-
-### Endpoints AJAX
-
-Local preferencial:
-
-- `ajax/*.php`
-
-Responsabilidades típicas:
-
-- tratamento de requisições assíncronas
-- orquestração enxuta do endpoint
-- delegação para backend/serviços
-
-### Assets
-
-- `public/css/*.css` para estilos
-- `public/js/*.js` para comportamento no cliente
-- `locales/` para traduções
-
-## Convenções de Namespace e Classes
-
-Para código moderno em `src/`:
-
-- usar namespaces PSR-4
-- usar o namespace base `GlpiPlugin\Vehiclescheduler`
-- espelhar a estrutura de diretórios nos namespaces
-- importar dependências com `use`
-- manter uma classe/interface/trait principal por arquivo sempre que possível
-
-Exemplos:
-
-- `src/Service/ReservationConflictService.php`
-- `src/Controller/ManagementController.php`
-
-Arquivos de entrada finos como `front/*.php`, `ajax/*.php`, `setup.php` e `hook.php` normalmente permanecem sem declaração de namespace.
-
-Arquivos legados `inc/*.class.php` podem continuar no formato de classe `PluginVehiclescheduler...` enquanto a migração ocorre.
-
-## Compatibilidade com Banco de Dados
-
-Para compatibilidade com GLPI 11:
-
-- não usar `$DB->request($sql)` com SQL bruto em string
-- preferir critérios estruturados com `$DB->request(...)`
-- usar `$DB->doQuery($sql)` apenas quando SQL bruto for inevitável
-- iterar resultados de consultas brutas com `$DB->fetchAssoc(...)`
-
-Não coloque SQL ou lógica de relatórios em arquivos de renderização front-end.
-
-## setup.php e hook.php
-
-`setup.php` deve permanecer focado em bootstrap do plugin, metadados, requisitos e verificações de configuração.
-
-`hook.php` deve permanecer focado em instalação, desinstalação, criação de esquema e lógica de upgrade de esquema.
-
-Mudanças de esquema devem ser idempotentes e reforçadas para instalações existentes.
-
-## Direção de Interface
-
-SisViaturas privilegia uma interface operacional, compacta e legível.
-
-Padrões alinhados ao projeto:
-
-- espaçamento compacto em zoom de 100%
-- boa legibilidade em cards de KPI
-- zebra striping em tabelas densas
-- destaque em hover na linha ativa
-- formatação operacional concisa para data e hora
-- patches CSS coerentes para ajustes visuais amplos
-
-Padrões a evitar:
-
-- cabeçalhos ou cards superdimensionados
-- layouts que só funcionam em zoom reduzido
-- correções visuais implementadas dentro de classes de backend
-
-## Estrutura Sugerida do Repositório
-
-```text
-plugins/vehiclescheduler/
-├── ajax/
-├── front/
-├── inc/                  # classes legadas/compatíveis enquanto a migração ocorre
-├── locales/
-├── public/
-│   ├── css/
-│   └── js/
-├── src/                  # local preferencial para domínio novo/refatorado
-├── templates/            # opcional
-├── tools/
-├── vendor/               # gerado por composer install
-├── CHANGELOG.md
-├── composer.json
-├── composer.lock
-├── hook.php
-├── LICENSE
-├── README.md
-├── README_vehiclescheduler_pt-BR.md
-├── setup.php
-└── plugin.xml
-```
-
-## Exemplos de Publicação Apache
-
-O repositório pode incluir exemplos de configuração Apache para ajudar administradores a publicar o GLPI tanto na raiz do host quanto em um subdiretório.
-
-### `glpi-root.conf.example`
-
-Use este exemplo quando o GLPI for publicado na raiz do host, por exemplo:
-
-- `http://servidor/`
-
-### `glpi-subdir.conf.example`
-
-Use este exemplo quando o GLPI for publicado em um subdiretório, por exemplo:
-
-- `http://servidor/glpi/`
-
-### `glpi.conf`
-
-Esse arquivo representa a configuração Apache efetiva ou atual utilizada no ambiente de destino.
-
-Ele pode ser usado como:
-
-- referência de deploy funcional
-- base para ajustes locais
-- ponto de comparação prático com os arquivos de exemplo
-
-## Compatibilidade com Raiz e Subdiretório
-
-SisViaturas foi pensado para funcionar com instalações GLPI publicadas tanto:
-
-- na raiz web, como `http://servidor/`
-- em subdiretório, como `http://servidor/glpi/`
-
-Por isso, as URLs do plugin devem usar helpers compatíveis com o GLPI em vez de assumir caminhos fixos como `/glpi`.
-
-Abordagem recomendada:
-
-- usar `plugin_vehiclescheduler_get_root_doc()` para URLs do core do GLPI
-- usar `plugin_vehiclescheduler_get_front_url()` para controllers `front` do plugin
-- usar `plugin_vehiclescheduler_get_public_url()` ou helper equivalente para assets públicos
-
-## Diretrizes de Desenvolvimento
-
-- Preferir `src/` para código backend novo ou refatorado.
-- Manter estável o código de domínio legado em `inc/*.class.php`, exceto quando a alteração exigir tocá-lo.
-- Seguir PSR-12 no PHP.
-- Manter abstrações de cache alinhadas ao PSR-6.
-- Reutilizar helpers ACL existentes quando disponíveis.
-- Manter comentários e documentação técnica em inglês.
-- Manter rótulos voltados ao usuário em português quando isso fizer sentido para o produto.
-
-## Mapa de Documentação
-
-- `AGENTS.md`: regras normativas para geração por IA/código
-- `CODEX_HANDOFF.md`: orientação prática de implementação para Codex
-- `README.md`: README em inglês
-- `CHANGELOG.md`: histórico de versões e mudanças relevantes
+As URLs do plugin devem usar helpers compatíveis com GLPI em vez de assumir caminhos fixos como `/glpi`.
 
 ## Licença
 
