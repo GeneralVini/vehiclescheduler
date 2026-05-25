@@ -10,7 +10,7 @@ if (!defined('GLPI_ROOT')) {
 }
 
 if (!function_exists('plugin_vehiclescheduler_get_front_url')) {
-    include_once(__DIR__ . '/common.inc.php');
+    include_once(dirname(__DIR__) . '/Bootstrap/common.php');
 }
 
 class PluginVehicleschedulerProfile extends CommonDBTM

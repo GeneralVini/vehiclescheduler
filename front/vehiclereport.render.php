@@ -16,23 +16,24 @@ function vs_vehiclereport_render_escape(?string $value): string
 function vs_render_vehiclereport_form(PluginVehicleschedulerVehiclereport $report): void
 {
     $entityId = (int) ($report->fields['entities_id'] ?? ($_SESSION['glpiactive_entity'] ?? 0));
+    $t = static fn(string $text): string => __($text, 'vehiclescheduler');
     ?>
     <div class="vs-vehiclereport-wrap" data-vs-vehiclereport-form>
         <div class="vs-vehiclereport-surface">
             <div class="vs-vehiclereport-card">
                 <div class="vs-vehiclereport-head">
                     <div>
-                        <h3 class="vs-vehiclereport-title"><i class="ti ti-file-report"></i> Relatório de veículo</h3>
-                        <div class="vs-vehiclereport-sub">Registro estruturado de problemas, observações e ocorrências para apoio à gestão da frota.</div>
+                        <h3 class="vs-vehiclereport-title"><i class="ti ti-file-report"></i> <?= vs_vehiclereport_render_escape($t('Vehicle report')) ?></h3>
+                        <div class="vs-vehiclereport-sub"><?= vs_vehiclereport_render_escape($t('Structured record of problems, observations, and events to support fleet management.')) ?></div>
                     </div>
-                    <div class="vs-vehiclereport-pill"><span class="dot"></span> Relatórios</div>
+                    <div class="vs-vehiclereport-pill"><span class="dot"></span> <?= vs_vehiclereport_render_escape($t('Reports')) ?></div>
                 </div>
 
                 <div class="vs-form-feedback" data-vehiclereport-validation hidden></div>
 
                 <div class="vs-vehiclereport-grid">
                     <div class="vs-vehiclereport-field">
-                        <div class="vs-vehiclereport-label">Veículo <span class="red">*</span></div>
+                        <div class="vs-vehiclereport-label"><?= vs_vehiclereport_render_escape($t('Vehicle')) ?> <span class="red">*</span></div>
                         <?php
                         PluginVehicleschedulerVehicle::dropdown([
                             'name'   => 'plugin_vehiclescheduler_vehicles_id',
@@ -43,7 +44,7 @@ function vs_render_vehiclereport_form(PluginVehicleschedulerVehiclereport $repor
                     </div>
 
                     <div class="vs-vehiclereport-field">
-                        <div class="vs-vehiclereport-label">Tipo de relatório <span class="red">*</span></div>
+                        <div class="vs-vehiclereport-label"><?= vs_vehiclereport_render_escape($t('Report type')) ?> <span class="red">*</span></div>
                         <?php
                         Dropdown::showFromArray('report_type', PluginVehicleschedulerVehiclereport::getAllTypes(), [
                             'value' => (int) ($report->fields['report_type'] ?? PluginVehicleschedulerVehiclereport::TYPE_OBSERVATION),
@@ -52,7 +53,7 @@ function vs_render_vehiclereport_form(PluginVehicleschedulerVehiclereport $repor
                     </div>
 
                     <div class="vs-vehiclereport-field">
-                        <div class="vs-vehiclereport-label">Reportado por</div>
+                        <div class="vs-vehiclereport-label"><?= vs_vehiclereport_render_escape($t('Reported by')) ?></div>
                         <?php
                         User::dropdown([
                             'name'  => 'users_id',
@@ -63,16 +64,16 @@ function vs_render_vehiclereport_form(PluginVehicleschedulerVehiclereport $repor
                     </div>
 
                     <div class="vs-vehiclereport-field">
-                        <div class="vs-vehiclereport-label">Departamento/Setor <span class="vs-vehiclereport-hint-inline">opcional</span></div>
+                        <div class="vs-vehiclereport-label"><?= vs_vehiclereport_render_escape($t('Department / sector')) ?> <span class="vs-vehiclereport-hint-inline"><?= vs_vehiclereport_render_escape($t('optional')) ?></span></div>
                         <?= Html::input('department', [
                             'value'       => $report->fields['department'] ?? '',
                             'size'        => 40,
-                            'placeholder' => 'Ex: Operações',
+                            'placeholder' => $t('Example: Operations'),
                         ]) ?>
                     </div>
 
                     <div class="vs-vehiclereport-field">
-                        <div class="vs-vehiclereport-label">Telefone para contato <span class="vs-vehiclereport-hint-inline">opcional</span></div>
+                        <div class="vs-vehiclereport-label"><?= vs_vehiclereport_render_escape($t('Contact phone')) ?> <span class="vs-vehiclereport-hint-inline"><?= vs_vehiclereport_render_escape($t('optional')) ?></span></div>
                         <?= Html::input('contact_phone', [
                             'value'       => $report->fields['contact_phone'] ?? '',
                             'size'        => 20,
@@ -81,7 +82,7 @@ function vs_render_vehiclereport_form(PluginVehicleschedulerVehiclereport $repor
                     </div>
 
                     <div class="vs-vehiclereport-field">
-                        <div class="vs-vehiclereport-label">Data do relatório <span class="red">*</span></div>
+                        <div class="vs-vehiclereport-label"><?= vs_vehiclereport_render_escape($t('Report date')) ?> <span class="red">*</span></div>
                         <?php
                         Html::showDateTimeField('report_date', [
                             'value' => $report->fields['report_date'] ?? date('Y-m-d H:i:s'),
@@ -90,12 +91,12 @@ function vs_render_vehiclereport_form(PluginVehicleschedulerVehiclereport $repor
                     </div>
 
                     <div class="vs-vehiclereport-field vs-vehiclereport-field--full">
-                        <div class="vs-vehiclereport-label">Descrição <span class="red">*</span></div>
-                        <textarea name="description" rows="6" placeholder="Descreva o problema, observação ou situação em detalhes"><?= vs_vehiclereport_render_escape($report->fields['description'] ?? '') ?></textarea>
+                        <div class="vs-vehiclereport-label"><?= vs_vehiclereport_render_escape($t('Description')) ?> <span class="red">*</span></div>
+                        <textarea name="description" rows="6" placeholder="<?= vs_vehiclereport_render_escape($t('Describe the problem, observation, or situation in detail')) ?>"><?= vs_vehiclereport_render_escape($report->fields['description'] ?? '') ?></textarea>
                     </div>
 
                     <div class="vs-vehiclereport-field vs-vehiclereport-field--full">
-                        <div class="vs-vehiclereport-label">Comentários adicionais <span class="vs-vehiclereport-hint-inline">opcional</span></div>
+                        <div class="vs-vehiclereport-label"><?= vs_vehiclereport_render_escape($t('Additional comments')) ?> <span class="vs-vehiclereport-hint-inline"><?= vs_vehiclereport_render_escape($t('optional')) ?></span></div>
                         <textarea name="comment" rows="3"><?= vs_vehiclereport_render_escape($report->fields['comment'] ?? '') ?></textarea>
                     </div>
                 </div>

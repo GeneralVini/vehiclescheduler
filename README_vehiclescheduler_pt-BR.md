@@ -77,7 +77,7 @@ O projeto segue separação rígida entre lógica de negócio e renderização d
 - `public/css/`: estilos
 - `public/js/`: comportamento no cliente
 - `locales/`: traduções
-- `inc/`: classes legadas/compatíveis enquanto a migração ocorre
+- `src/Legacy/`: classes de compatibilidade GLPI carregadas pelo classmap do Composer
 
 Classes backend/domínio não devem conter layout de tela, CSS inline, JavaScript inline, composição de página ou marcação de botões.
 

@@ -12,7 +12,7 @@ header('Content-Type: application/json; charset=UTF-8');
 Session::checkLoginUser();
 
 if (!Session::haveRight('plugin_vehiclescheduler', READ)) {
-    echo json_encode(['error' => 'Sem permissão', 'vehicles' => [], 'drivers' => []]);
+    echo json_encode(['error' => __('No permission', 'vehiclescheduler'), 'vehicles' => [], 'drivers' => []]);
     exit;
 }
 

@@ -1,7 +1,7 @@
 <?php
 
-include_once(__DIR__ . '/../inc/common.inc.php');
-include_once(__DIR__ . '/../inc/ui-helpers.php');
+include_once(__DIR__ . '/../src/Bootstrap/common.php');
+include_once(__DIR__ . '/../src/Bootstrap/ui-helpers.php');
 
 Session::checkRight('plugin_vehiclescheduler', UPDATE);
 
@@ -83,7 +83,7 @@ if (isset($_POST['add'])) {
     $report->checkGlobal(READ);
 
     Html::header(
-        'Relatórios de Veículos',
+        __('Vehicle Reports', 'vehiclescheduler'),
         $_SERVER['PHP_SELF'],
         'tools',
         PluginVehicleschedulerVehiclereport::class,
@@ -92,7 +92,7 @@ if (isset($_POST['add'])) {
 
     plugin_vehiclescheduler_load_css();
     plugin_vehiclescheduler_enhance_ui();
-    vs_render_back_button(plugin_vehiclescheduler_get_front_url('vehiclereport.php'), 'Voltar');
+    vs_render_back_button(plugin_vehiclescheduler_get_front_url('vehiclereport.php'), __('Back', 'vehiclescheduler'));
 
     echo "<script src='" . htmlspecialchars(plugin_vehiclescheduler_get_public_asset_url('js/form-feedback.js'), ENT_QUOTES, 'UTF-8') . "' defer></script>";
     echo "<script src='" . htmlspecialchars(plugin_vehiclescheduler_get_public_asset_url('js/vehiclereport-form.js'), ENT_QUOTES, 'UTF-8') . "' defer></script>";

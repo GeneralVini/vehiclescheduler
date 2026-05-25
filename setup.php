@@ -8,6 +8,11 @@ define('PLUGIN_VEHICLESCHEDULER_VERSION', '0.1.0-dev');
 define('PLUGIN_VEHICLESCHEDULER_MIN_GLPI_VERSION', '11.0.0');
 define('PLUGIN_VEHICLESCHEDULER_MAX_GLPI_VERSION', '12.0.0');
 
+$vehicleschedulerAutoload = __DIR__ . '/vendor/autoload.php';
+if (is_file($vehicleschedulerAutoload)) {
+    require_once $vehicleschedulerAutoload;
+}
+
 /**
  * Initialize plugin hooks.
  *
@@ -18,6 +23,9 @@ function plugin_init_vehiclescheduler(): void
     global $PLUGIN_HOOKS;
 
     $PLUGIN_HOOKS['csrf_compliant']['vehiclescheduler'] = true;
+
+    // Force apply plugin language as early as possible
+    $PLUGIN_HOOKS['init']['vehiclescheduler'] = 'plugin_vehiclescheduler_apply_locale_hook';
 
     Plugin::registerClass('PluginVehicleschedulerProfile', [
         'addtabon' => ['Profile']
@@ -44,6 +52,7 @@ function plugin_init_vehiclescheduler(): void
     Plugin::registerClass('PluginVehicleschedulerDriver');
     Plugin::registerClass('PluginVehicleschedulerSchedule');
     Plugin::registerClass('PluginVehicleschedulerMaintenance');
+    Plugin::registerClass('PluginVehicleschedulerWorkshop');
     Plugin::registerClass('PluginVehicleschedulerIncident');
     Plugin::registerClass('PluginVehicleschedulerInsuranceclaim');
     Plugin::registerClass('PluginVehicleschedulerDriverfine');
@@ -87,21 +96,33 @@ function plugin_version_vehiclescheduler(): array
 function plugin_vehiclescheduler_check_prerequisites(): bool
 {
     if (version_compare(GLPI_VERSION, PLUGIN_VEHICLESCHEDULER_MIN_GLPI_VERSION, '<')) {
-        echo "Este plugin requer GLPI >= " . PLUGIN_VEHICLESCHEDULER_MIN_GLPI_VERSION;
+        echo __('This plugin requires GLPI >= ', 'vehiclescheduler') . PLUGIN_VEHICLESCHEDULER_MIN_GLPI_VERSION;
         return false;
     }
 
     if (version_compare(GLPI_VERSION, PLUGIN_VEHICLESCHEDULER_MAX_GLPI_VERSION, '>=')) {
-        echo "Este plugin requer GLPI < " . PLUGIN_VEHICLESCHEDULER_MAX_GLPI_VERSION;
+        echo __('This plugin requires GLPI < ', 'vehiclescheduler') . PLUGIN_VEHICLESCHEDULER_MAX_GLPI_VERSION;
         return false;
     }
 
     if (version_compare(PHP_VERSION, '8.1.0', '<')) {
-        echo "Este plugin requer PHP >= 8.1";
+        echo __('This plugin requires PHP >= 8.1', 'vehiclescheduler');
         return false;
     }
 
     return true;
+}
+
+/**
+ * Hook: Apply user's plugin language setting on init
+ * Called early during GLPI initialization
+ *
+ * @return void
+ */
+function plugin_vehiclescheduler_apply_locale_hook(): void
+{
+    include_once(__DIR__ . '/src/Bootstrap/common.php');
+    plugin_vehiclescheduler_apply_configured_locale();
 }
 
 /**

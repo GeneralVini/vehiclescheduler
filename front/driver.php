@@ -1,7 +1,7 @@
 <?php
 // front/driver.php
 
-include_once(__DIR__ . '/../inc/common.inc.php');
+include_once(__DIR__ . '/../src/Bootstrap/common.php');
 
 Session::checkRight('plugin_vehiclescheduler_management', READ);
 
@@ -29,7 +29,7 @@ function vs_driver_list_format_date(?string $value): string
     $value = trim((string) $value);
 
     if ($value === '' || $value === '0000-00-00' || $value === '0000-00-00 00:00:00') {
-        return 'Não informado';
+        return __('Not informed', 'vehiclescheduler');
     }
 
     $timestamp = strtotime($value);
@@ -53,7 +53,7 @@ function vs_driver_list_format_datetime(?string $value): string
     $value = trim((string) $value);
 
     if ($value === '' || $value === '0000-00-00' || $value === '0000-00-00 00:00:00') {
-        return 'Não informado';
+        return __('Not informed', 'vehiclescheduler');
     }
 
     $timestamp = strtotime($value);
@@ -151,17 +151,18 @@ function vs_driver_list_status_pill(string $label, string $modifier): string
 function vs_driver_list_expiry_badge(array $badge): string
 {
     return '<span class="vs-driver-grid__expiry-badge ' . vs_driver_list_escape((string) ($badge['class'] ?? '')) . '">'
-        . vs_driver_list_escape((string) ($badge['label'] ?? 'Sem data'))
+        . vs_driver_list_escape((string) ($badge['label'] ?? __('No date', 'vehiclescheduler')))
         . '</span>';
 }
 
 $drivers = PluginVehicleschedulerDriver::getManagementGridRows();
+$t = static fn(string $message): string => __($message, 'vehiclescheduler');
 
 global $CFG_GLPI;
 $driverFormUrl = plugin_vehiclescheduler_get_front_url('driver.form.php');
 
 Html::header(
-    'Motoristas',
+    $t('Drivers'),
     $_SERVER['PHP_SELF'],
     'tools',
     PluginVehicleschedulerMenu::class,
@@ -181,15 +182,15 @@ echo "            <div class='vs-header-icon-wrapper'>";
 echo "                <i class='ti ti-steering-wheel vs-header-icon'></i>";
 echo "            </div>";
 echo "            <div>";
-echo "                <h2>Gestão de Motoristas</h2>";
-echo "                <p class='vs-page-subtitle'>Grade operacional compacta para consulta, filtros rápidos e manutenção do cadastro.</p>";
+echo "                <h2>" . vs_driver_list_escape($t('Driver Management')) . "</h2>";
+echo "                <p class='vs-page-subtitle'>" . vs_driver_list_escape($t('Compact operational grid for lookup, quick filters, and registry maintenance.')) . "</p>";
 echo "            </div>";
 echo "        </div>";
 
 if (Session::haveRight('plugin_vehiclescheduler_management', CREATE)) {
     echo "        <a href='" . vs_driver_list_escape($driverFormUrl) . "' class='vs-btn-add'>";
     echo "            <i class='ti ti-plus'></i>";
-    echo "            <span>Adicionar Motorista</span>";
+    echo "            <span>" . vs_driver_list_escape($t('Add Driver')) . "</span>";
     echo "        </a>";
 }
 
@@ -201,38 +202,38 @@ echo "<div class='vs-driver-grid' data-vs-driver-grid>";
 echo "    <section class='vs-driver-grid__toolbar'>";
 echo "        <div class='vs-driver-grid__search-wrap'>";
 echo "            <i class='ti ti-search'></i>";
-echo "            <input type='search' placeholder='Buscar motorista...' aria-label='Buscar motoristas' data-driver-filter-search>";
+echo "            <input type='search' placeholder='" . vs_driver_list_escape($t('Search driver...')) . "' aria-label='" . vs_driver_list_escape($t('Search drivers')) . "' data-driver-filter-search>";
 echo "        </div>";
 
 echo "        <div class='vs-driver-grid__results-text' data-driver-result-count>";
-echo "            Exibindo " . (int) count($drivers) . " motoristas";
+echo              vs_driver_list_escape(sprintf($t('Showing %d drivers'), (int) count($drivers)));
 echo "        </div>";
 
 echo "        <div class='vs-driver-grid__filters'>";
 echo "            <label class='vs-driver-grid__filter'>";
-echo "                <span>Situação</span>";
+echo "                <span>" . vs_driver_list_escape($t('Situation')) . "</span>";
 echo "                <select data-driver-filter-active>";
-echo "                    <option value='all'>Todos</option>";
-echo "                    <option value='1'>Ativos</option>";
-echo "                    <option value='0'>Inativos</option>";
+echo "                    <option value='all'>" . vs_driver_list_escape($t('All')) . "</option>";
+echo "                    <option value='1'>" . vs_driver_list_escape($t('Active')) . "</option>";
+echo "                    <option value='0'>" . vs_driver_list_escape($t('Inactive')) . "</option>";
 echo "                </select>";
 echo "            </label>";
 
 echo "            <label class='vs-driver-grid__filter'>";
 echo "                <span>CNH</span>";
 echo "                <select data-driver-filter-expiry>";
-echo "                    <option value='all'>Todas</option>";
-echo "                    <option value='ok'>Válida</option>";
-echo "                    <option value='warning'>Alerta</option>";
-echo "                    <option value='critical'>Crítica</option>";
-echo "                    <option value='expired'>Vencida</option>";
-echo "                    <option value='unknown'>Sem data</option>";
+echo "                    <option value='all'>" . vs_driver_list_escape($t('All')) . "</option>";
+echo "                    <option value='ok'>" . vs_driver_list_escape($t('Valid')) . "</option>";
+echo "                    <option value='warning'>" . vs_driver_list_escape($t('Warning')) . "</option>";
+echo "                    <option value='critical'>" . vs_driver_list_escape($t('Critical')) . "</option>";
+echo "                    <option value='expired'>" . vs_driver_list_escape($t('Expired')) . "</option>";
+echo "                    <option value='unknown'>" . vs_driver_list_escape($t('No date')) . "</option>";
 echo "                </select>";
 echo "            </label>";
 
 echo "            <button type='button' class='vs-driver-grid__clear' data-driver-clear-filters>";
 echo "                <i class='ti ti-eraser'></i>";
-echo "                <span>Limpar</span>";
+echo "                <span>" . vs_driver_list_escape($t('Clear')) . "</span>";
 echo "            </button>";
 echo "        </div>";
 echo "    </section>";
@@ -241,21 +242,21 @@ echo "    <div class='vs-driver-grid__table-wrap'>";
 echo "        <table class='vs-driver-grid__table'>";
 echo "            <thead>";
 echo "                <tr>";
-echo "                    <th>Motorista</th>";
-echo "                    <th>Matrícula</th>";
-echo "                    <th>Grupo</th>";
-echo "                    <th>Telefone</th>";
-echo "                    <th>Categorias CNH</th>";
-echo "                    <th>Vencimento da CNH</th>";
-echo "                    <th>Status</th>";
-echo "                    <th>Atualizado em</th>";
-echo "                    <th class='vs-driver-grid__actions-col'>Ações</th>";
+echo "                    <th>" . vs_driver_list_escape($t('Driver')) . "</th>";
+echo "                    <th>" . vs_driver_list_escape($t('Registration')) . "</th>";
+echo "                    <th>" . vs_driver_list_escape($t('Group')) . "</th>";
+echo "                    <th>" . vs_driver_list_escape($t('Phone')) . "</th>";
+echo "                    <th>" . vs_driver_list_escape($t('CNH categories')) . "</th>";
+echo "                    <th>" . vs_driver_list_escape($t('CNH expiry')) . "</th>";
+echo "                    <th>" . vs_driver_list_escape($t('Status')) . "</th>";
+echo "                    <th>" . vs_driver_list_escape($t('Updated at')) . "</th>";
+echo "                    <th class='vs-driver-grid__actions-col'>" . vs_driver_list_escape($t('Actions')) . "</th>";
 echo "                </tr>";
 echo "            </thead>";
 echo "            <tbody data-driver-row-list>";
 
 foreach ($drivers as $driver) {
-    $driverName = (string) (($driver['name'] ?? '') !== '' ? $driver['name'] : 'Motorista sem nome');
+    $driverName = (string) (($driver['name'] ?? '') !== '' ? $driver['name'] : $t('Unnamed driver'));
     $driverUrl = $driverFormUrl . '?id=' . (int) ($driver['id'] ?? 0);
 
     $searchIndex = implode(' ', [
@@ -279,15 +280,15 @@ foreach ($drivers as $driver) {
     echo "                        <div class='vs-driver-grid__identity-body'>";
     echo "                            <div class='vs-driver-grid__name'>" . vs_driver_list_escape($driverName) . "</div>";
     echo "                            <div class='vs-driver-grid__subline'><i class='ti ti-user'></i> "
-        . vs_driver_list_escape((string) ((($driver['user_name'] ?? '') !== '') ? $driver['user_name'] : 'Usuário não vinculado'))
+        . vs_driver_list_escape((string) ((($driver['user_name'] ?? '') !== '') ? $driver['user_name'] : $t('Unlinked user')))
         . "</div>";
     echo "                        </div>";
     echo "                    </div>";
     echo "                </td>";
 
-    echo "                <td>" . vs_driver_list_escape((string) ((($driver['registration'] ?? '') !== '') ? $driver['registration'] : 'Não informada')) . "</td>";
-    echo "                <td>" . vs_driver_list_escape((string) ((($driver['group_name'] ?? '') !== '') ? $driver['group_name'] : 'Não informado')) . "</td>";
-    echo "                <td>" . vs_driver_list_escape((string) ((($driver['contact_phone'] ?? '') !== '') ? $driver['contact_phone'] : 'Não informado')) . "</td>";
+    echo "                <td>" . vs_driver_list_escape((string) ((($driver['registration'] ?? '') !== '') ? $driver['registration'] : $t('Not informed'))) . "</td>";
+    echo "                <td>" . vs_driver_list_escape((string) ((($driver['group_name'] ?? '') !== '') ? $driver['group_name'] : $t('Not informed'))) . "</td>";
+    echo "                <td>" . vs_driver_list_escape((string) ((($driver['contact_phone'] ?? '') !== '') ? $driver['contact_phone'] : $t('Not informed'))) . "</td>";
 
     echo "                <td>";
     echo "                    <div class='vs-driver-grid__chip-list'>";
@@ -303,7 +304,7 @@ foreach ($drivers as $driver) {
                 . "</span>";
         }
     } else {
-        echo "<span class='vs-driver-grid__muted'>Não informadas</span>";
+        echo "<span class='vs-driver-grid__muted'>" . vs_driver_list_escape($t('Not informed')) . "</span>";
     }
 
     echo "                    </div>";
@@ -321,7 +322,7 @@ foreach ($drivers as $driver) {
     echo "                <td>";
     echo "                    <div class='vs-driver-grid__pill-stack'>";
     echo                          vs_driver_list_status_pill(
-        ((int) ($driver['is_active'] ?? 0) === 1 ? 'Ativo' : 'Inativo'),
+        ((int) ($driver['is_active'] ?? 0) === 1 ? $t('Active') : $t('Inactive')),
         ((int) ($driver['is_active'] ?? 0) === 1 ? 'active' : 'inactive')
     );
     echo "                    </div>";
@@ -332,7 +333,7 @@ foreach ($drivers as $driver) {
     echo "                <td class='vs-driver-grid__actions-col'>";
     echo "                    <a href='" . vs_driver_list_escape($driverUrl) . "' class='vs-driver-grid__action'>";
     echo "                        <i class='ti ti-pencil'></i>";
-    echo "                        <span>Abrir</span>";
+    echo "                        <span>" . vs_driver_list_escape($t('Open')) . "</span>";
     echo "                    </a>";
     echo "                </td>";
 
@@ -345,8 +346,8 @@ echo "    </div>";
 
 echo "    <div class='vs-driver-grid__empty' data-driver-empty hidden>";
 echo "        <div class='vs-driver-grid__empty-icon'><i class='ti ti-users'></i></div>";
-echo "        <h3>Nenhum motorista encontrado</h3>";
-echo "        <p>Revise os filtros aplicados.</p>";
+echo "        <h3>" . vs_driver_list_escape($t('No driver found')) . "</h3>";
+echo "        <p>" . vs_driver_list_escape($t('Review the applied filters.')) . "</p>";
 echo "    </div>";
 
 echo "</div>";

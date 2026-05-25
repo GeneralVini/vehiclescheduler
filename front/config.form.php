@@ -1,6 +1,6 @@
 <?php
 
-include_once __DIR__ . '/../inc/common.inc.php';
+include_once __DIR__ . '/../src/Bootstrap/common.php';
 
 $managementUrl = plugin_vehiclescheduler_get_front_url('management.php');
 $formUrl = plugin_vehiclescheduler_get_front_url('config.form.php');
@@ -34,40 +34,21 @@ if (isset($_POST['save_config'])) {
     exit;
 }
 
-if (isset($_POST['set_plugin_locale'])) {
-    if (!PluginVehicleschedulerProfile::canViewManagement()) {
-        plugin_vehiclescheduler_flash_error(__('You are not allowed to change plugin settings.', 'vehiclescheduler'));
-        Html::redirect($managementUrl);
-        exit;
-    }
-
-    $locale = PluginVehicleschedulerInput::enum(
-        $_POST,
-        'set_plugin_locale',
-        array_keys($supportedLocales),
-        PluginVehicleschedulerConfig::getPluginLocale()
-    );
-
-    if (PluginVehicleschedulerConfig::setPluginLocale($locale)) {
-        plugin_vehiclescheduler_flash_success(__('Plugin language saved successfully.', 'vehiclescheduler'));
-    } else {
-        plugin_vehiclescheduler_flash_error(__('Unable to save plugin language.', 'vehiclescheduler'));
-    }
-
-    Html::redirect($formUrl);
-    exit;
-}
+// Language changes are now handled via AJAX in config-locale.js
 
 $autoDepartureChecklist = PluginVehicleschedulerConfig::shouldAutoOpenDepartureChecklistAfterApproval();
 $currentLocale = PluginVehicleschedulerConfig::getPluginLocale();
 
 Html::header(__('Plugin settings', 'vehiclescheduler'), $formUrl, 'tools', PluginVehicleschedulerMenu::class, 'management');
+// Re-apply plugin locale after header to override GLPI's language selection
+plugin_vehiclescheduler_apply_configured_locale();
 plugin_vehiclescheduler_load_css([
     'css/pages/driver-grid.css',
 ]);
 plugin_vehiclescheduler_enhance_ui();
 plugin_vehiclescheduler_render_back_to_management();
 ?>
+<script src="<?= plugin_vehiclescheduler_get_public_asset_url('js/config-locale.js') ?>"></script>
 <div class="vs-page-header">
     <div class="vs-header-content">
         <div class="vs-header-title">
@@ -115,15 +96,33 @@ plugin_vehiclescheduler_render_back_to_management();
             <div class="vs-language-buttons" role="group" aria-label="<?= htmlspecialchars(__('Plugin language', 'vehiclescheduler'), ENT_QUOTES, 'UTF-8') ?>">
                 <?php foreach ($supportedLocales as $localeCode => $locale): ?>
                     <?php $isCurrentLocale = $localeCode === $currentLocale; ?>
+                    <?php
+                    $localeFlagMap = [
+                        'pt_BR' => 'img/flags/br.svg',
+                        'en_GB' => 'img/flags/gb.svg',
+                        'es_ES' => 'img/flags/es.svg',
+                        'fr_FR' => 'img/flags/fr.svg',
+                    ];
+                    $localeFlagUrl = plugin_vehiclescheduler_get_public_asset_url($localeFlagMap[$localeCode] ?? 'img/flags/gb.svg');
+                    ?>
                     <button
-                        type="submit"
+                        type="button"
                         name="set_plugin_locale"
                         value="<?= htmlspecialchars($localeCode, ENT_QUOTES, 'UTF-8') ?>"
                         class="vs-language-button<?= $isCurrentLocale ? ' vs-language-button--active' : '' ?>"
                         aria-pressed="<?= $isCurrentLocale ? 'true' : 'false' ?>"
                     >
-                        <span><?= htmlspecialchars($locale['native'], ENT_QUOTES, 'UTF-8') ?></span>
-                        <small><?= htmlspecialchars($localeCode, ENT_QUOTES, 'UTF-8') ?></small>
+                        <img
+                            src="<?= htmlspecialchars($localeFlagUrl, ENT_QUOTES, 'UTF-8') ?>"
+                            alt=""
+                            class="vs-language-flag"
+                            loading="lazy"
+                            aria-hidden="true"
+                        >
+                        <span class="vs-language-button__text">
+                            <span><?= htmlspecialchars($locale['native'], ENT_QUOTES, 'UTF-8') ?></span>
+                            <small><?= htmlspecialchars($localeCode, ENT_QUOTES, 'UTF-8') ?></small>
+                        </span>
                     </button>
                 <?php endforeach; ?>
             </div>

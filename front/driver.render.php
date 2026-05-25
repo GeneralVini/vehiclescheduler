@@ -33,7 +33,7 @@ function vs_driver_render_expiry_badge(array $status): string
     $badge = PluginVehicleschedulerDriver::getCNHExpiryBadgeData($status);
 
     return '<span class="vs-driver-expiry-badge ' . vs_driver_render_escape((string) ($badge['class'] ?? '')) . '">'
-        . vs_driver_render_escape((string) ($badge['label'] ?? 'Sem data'))
+        . vs_driver_render_escape((string) ($badge['label'] ?? __('No date', 'vehiclescheduler')))
         . '</span>';
 }
 
@@ -65,6 +65,7 @@ function vs_driver_render_category_icon(string $category): string
  */
 function vs_render_driver_form(PluginVehicleschedulerDriver $driver, int $id): void
 {
+    $t = static fn(string $message): string => __($message, 'vehiclescheduler');
     $selectedCategories = PluginVehicleschedulerDriver::getDriverCNHCategoryList(
         $driver->fields['cnh_category'] ?? ''
     );
@@ -84,22 +85,21 @@ function vs_render_driver_form(PluginVehicleschedulerDriver $driver, int $id): v
                     <div>
                         <h3 class="vs-driver-title">
                             <i class="ti ti-steering-wheel"></i>
-                            Cadastro de Motorista
+                            <?= vs_driver_render_escape($t('Driver registration')) ?>
                         </h3>
                         <div class="vs-driver-sub">
-                            Campos essenciais para gestão de frota com privacidade por padrão.
+                            <?= vs_driver_render_escape($t('Essential fields for fleet management with privacy by default.')) ?>
                         </div>
                     </div>
                     <div class="vs-driver-pill">
                         <span class="dot"></span>
-                        Motoristas
+                        <?= vs_driver_render_escape($t('Drivers')) ?>
                     </div>
                 </div>
 
                 <div class="vs-driver-privacy">
-                    <strong>Aviso LGPD:</strong>
-                    Coletamos apenas dados mínimos necessários. Não armazenamos CPF, RG, número da CNH
-                    ou biometria. Base legal: execução de contrato e legítimo interesse operacional.
+                    <strong><?= vs_driver_render_escape($t('LGPD notice:')) ?></strong>
+                    <?= vs_driver_render_escape($t('We collect only the minimum required data. We do not store CPF, RG, CNH number, or biometrics. Legal basis: contract execution and legitimate operational interest.')) ?>
                 </div>
 
                 <div class="vs-form-feedback" data-driver-validation hidden></div>
@@ -107,7 +107,7 @@ function vs_render_driver_form(PluginVehicleschedulerDriver $driver, int $id): v
                 <div class="vs-driver-form-grid">
                     <div class="vs-driver-field vs-driver-field--user">
                         <div class="vs-driver-label">
-                            Usuário (GLPI) <span class="red">*</span>
+                            <?= vs_driver_render_escape($t('User (GLPI)')) ?> <span class="red">*</span>
                         </div>
                         <?php
                         User::dropdown([
@@ -118,13 +118,13 @@ function vs_render_driver_form(PluginVehicleschedulerDriver $driver, int $id): v
                         ]);
                         ?>
                         <div class="vs-driver-hint">
-                            O nome do motorista será preenchido automaticamente a partir do usuário selecionado.
+                            <?= vs_driver_render_escape($t('The driver name will be filled automatically from the selected user.')) ?>
                         </div>
                     </div>
 
                     <div class="vs-driver-field vs-driver-field--categories">
                         <div class="vs-driver-label">
-                            Categorias CNH <span class="red">*</span>
+                            <?= vs_driver_render_escape($t('CNH categories')) ?> <span class="red">*</span>
                         </div>
                         <div class="vs-driver-category-grid" data-driver-category-group>
                             <?php foreach (PluginVehicleschedulerDriver::getDriverSelectableCNHCategories() as $category => $label) : ?>
@@ -150,13 +150,13 @@ function vs_render_driver_form(PluginVehicleschedulerDriver $driver, int $id): v
                             <?php endforeach; ?>
                         </div>
                         <div class="vs-driver-hint">
-                            Regra do MVP: moto exige A, carro aceita B ou D, e caminhão/van exige D.
+                            <?= vs_driver_render_escape($t('MVP rule: motorcycles require A, cars accept B or D, and trucks/vans require D.')) ?>
                         </div>
                     </div>
 
                     <div class="vs-driver-field vs-driver-field--registration">
                         <div class="vs-driver-label">
-                            Matrícula Interna <span class="vs-driver-hint-inline">opcional</span>
+                            <?= vs_driver_render_escape($t('Internal registration')) ?> <span class="vs-driver-hint-inline"><?= vs_driver_render_escape($t('optional')) ?></span>
                         </div>
                         <?= Html::input('registration', [
                             'value'       => $driver->fields['registration'] ?? '',
@@ -167,7 +167,7 @@ function vs_render_driver_form(PluginVehicleschedulerDriver $driver, int $id): v
 
                     <div class="vs-driver-field vs-driver-field--group">
                         <div class="vs-driver-label">
-                            Departamento/Setor <span class="vs-driver-hint-inline">opcional</span>
+                            <?= vs_driver_render_escape($t('Department / Sector')) ?> <span class="vs-driver-hint-inline"><?= vs_driver_render_escape($t('optional')) ?></span>
                         </div>
                         <?php
                         Group::dropdown([
@@ -180,7 +180,7 @@ function vs_render_driver_form(PluginVehicleschedulerDriver $driver, int $id): v
 
                     <div class="vs-driver-field vs-driver-field--phone">
                         <div class="vs-driver-label">
-                            Telefone para Contato <span class="vs-driver-hint-inline">opcional</span>
+                            <?= vs_driver_render_escape($t('Contact phone')) ?> <span class="vs-driver-hint-inline"><?= vs_driver_render_escape($t('optional')) ?></span>
                         </div>
                         <?= Html::input('contact_phone', [
                             'value'       => $driver->fields['contact_phone'] ?? '',
@@ -191,7 +191,7 @@ function vs_render_driver_form(PluginVehicleschedulerDriver $driver, int $id): v
 
                     <div class="vs-driver-field vs-driver-field--expiry">
                         <div class="vs-driver-label">
-                            <span>Vencimento da CNH <span class="red">*</span></span>
+                            <span><?= vs_driver_render_escape($t('CNH expiry')) ?> <span class="red">*</span></span>
                             <span class="vs-driver-badge-slot"><?= $badgeHtml ?></span>
                         </div>
                         <?php
@@ -202,13 +202,13 @@ function vs_render_driver_form(PluginVehicleschedulerDriver $driver, int $id): v
                     </div>
 
                     <div class="vs-driver-field vs-driver-field--active">
-                        <div class="vs-driver-label">Ativo</div>
+                        <div class="vs-driver-label"><?= vs_driver_render_escape($t('Active')) ?></div>
                         <?php Dropdown::showYesNo('is_active', (int) ($driver->fields['is_active'] ?? 1)); ?>
                     </div>
 
                     <div class="vs-driver-field vs-driver-field--comment">
                         <div class="vs-driver-label">
-                            Observações <span class="vs-driver-hint-inline">opcional</span>
+                            <?= vs_driver_render_escape($t('Notes')) ?> <span class="vs-driver-hint-inline"><?= vs_driver_render_escape($t('optional')) ?></span>
                         </div>
                         <?= Html::textarea([
                             'name'  => 'comment',
@@ -216,13 +216,13 @@ function vs_render_driver_form(PluginVehicleschedulerDriver $driver, int $id): v
                             'rows'  => 3,
                         ]) ?>
                         <div class="vs-driver-hint">
-                            Use este campo para orientações operacionais úteis, evitando dados pessoais sensíveis.
+                            <?= vs_driver_render_escape($t('Use this field for useful operational guidance, avoiding sensitive personal data.')) ?>
                         </div>
                     </div>
                 </div>
 
                 <div class="vs-driver-foot">
-                    Mantenha apenas informações operacionais necessárias para alocação e conformidade da frota.
+                    <?= vs_driver_render_escape($t('Keep only operational information required for fleet allocation and compliance.')) ?>
                 </div>
             </div>
         </div>

@@ -4,8 +4,7 @@
  * Executive dashboard realtime polling endpoint.
  */
 
-include_once(__DIR__ . '/../inc/common.inc.php');
-include_once(__DIR__ . '/../inc/dashboard.class.php');
+include_once(__DIR__ . '/../src/Bootstrap/common.php');
 
 header('Content-Type: application/json; charset=UTF-8');
 
@@ -14,7 +13,7 @@ if (!Session::haveRight('plugin_vehiclescheduler_management', READ)) {
 
     echo json_encode([
         'ok'    => false,
-        'error' => 'Acesso negado.',
+        'error' => __('Access denied.', 'vehiclescheduler'),
     ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
     exit;
@@ -37,6 +36,6 @@ try {
 
     echo json_encode([
         'ok'    => false,
-        'error' => 'Erro ao obter alertas do dashboard.',
+        'error' => __('Unable to get dashboard alerts.', 'vehiclescheduler'),
     ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 }

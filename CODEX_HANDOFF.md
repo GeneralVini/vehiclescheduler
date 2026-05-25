@@ -23,7 +23,7 @@ The project regularly rejects fixes that solve a UI problem in a domain class or
 
 ### Backend/domain changes belong in
 - `src/...`
-- legacy `inc/*.class.php` only when touching code that has not yet migrated
+- `src/Legacy/...` for GLPI compatibility classes that still use `PluginVehiclescheduler...` names
 
 Use backend/domain for:
 - ACL
@@ -78,9 +78,9 @@ These usually stay procedural and without namespace declarations:
 They may still consume namespaced classes via `use`.
 
 ### Legacy area
-- old `inc/*.class.php` files may remain in `PluginVehiclescheduler...` format
+- compatibility classes may remain in `PluginVehiclescheduler...` format under `src/Legacy/`
 - do not create new legacy classes unless compatibility forces it
-- prefer migrating old logic into `src/` over growing `inc/`
+- keep implementation inside `src/`
 
 ## GLPI 11 database lesson
 A known failure mode in this project is generating raw SQL through:

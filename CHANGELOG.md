@@ -169,7 +169,7 @@ The format is based on **Keep a Changelog** principles and the project should pr
 
 - `README.md` restructured to separate public project context from internal generation rules.
 
-- Explicit rules for namespaces, `use` imports, PSR-4 layout, and legacy coexistence with `inc/*.class.php`.
+- Explicit rules for namespaces, `use` imports, PSR-4 layout, and legacy coexistence with `src/Legacy/*.class.php`.
 
 - Explicit GLPI 11 database compatibility rules for raw SQL handling.
 

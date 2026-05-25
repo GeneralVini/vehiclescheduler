@@ -1,448 +1,992 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Vinicius Lopes
-# This file is distributed under the same license as the Vehicle Scheduler plugin.
-# Vinicius Lopes <generalvini@gmail.com>, YEAR.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the vehiclescheduler package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Vehicle Scheduler 1.0.0\n"
+"Project-Id-Version: vehiclescheduler 0.1.0-dev\n"
 "Report-Msgid-Bugs-To: generalvini@gmail.com\n"
-"POT-Creation-Date: 2026-04-14 16:32+0000\n"
+"POT-Creation-Date: 2026-05-25 15:50-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: \n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Domain: vehiclescheduler\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-msgid "Vehicle Scheduler"
+#: ajax/dashboard_alerts.php:16
+msgid "Access denied."
 msgstr ""
 
-msgid "Fleet Management"
+#: ajax/dashboard_alerts.php:39
+msgid "Unable to get dashboard alerts."
 msgstr ""
 
+#: ajax/set_theme.php:9
+msgid "Method not allowed"
+msgstr ""
+
+#: ajax/set_theme.php:18
+msgid "Theme not specified"
+msgstr ""
+
+#: front/booking.php:79
 msgid "Fleet Reservation"
 msgstr ""
 
-msgid "Dashboard"
-msgstr ""
-
-msgid "Calendar"
-msgstr ""
-
-msgid "Management"
-msgstr ""
-
-msgid "Administration"
-msgstr ""
-
-msgid "Reports"
-msgstr ""
-
-msgid "Settings"
-msgstr ""
-
-msgid "Vehicle"
-msgstr ""
-
-msgid "Vehicles"
-msgstr ""
-
-msgid "Driver"
-msgstr ""
-
-msgid "Drivers"
-msgstr ""
-
-msgid "Schedule"
-msgstr ""
-
-msgid "Schedules"
-msgstr ""
-
-msgid "Reservation"
-msgstr ""
-
-msgid "Reservations"
-msgstr ""
-
-msgid "Incident"
-msgstr ""
-
-msgid "Incidents"
-msgstr ""
-
-msgid "Maintenance"
-msgstr ""
-
-msgid "Maintenances"
-msgstr ""
-
-msgid "Insurance Claim"
-msgstr ""
-
-msgid "Insurance Claims"
-msgstr ""
-
-msgid "Fine"
-msgstr ""
-
-msgid "Fines"
-msgstr ""
-
-msgid "Plate"
-msgstr ""
-
-msgid "Brand"
-msgstr ""
-
-msgid "Model"
-msgstr ""
-
-msgid "Year"
-msgstr ""
-
-msgid "Color"
-msgstr ""
-
-msgid "Category"
-msgstr ""
-
-msgid "Fuel"
-msgstr ""
-
-msgid "Seats"
-msgstr ""
-
-msgid "Mileage"
-msgstr ""
-
-msgid "Status"
-msgstr ""
-
-msgid "Available"
-msgstr ""
-
-msgid "Unavailable"
-msgstr ""
-
-msgid "In maintenance"
-msgstr ""
-
-msgid "Vehicle Scheduling"
-msgstr ""
-
-msgid "Reservation Request"
-msgstr ""
-
-msgid "Reservation %s - %s"
-msgstr ""
-
-msgid "Requester"
-msgstr ""
-
-msgid "Request date"
-msgstr ""
-
-msgid "Start date"
-msgstr ""
-
-msgid "End date"
-msgstr ""
-
-msgid "Start time"
-msgstr ""
-
-msgid "End time"
-msgstr ""
-
-msgid "Departure"
-msgstr ""
-
-msgid "Return"
-msgstr ""
-
-msgid "Origin"
-msgstr ""
-
-msgid "Destination"
-msgstr ""
-
-msgid "Purpose"
-msgstr ""
-
-msgid "Description"
-msgstr ""
-
-msgid "Description/Purpose"
-msgstr ""
-
-msgid "Describe the purpose of this reservation"
-msgstr ""
-
-msgid "Number of passengers"
-msgstr ""
-
-msgid "Passengers"
-msgstr ""
-
-msgid "Assigned driver"
-msgstr ""
-
-msgid "Assigned vehicle"
-msgstr ""
-
-msgid "Contact Phone"
-msgstr ""
-
-msgid "Department/Sector"
-msgstr ""
-
-msgid "Additional Comments"
-msgstr ""
-
-msgid "Additional observations"
-msgstr ""
-
-msgid "Related Ticket"
-msgstr ""
-
-msgid "Vehicle Report"
-msgstr ""
-
-msgid "Vehicle Reports"
-msgstr ""
-
-msgid "Report Type"
-msgstr ""
-
-msgid "Report Date"
-msgstr ""
-
-msgid "Reporter"
-msgstr ""
-
-msgid "Maintenance Needed"
-msgstr ""
-
-msgid "Problem/Issue"
-msgstr ""
-
-msgid "Accident"
-msgstr ""
-
-msgid "Observation"
-msgstr ""
-
-msgid "Describe the issue, observation or situation in detail"
-msgstr ""
-
-msgid "New"
-msgstr ""
-
-msgid "Pending"
-msgstr ""
-
-msgid "Approved"
-msgstr ""
-
-msgid "Rejected"
-msgstr ""
-
-msgid "Cancelled"
-msgstr ""
-
-msgid "Completed"
-msgstr ""
-
-msgid "Active"
-msgstr ""
-
-msgid "Closed"
-msgstr ""
-
-msgid "Open"
-msgstr ""
-
-msgid "View"
-msgstr ""
-
-msgid "Add"
-msgstr ""
-
-msgid "Create"
-msgstr ""
-
-msgid "Edit"
-msgstr ""
-
-msgid "Update"
-msgstr ""
-
-msgid "Save"
-msgstr ""
-
-msgid "Delete"
-msgstr ""
-
-msgid "Approve"
-msgstr ""
-
-msgid "Reject"
-msgstr ""
-
-msgid "Cancel"
-msgstr ""
-
-msgid "Close"
-msgstr ""
-
-msgid "Filter"
-msgstr ""
-
-msgid "Search"
-msgstr ""
-
-msgid "Clear filters"
-msgstr ""
-
-msgid "Approved reservations"
-msgstr ""
-
-msgid "Pending requests"
-msgstr ""
-
-msgid "Rejected requests"
-msgstr ""
-
-msgid "Reservations by status"
-msgstr ""
-
-msgid "Operational overview"
-msgstr ""
-
-msgid "Management overview"
-msgstr ""
-
-msgid "Executive overview"
-msgstr ""
-
-msgid "Department is required"
-msgstr ""
-
-msgid "Contact phone is required"
-msgstr ""
-
-msgid "Description/Purpose is required"
-msgstr ""
-
-msgid "Description is required"
-msgstr ""
-
-msgid "Vehicle is required"
-msgstr ""
-
-msgid "Start date is required"
-msgstr ""
-
-msgid "End date is required"
-msgstr ""
-
-msgid "Destination is required"
-msgstr ""
-
-msgid "Driver is required"
-msgstr ""
-
-msgid "Invalid period"
-msgstr ""
-
-msgid "The selected vehicle is not available for this period"
-msgstr ""
-
-msgid "The selected driver is not available for this period"
-msgstr ""
-
-msgid "Item added successfully"
-msgstr ""
-
-msgid "Item updated successfully"
-msgstr ""
-
-msgid "Item deleted successfully"
-msgstr ""
-
-msgid "Reservation approved successfully"
-msgstr ""
-
-msgid "Reservation rejected successfully"
-msgstr ""
-
-msgid "Unable to save data"
-msgstr ""
-
-msgid "An unexpected error occurred"
-msgstr ""
-
-msgid "Vehicle Reservation: %s - %s"
-msgstr ""
-
-msgid "Vehicle Reservation Details:\\n\\nVehicle: %s\\nRequester: %s\\nStart: %s\\nEnd: %s\\nDestination: %s\\nPassengers: %d\\nPurpose: %s"
-msgstr ""
-
-msgid "Portuguese"
-msgstr ""
-
-msgid "English"
-msgstr ""
-
-msgid "Spanish"
-msgstr ""
-
-msgid "French"
-msgstr ""
-
+#: front/config.form.php:10
 msgid "You are not allowed to access plugin settings."
 msgstr ""
 
+#: front/config.form.php:17 front/config.form.php:39
 msgid "You are not allowed to change plugin settings."
 msgstr ""
 
+#: front/config.form.php:28
 msgid "Settings saved successfully."
 msgstr ""
 
+#: front/config.form.php:30
 msgid "Unable to save plugin settings."
 msgstr ""
 
+#: front/config.form.php:52
 msgid "Plugin language saved successfully."
 msgstr ""
 
+#: front/config.form.php:54
 msgid "Unable to save plugin language."
 msgstr ""
 
+#: front/config.form.php:64 front/config.form.php:78
 msgid "Plugin settings"
 msgstr ""
 
+#: front/config.form.php:79
 msgid "Operational settings for SisViaturas behavior."
 msgstr ""
 
+#: front/config.form.php:85
+msgid "Save"
+msgstr ""
+
+#: front/config.form.php:97 src/Legacy/checklist.class.php:18
+#: src/Maintenance/WorkOrder.php:40
 msgid "Checklist"
 msgstr ""
 
+#: front/config.form.php:101
 msgid "Automatic departure checklist"
 msgstr ""
 
+#: front/config.form.php:102
 msgid "Open the first checklist after reservation approval."
 msgstr ""
 
+#: front/config.form.php:110
 msgid "Language"
 msgstr ""
 
+#: front/config.form.php:111 front/config.form.php:115
 msgid "Plugin language"
 msgstr ""
 
+#: front/config.form.php:112
 msgid "Choose the language used by SisViaturas screens."
+msgstr ""
+
+#: front/dashboard.php:8
+msgid "Fleet Dashboard"
+msgstr ""
+
+#: front/dashboard.php:200
+msgid "New Reservation"
+msgstr ""
+
+#: front/dashboard.php:204
+msgid "Open Calendar"
+msgstr ""
+
+#: front/dashboard.php:208
+msgid "Report Incident"
+msgstr ""
+
+#: front/dashboard.php:212
+msgid "Schedule Maintenance"
+msgstr ""
+
+#: front/dashboard.php:216
+msgid "Open Insurance Claim"
+msgstr ""
+
+#: front/dashboard.php:223
+msgid "Active Vehicles"
+msgstr ""
+
+#: front/dashboard.php:224
+msgid "Active Drivers"
+msgstr ""
+
+#: front/dashboard.php:225
+msgid "Pending Approval"
+msgstr ""
+
+#: front/dashboard.php:225
+msgid "Reservations"
+msgstr ""
+
+#: front/dashboard.php:226
+msgid "Approved Reservations"
+msgstr ""
+
+#: front/dashboard.php:227 front/dashboard.php:328
+msgid "Open Incidents"
+msgstr ""
+
+#: front/dashboard.php:228
+msgid "Scheduled Maintenances"
+msgstr ""
+
+#: front/dashboard.php:229
+msgid "Open Claims"
+msgstr ""
+
+#: front/dashboard.php:230
+msgid "Open Fines"
+msgstr ""
+
+#: front/dashboard.php:250
+msgid "Reservations Pending Approval"
+msgstr ""
+
+#: front/dashboard.php:250 front/dashboard.php:288 front/dashboard.php:328
+#: front/dashboard.php:370 front/dashboard.php:421
+msgid "View all"
+msgstr ""
+
+#: front/dashboard.php:253
+msgid "No pending reservations"
+msgstr ""
+
+#: front/dashboard.php:258
+msgid "Requester"
+msgstr ""
+
+#: front/dashboard.php:259 front/dashboard.php:338 front/dashboard.php:378
+#: front/dashboard.php:430 src/Legacy/maintenance.class.php:154
+#: src/Legacy/vehicle.class.php:29 src/Legacy/vehiclereport.class.php:143
+msgid "Vehicle"
+msgid_plural "Vehicles"
+msgstr[0] ""
+msgstr[1] ""
+
+#: front/dashboard.php:260
+msgid "Dates"
+msgstr ""
+
+#: front/dashboard.php:261 front/dashboard.php:339 front/dashboard.php:381
+#: front/dashboard.php:434 src/Legacy/schedule.class.php:286
+msgid "Status"
+msgstr ""
+
+#: front/dashboard.php:278
+msgid "New"
+msgstr ""
+
+#: front/dashboard.php:288
+msgid "CNH Expiry Alerts (next 90 days)"
+msgstr ""
+
+#: front/dashboard.php:291
+msgid "No CNH expiring soon"
+msgstr ""
+
+#: front/dashboard.php:296 src/Legacy/driver.class.php:38
+msgid "Driver"
+msgstr ""
+
+#: front/dashboard.php:298
+msgid "Expiry"
+msgstr ""
+
+#: front/dashboard.php:331
+msgid "No open incidents"
+msgstr ""
+
+#: front/dashboard.php:336
+msgid "Date"
+msgstr ""
+
+#: front/dashboard.php:337 front/dashboard.php:379
+#: src/Legacy/checklist.class.php:151 src/Legacy/maintenance.class.php:162
+#: src/Legacy/vehiclereport.class.php:144 src/Legacy/workshop.class.php:96
+msgid "Type"
+msgstr ""
+
+#: front/dashboard.php:349 src/Maintenance/WorkOrder.php:64
+msgid "Open"
+msgstr ""
+
+#: front/dashboard.php:350
+msgid "Analyzing"
+msgstr ""
+
+#: front/dashboard.php:370
+msgid "Upcoming Maintenances"
+msgstr ""
+
+#: front/dashboard.php:373
+msgid "No maintenances pending"
+msgstr ""
+
+#: front/dashboard.php:380 front/dashboard.php:394
+#: src/Legacy/maintenance.class.php:76
+msgid "Scheduled"
+msgstr ""
+
+#: front/dashboard.php:395 src/Legacy/maintenance.class.php:77
+msgid "In Progress"
+msgstr ""
+
+#: front/dashboard.php:399
+msgid "Overdue"
+msgstr ""
+
+#: front/dashboard.php:421
+msgid "Insurance Claims in Progress"
+msgstr ""
+
+#: front/dashboard.php:424
+msgid "No open claims"
+msgstr ""
+
+#: front/dashboard.php:432
+msgid "Opened"
+msgstr ""
+
+#: front/driver.php:32 front/driver.php:56 front/incident.php:18
+#: front/maintenance.php:17 front/vehicle.php:31
+msgid "Not informed"
+msgstr ""
+
+#: front/driver.php:154 front/driver.render.php:36
+#: src/Legacy/driver.class.php:323
+msgid "No date"
+msgstr ""
+
+#: front/get_available_resources.php:15
+msgid "No permission"
+msgstr ""
+
+#: front/get_manager_notifications.php:21
+msgid "No management rights"
+msgstr ""
+
+#: front/get_manager_notifications.php:64
+#, php-format
+msgid "%s to %s"
+msgstr ""
+
+#: front/requester.php:27 front/requester.php:43
+msgid "Fleet vehicles"
+msgstr ""
+
+#: front/requester.php:38
+msgid "Fleet portal"
+msgstr ""
+
+#: front/requester.php:47
+msgid ""
+"Request a vehicle in a simple way and follow the evolution of the fleet "
+"service portal."
+msgstr ""
+
+#: front/requester.php:57
+msgid "Schedule vehicle"
+msgstr ""
+
+#: front/requester.php:60
+msgid "Open the request form to reserve a vehicle and start the service flow."
+msgstr ""
+
+#: front/requester.php:66 front/requester.php:101
+msgid "Open form"
+msgstr ""
+
+#: front/requester.php:75
+msgid "My reservations"
+msgstr ""
+
+#: front/requester.php:78
+msgid ""
+"Check opened requests, follow statuses, and view your reservation history."
+msgstr ""
+
+#: front/requester.php:83
+msgid "Coming soon"
+msgstr ""
+
+#: front/requester.php:92
+msgid "Report claim"
+msgstr ""
+
+#: front/requester.php:95
+msgid "Register accidents, damage, and events related to vehicle use."
+msgstr ""
+
+#: front/requester.php:107
+msgid "Note:"
+msgstr ""
+
+#: front/requester.php:108
+msgid ""
+"Use this address as the destination for the Fleet vehicles card on the self-"
+"service home."
+msgstr ""
+
+#: front/requester.php:109
+msgid "In this first stage, the active flow is scheduling."
+msgstr ""
+
+#: front/vehicle.form.php:80
+msgid "Vehicle created successfully."
+msgstr ""
+
+#: front/vehicle.form.php:91 front/vehicle.form.php:107
+#: front/vehicle.form.php:121 front/vehicle.form.php:135
+#: src/Legacy/vehicle.class.php:200
+msgid "Invalid vehicle ID."
+msgstr ""
+
+#: front/vehicle.form.php:100
+msgid "Vehicle updated successfully."
+msgstr ""
+
+#: front/vehicle.form.php:153 src/Legacy/vehicle.class.php:34
+msgid "Vehicles"
+msgstr ""
+
+#: front/vehicle.form.php:162 front/vehiclereport.form.php:95
+msgid "Back"
+msgstr ""
+
+#: front/vehiclereport.form.php:86
+msgid "Vehicle Reports"
+msgstr ""
+
+#: setup.php:96
+msgid "This plugin requires GLPI >= "
+msgstr ""
+
+#: setup.php:101
+msgid "This plugin requires GLPI < "
+msgstr ""
+
+#: setup.php:106
+msgid "This plugin requires PHP >= 8.1"
+msgstr ""
+
+#: src/Bootstrap/common.php:205
+msgid "Back to Fleet Management"
+msgstr ""
+
+#: src/Legacy/checklist.class.php:18 src/Legacy/checklist.class.php:136
+msgid "Checklists"
+msgstr ""
+
+#: src/Legacy/checklist.class.php:29
+msgid "Departure"
+msgstr ""
+
+#: src/Legacy/checklist.class.php:30
+msgid "Arrival"
+msgstr ""
+
+#: src/Legacy/checklist.class.php:31
+msgid "Both"
+msgstr ""
+
+#: src/Legacy/checklist.class.php:89
+msgid ""
+"The reservation was approved and the first operational checklist can now be "
+"completed."
+msgstr ""
+
+#: src/Legacy/checklist.class.php:90
+msgid "Access:"
+msgstr ""
+
+#: src/Legacy/checklist.class.php:91
+msgid "Checklist:"
+msgstr ""
+
+#: src/Legacy/checklist.class.php:91
+msgid "Departure checklist"
+msgstr ""
+
+#: src/Legacy/checklist.class.php:101 src/Legacy/checklist.class.php:124
+msgid "Name is required."
+msgstr ""
+
+#: src/Legacy/checklist.class.php:118
+msgid "Invalid checklist."
+msgstr ""
+
+#: src/Legacy/checklist.class.php:142 src/Legacy/driver.class.php:633
+#: src/Legacy/vehicle.class.php:254 src/Legacy/workshop.class.php:88
+msgid "Name"
+msgstr ""
+
+#: src/Legacy/checklist.class.php:159 src/Legacy/driver.class.php:691
+#: src/Legacy/vehicle.class.php:303 src/Legacy/workshop.class.php:105
+msgid "Active"
+msgstr ""
+
+#: src/Legacy/checklistitem.class.php:22
+msgid "Item"
+msgstr ""
+
+#: src/Legacy/checklistitem.class.php:22
+msgid "Items"
+msgstr ""
+
+#: src/Legacy/checklistitem.class.php:33
+msgid "Yes/No"
+msgstr ""
+
+#: src/Legacy/checklistitem.class.php:34
+msgid "Text"
+msgstr ""
+
+#: src/Legacy/checklistitem.class.php:35
+msgid "Number"
+msgstr ""
+
+#: src/Legacy/checklistitem.class.php:36
+msgid "Photo"
+msgstr ""
+
+#: src/Legacy/checklistitem.class.php:37
+msgid "Signature"
+msgstr ""
+
+#: src/Legacy/checklistitem.class.php:46 src/Legacy/checklistitem.class.php:79
+#: src/Legacy/vehiclereport.class.php:111
+msgid "Description is required."
+msgstr ""
+
+#: src/Legacy/checklistitem.class.php:73
+msgid "Invalid item."
+msgstr ""
+
+#: src/Legacy/driver.class.php:38 src/Legacy/driver.class.php:48
+#: src/Legacy/driver.class.php:626
+msgid "Drivers"
+msgstr ""
+
+#: src/Legacy/driver.class.php:108 src/Legacy/vehicle.class.php:45
+msgid "A - Motorcycle"
+msgstr ""
+
+#: src/Legacy/driver.class.php:109 src/Legacy/vehicle.class.php:46
+msgid "B - Car"
+msgstr ""
+
+#: src/Legacy/driver.class.php:110 src/Legacy/vehicle.class.php:47
+msgid "D - Truck or van"
+msgstr ""
+
+#: src/Legacy/driver.class.php:111
+msgid "AB - Motorcycles and cars (legacy)"
+msgstr ""
+
+#: src/Legacy/driver.class.php:123
+msgid "Allows motorcycle driving."
+msgstr ""
+
+#: src/Legacy/driver.class.php:124
+msgid "Allows car driving."
+msgstr ""
+
+#: src/Legacy/driver.class.php:125
+msgid "Allows car, truck, and van driving."
+msgstr ""
+
+#: src/Legacy/driver.class.php:319
+msgid "Valid"
+msgstr ""
+
+#: src/Legacy/driver.class.php:320
+msgid "Expiring soon"
+msgstr ""
+
+#: src/Legacy/driver.class.php:321 src/Maintenance/WorkOrder.php:54
+msgid "Critical"
+msgstr ""
+
+#: src/Legacy/driver.class.php:322
+msgid "EXPIRED"
+msgstr ""
+
+#: src/Legacy/driver.class.php:329
+#, php-format
+msgid "Expires in %d days"
+msgstr ""
+
+#: src/Legacy/driver.class.php:331
+#, php-format
+msgid "Valid - %d days remaining"
+msgstr ""
+
+#: src/Legacy/driver.class.php:333
+#, php-format
+msgid "EXPIRED %d days ago"
+msgstr ""
+
+#: src/Legacy/driver.class.php:519 src/Legacy/driver.class.php:582
+msgid "Select a GLPI user for the driver."
+msgstr ""
+
+#: src/Legacy/driver.class.php:524 src/Legacy/driver.class.php:587
+msgid "Select at least one driver license category for the driver."
+msgstr ""
+
+#: src/Legacy/driver.class.php:529 src/Legacy/driver.class.php:592
+msgid "Driver license expiration is required and must be a valid date."
+msgstr ""
+
+#: src/Legacy/driver.class.php:534 src/Legacy/driver.class.php:597
+msgid "This GLPI user is already linked to another driver."
+msgstr ""
+
+#: src/Legacy/driver.class.php:539 src/Legacy/driver.class.php:602
+msgid "The informed registration is already in use."
+msgstr ""
+
+#: src/Legacy/driver.class.php:556
+msgid "Driver registered. Waiting for management approval."
+msgstr ""
+
+#: src/Legacy/driver.class.php:577
+msgid "Invalid driver ID."
+msgstr ""
+
+#: src/Legacy/driver.class.php:642
+msgid "GLPI user"
+msgstr ""
+
+#: src/Legacy/driver.class.php:650
+msgid "Internal registration"
+msgstr ""
+
+#: src/Legacy/driver.class.php:658
+msgid "Driver license category"
+msgstr ""
+
+#: src/Legacy/driver.class.php:667
+msgid "Driver license expiration"
+msgstr ""
+
+#: src/Legacy/driver.class.php:675 src/Legacy/vehiclereport.class.php:146
+msgid "Department / sector"
+msgstr ""
+
+#: src/Legacy/driver.class.php:683 src/Legacy/vehiclereport.class.php:147
+msgid "Phone"
+msgstr ""
+
+#: src/Legacy/driver.class.php:699 src/Maintenance/WorkOrder.php:84
+msgid "Approved"
+msgstr ""
+
+#: src/Legacy/driver.class.php:707
+msgid "Last modification"
+msgstr ""
+
+#: src/Legacy/incident.class.php:26 src/Maintenance/WorkOrder.php:39
+msgid "Incident"
+msgid_plural "Incidents"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Legacy/incident.class.php:31
+msgid "Incidents"
+msgstr ""
+
+#: src/Legacy/insuranceclaim.class.php:20
+msgid "Insurance Claim"
+msgid_plural "Insurance Claims"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Legacy/maintenance.class.php:22
+msgid "Maintenance"
+msgid_plural "Maintenances"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Legacy/maintenance.class.php:27
+msgid "Maintenances"
+msgstr ""
+
+#: src/Legacy/maintenance.class.php:68 src/Maintenance/WorkOrder.php:41
+msgid "Preventive"
+msgstr ""
+
+#: src/Legacy/maintenance.class.php:69
+msgid "Corrective"
+msgstr ""
+
+#: src/Legacy/maintenance.class.php:78
+msgid "Done"
+msgstr ""
+
+#: src/Legacy/maintenance.class.php:79 src/Maintenance/WorkOrder.php:72
+msgid "Cancelled"
+msgstr ""
+
+#: src/Legacy/maintenance.class.php:97 src/Legacy/maintenance.class.php:124
+#: src/Legacy/vehiclereport.class.php:106
+msgid "Vehicle is required."
+msgstr ""
+
+#: src/Legacy/maintenance.class.php:118
+msgid "Invalid maintenance."
+msgstr ""
+
+#: src/Legacy/maintenance.class.php:180
+msgid "Scheduled date"
+msgstr ""
+
+#: src/Legacy/maintenance.class.php:188
+msgid "Cost"
+msgstr ""
+
+#: src/Legacy/maintenance.class.php:196
+msgid "Supplier"
+msgstr ""
+
+#: src/Legacy/profile.class.php:37 src/Legacy/profile.class.php:46
+#: src/Legacy/profile.class.php:59
+msgid "Read"
+msgstr ""
+
+#: src/Legacy/profile.class.php:47
+msgid "Update"
+msgstr ""
+
+#: src/Legacy/profile.class.php:48
+msgid "Create"
+msgstr ""
+
+#: src/Legacy/profile.class.php:49
+msgid "Delete"
+msgstr ""
+
+#: src/Legacy/profile.class.php:50
+msgid "Delete permanently"
+msgstr ""
+
+#: src/Legacy/schedule.class.php:260
+msgid "Characteristics"
+msgstr ""
+
+#: src/Legacy/schedule.class.php:268
+msgid "Destino"
+msgstr ""
+
+#: src/Legacy/schedule.class.php:277 src/Legacy/workshop.class.php:79
+msgid "ID"
+msgstr ""
+
+#: src/Legacy/schedule.class.php:295
+msgid "Saída"
+msgstr ""
+
+#: src/Legacy/schedule.class.php:304
+msgid "Retorno"
+msgstr ""
+
+#: src/Legacy/schedule.class.php:314
+msgid "Solicitante"
+msgstr ""
+
+#: src/Legacy/schedule.class.php:324
+msgid "Viatura"
+msgstr ""
+
+#: src/Legacy/schedule.class.php:334
+msgid "Motorista"
+msgstr ""
+
+#: src/Legacy/schedule.class.php:343
+msgid "Departamento"
+msgstr ""
+
+#: src/Legacy/schedule.class.php:352
+msgid "Passageiros"
+msgstr ""
+
+#: src/Legacy/schedule.class.php:362
+msgid "Aprovado por"
+msgstr ""
+
+#: src/Legacy/schedule.class.php:371
+msgid "Data da aprovação"
+msgstr ""
+
+#: src/Legacy/schedule.class.php:380
+msgid "Criação"
+msgstr ""
+
+#: src/Legacy/vehicle.class.php:159 src/Legacy/vehicle.class.php:205
+msgid "Vehicle name is required."
+msgstr ""
+
+#: src/Legacy/vehicle.class.php:164 src/Legacy/vehicle.class.php:210
+msgid "Plate is required."
+msgstr ""
+
+#: src/Legacy/vehicle.class.php:169 src/Legacy/vehicle.class.php:215
+msgid "Invalid year."
+msgstr ""
+
+#: src/Legacy/vehicle.class.php:174 src/Legacy/vehicle.class.php:220
+msgid "Invalid passenger capacity."
+msgstr ""
+
+#: src/Legacy/vehicle.class.php:179 src/Legacy/vehicle.class.php:225
+msgid "Select the required CNH category for the vehicle."
+msgstr ""
+
+#: src/Legacy/vehicle.class.php:184 src/Legacy/vehicle.class.php:230
+msgid "The informed plate is already in use."
+msgstr ""
+
+#: src/Legacy/vehicle.class.php:263
+msgid "Plate"
+msgstr ""
+
+#: src/Legacy/vehicle.class.php:271
+msgid "Brand"
+msgstr ""
+
+#: src/Legacy/vehicle.class.php:279
+msgid "Model"
+msgstr ""
+
+#: src/Legacy/vehicle.class.php:287
+msgid "Year"
+msgstr ""
+
+#: src/Legacy/vehicle.class.php:295
+msgid "Passengers"
+msgstr ""
+
+#: src/Legacy/vehicle.class.php:311
+msgid "Required CNH"
+msgstr ""
+
+#: src/Legacy/vehicle.class.php:320
+msgid "Last update"
+msgstr ""
+
+#: src/Legacy/vehiclereport.class.php:24
+msgid "Vehicle report"
+msgstr ""
+
+#: src/Legacy/vehiclereport.class.php:24 src/Legacy/vehiclereport.class.php:29
+#: src/Legacy/vehiclereport.class.php:54 src/Legacy/vehiclereport.class.php:64
+#: src/Legacy/vehiclereport.class.php:141
+msgid "Vehicle reports"
+msgstr ""
+
+#: src/Legacy/vehiclereport.class.php:40
+msgid "Needs maintenance"
+msgstr ""
+
+#: src/Legacy/vehiclereport.class.php:41
+msgid "Problem / defect"
+msgstr ""
+
+#: src/Legacy/vehiclereport.class.php:42
+msgid "Accident"
+msgstr ""
+
+#: src/Legacy/vehiclereport.class.php:43
+msgid "General observation"
+msgstr ""
+
+#: src/Legacy/vehiclereport.class.php:131
+msgid "Invalid report ID."
+msgstr ""
+
+#: src/Legacy/vehiclereport.class.php:145
+msgid "Reported by"
+msgstr ""
+
+#: src/Legacy/vehiclereport.class.php:148
+msgid "Report date"
+msgstr ""
+
+#: src/Legacy/vehiclereport.class.php:149
+msgid "Description"
+msgstr ""
+
+#: src/Legacy/workshop.class.php:16
+msgid "Workshop"
+msgid_plural "Workshops"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Legacy/workshop.class.php:39 src/Legacy/workshop.class.php:62
+msgid "Workshop name is required."
+msgstr ""
+
+#: src/Legacy/workshop.class.php:56
+msgid "Invalid workshop."
+msgstr ""
+
+#: src/Legacy/workshop.class.php:114
+msgid "City"
+msgstr ""
+
+#: src/Legacy/workshop.class.php:122
+msgid "State"
+msgstr ""
+
+#: src/Localization/LocaleManager.php:16
+msgid "Portuguese"
+msgstr ""
+
+#: src/Localization/LocaleManager.php:20
+msgid "English"
+msgstr ""
+
+#: src/Localization/LocaleManager.php:24
+msgid "Spanish"
+msgstr ""
+
+#: src/Localization/LocaleManager.php:28
+msgid "French"
+msgstr ""
+
+#: src/Maintenance/WorkOrder.php:38
+msgid "Manual"
+msgstr ""
+
+#: src/Maintenance/WorkOrder.php:51
+msgid "Low"
+msgstr ""
+
+#: src/Maintenance/WorkOrder.php:52
+msgid "Normal"
+msgstr ""
+
+#: src/Maintenance/WorkOrder.php:53
+msgid "High"
+msgstr ""
+
+#: src/Maintenance/WorkOrder.php:65
+msgid "Analysis"
+msgstr ""
+
+#: src/Maintenance/WorkOrder.php:66
+msgid "Workshop linked"
+msgstr ""
+
+#: src/Maintenance/WorkOrder.php:67
+msgid "Diagnosis / estimate"
+msgstr ""
+
+#: src/Maintenance/WorkOrder.php:68
+msgid "Approval"
+msgstr ""
+
+#: src/Maintenance/WorkOrder.php:69
+msgid "Execution"
+msgstr ""
+
+#: src/Maintenance/WorkOrder.php:70
+msgid "Concluded"
+msgstr ""
+
+#: src/Maintenance/WorkOrder.php:71
+msgid "Vehicle released"
+msgstr ""
+
+#: src/Maintenance/WorkOrder.php:82
+msgid "Not required"
+msgstr ""
+
+#: src/Maintenance/WorkOrder.php:83
+msgid "Pending"
+msgstr ""
+
+#: src/Maintenance/WorkOrder.php:85
+msgid "Rejected"
+msgstr ""
+
+#: src/Maintenance/Workshop.php:29
+msgid "Internal"
+msgstr ""
+
+#: src/Maintenance/Workshop.php:30
+msgid "Accredited"
+msgstr ""
+
+#: src/Maintenance/Workshop.php:40
+msgid "Mechanical"
+msgstr ""
+
+#: src/Maintenance/Workshop.php:41
+msgid "Electrical"
+msgstr ""
+
+#: src/Maintenance/Workshop.php:42
+msgid "Bodywork"
+msgstr ""
+
+#: src/Maintenance/Workshop.php:43
+msgid "Painting"
+msgstr ""
+
+#: src/Maintenance/Workshop.php:44
+msgid "Tires"
+msgstr ""
+
+#: src/Maintenance/Workshop.php:45
+msgid "Brakes"
+msgstr ""
+
+#: src/Maintenance/Workshop.php:46
+msgid "Suspension"
+msgstr ""
+
+#: src/Maintenance/Workshop.php:47
+msgid "Engine"
+msgstr ""
+
+#: src/Maintenance/Workshop.php:48
+msgid "Transmission"
+msgstr ""
+
+#: src/Maintenance/Workshop.php:49
+msgid "Air conditioning"
+msgstr ""
+
+#: src/Maintenance/Workshop.php:50
+msgid "Diagnostics"
+msgstr ""
+
+#: src/Maintenance/Workshop.php:51
+msgid "Other"
+msgstr ""
+
+#: src/Menu/ManagementMenu.php:28
+msgid "Fleet Management"
 msgstr ""

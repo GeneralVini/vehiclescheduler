@@ -8,8 +8,6 @@ function plugin_vehiclescheduler_install()
 {
     global $DB;
 
-    include_once(Plugin::getPhpDir('vehiclescheduler') . '/inc/profile.class.php');
-
     $migration         = new Migration(PLUGIN_VEHICLESCHEDULER_VERSION);
     $default_charset   = DBConnection::getDefaultCharset();
     $default_collation = DBConnection::getDefaultCollation();
@@ -152,20 +150,66 @@ function plugin_vehiclescheduler_install()
     ");
 
     // =========================================================
-    // MANUTENÇÕES / REVISÕES
+    // OFICINAS
+    // =========================================================
+    $DB->doQuery("
+        CREATE TABLE IF NOT EXISTS `glpi_plugin_vehiclescheduler_workshops` (
+            `id` int unsigned NOT NULL AUTO_INCREMENT,
+            `entities_id` int unsigned NOT NULL DEFAULT '0',
+            `is_recursive` tinyint NOT NULL DEFAULT '0',
+            `name` varchar(255) NOT NULL DEFAULT '',
+            `type` tinyint NOT NULL DEFAULT '1' COMMENT '1=Internal, 2=Accredited',
+            `document` varchar(50) NOT NULL DEFAULT '',
+            `phone` varchar(50) NOT NULL DEFAULT '',
+            `email` varchar(255) NOT NULL DEFAULT '',
+            `city` varchar(100) NOT NULL DEFAULT '',
+            `state` varchar(2) NOT NULL DEFAULT '',
+            `is_active` tinyint NOT NULL DEFAULT '1',
+            `specialties` text,
+            `comment` text,
+            `date_creation` timestamp NULL DEFAULT NULL,
+            `date_mod` timestamp NULL DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            KEY `name` (`name`),
+            KEY `entities_id` (`entities_id`),
+            KEY `type` (`type`),
+            KEY `is_active` (`is_active`)
+        ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation};
+    ");
+
+    // =========================================================
+    // MANUTENÇÕES / ORDENS DE SERVIÇO
     // =========================================================
     $DB->doQuery("
         CREATE TABLE IF NOT EXISTS `glpi_plugin_vehiclescheduler_maintenances` (
             `id` int unsigned NOT NULL AUTO_INCREMENT,
             `plugin_vehiclescheduler_vehicles_id` int unsigned NOT NULL DEFAULT '0',
             `plugin_vehiclescheduler_incidents_id` int unsigned NOT NULL DEFAULT '0',
+            `plugin_vehiclescheduler_workshops_id` int unsigned NOT NULL DEFAULT '0',
+            `service_order_number` varchar(50) NOT NULL DEFAULT '',
+            `origin` tinyint NOT NULL DEFAULT '1' COMMENT '1=Manual, 2=Incident, 3=Checklist, 4=Preventive',
+            `priority` tinyint NOT NULL DEFAULT '2' COMMENT '1=Low, 2=Normal, 3=High, 4=Critical',
             `type` int NOT NULL DEFAULT '1',
             `status` int NOT NULL DEFAULT '1',
+            `approval_status` tinyint NOT NULL DEFAULT '1' COMMENT '1=Not required, 2=Pending, 3=Approved, 4=Rejected',
             `scheduled_date` date DEFAULT NULL,
+            `opening_date` timestamp NULL DEFAULT NULL,
+            `workshop_sent_date` timestamp NULL DEFAULT NULL,
+            `expected_completion_date` timestamp NULL DEFAULT NULL,
             `completion_date` date DEFAULT NULL,
+            `release_date` timestamp NULL DEFAULT NULL,
             `supplier` varchar(255) NOT NULL DEFAULT '',
+            `diagnosis` text,
+            `estimated_cost` decimal(10,2) NOT NULL DEFAULT '0.00',
+            `final_cost` decimal(10,2) NOT NULL DEFAULT '0.00',
             `cost` decimal(10,2) NOT NULL DEFAULT '0.00',
             `mileage` int NOT NULL DEFAULT '0',
+            `requester_id` int unsigned NOT NULL DEFAULT '0',
+            `responsible_id` int unsigned NOT NULL DEFAULT '0',
+            `approver_id` int unsigned NOT NULL DEFAULT '0',
+            `approval_date` timestamp NULL DEFAULT NULL,
+            `approval_justification` text,
+            `blocks_vehicle` tinyint NOT NULL DEFAULT '0',
             `trigger_type` tinyint NOT NULL DEFAULT '1' COMMENT '1=Manual, 2=KM, 3=Data, 4=KM ou Data',
             `due_mileage` int unsigned NOT NULL DEFAULT '0',
             `due_date` date DEFAULT NULL,
@@ -177,8 +221,12 @@ function plugin_vehiclescheduler_install()
             `date_mod` timestamp NULL DEFAULT NULL,
             PRIMARY KEY (`id`),
             KEY `plugin_vehiclescheduler_vehicles_id` (`plugin_vehiclescheduler_vehicles_id`),
+            KEY `plugin_vehiclescheduler_workshops_id` (`plugin_vehiclescheduler_workshops_id`),
+            KEY `service_order_number` (`service_order_number`),
             KEY `status` (`status`),
+            KEY `approval_status` (`approval_status`),
             KEY `scheduled_date` (`scheduled_date`),
+            KEY `opening_date` (`opening_date`),
             KEY `due_date` (`due_date`),
             KEY `due_mileage` (`due_mileage`)
         ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation};
@@ -452,9 +500,133 @@ function plugin_vehiclescheduler_install()
     // maintenances
     plugin_vehiclescheduler_add_column_if_missing(
         'glpi_plugin_vehiclescheduler_maintenances',
+        'plugin_vehiclescheduler_workshops_id',
+        "`plugin_vehiclescheduler_workshops_id` int unsigned NOT NULL DEFAULT '0' AFTER `plugin_vehiclescheduler_incidents_id`"
+    );
+
+    plugin_vehiclescheduler_add_column_if_missing(
+        'glpi_plugin_vehiclescheduler_maintenances',
+        'service_order_number',
+        "`service_order_number` varchar(50) NOT NULL DEFAULT '' AFTER `plugin_vehiclescheduler_workshops_id`"
+    );
+
+    plugin_vehiclescheduler_add_column_if_missing(
+        'glpi_plugin_vehiclescheduler_maintenances',
+        'origin',
+        "`origin` tinyint NOT NULL DEFAULT '1' COMMENT '1=Manual, 2=Incident, 3=Checklist, 4=Preventive' AFTER `service_order_number`"
+    );
+
+    plugin_vehiclescheduler_add_column_if_missing(
+        'glpi_plugin_vehiclescheduler_maintenances',
+        'priority',
+        "`priority` tinyint NOT NULL DEFAULT '2' COMMENT '1=Low, 2=Normal, 3=High, 4=Critical' AFTER `origin`"
+    );
+
+    plugin_vehiclescheduler_add_column_if_missing(
+        'glpi_plugin_vehiclescheduler_maintenances',
+        'approval_status',
+        "`approval_status` tinyint NOT NULL DEFAULT '1' COMMENT '1=Not required, 2=Pending, 3=Approved, 4=Rejected' AFTER `status`"
+    );
+
+    plugin_vehiclescheduler_add_column_if_missing(
+        'glpi_plugin_vehiclescheduler_maintenances',
+        'opening_date',
+        "`opening_date` timestamp NULL DEFAULT NULL AFTER `scheduled_date`"
+    );
+
+    plugin_vehiclescheduler_add_column_if_missing(
+        'glpi_plugin_vehiclescheduler_maintenances',
+        'workshop_sent_date',
+        "`workshop_sent_date` timestamp NULL DEFAULT NULL AFTER `opening_date`"
+    );
+
+    plugin_vehiclescheduler_add_column_if_missing(
+        'glpi_plugin_vehiclescheduler_maintenances',
+        'expected_completion_date',
+        "`expected_completion_date` timestamp NULL DEFAULT NULL AFTER `workshop_sent_date`"
+    );
+
+    plugin_vehiclescheduler_add_column_if_missing(
+        'glpi_plugin_vehiclescheduler_maintenances',
+        'release_date',
+        "`release_date` timestamp NULL DEFAULT NULL AFTER `completion_date`"
+    );
+
+    plugin_vehiclescheduler_add_column_if_missing(
+        'glpi_plugin_vehiclescheduler_maintenances',
+        'diagnosis',
+        "`diagnosis` text AFTER `supplier`"
+    );
+
+    plugin_vehiclescheduler_add_column_if_missing(
+        'glpi_plugin_vehiclescheduler_maintenances',
+        'estimated_cost',
+        "`estimated_cost` decimal(10,2) NOT NULL DEFAULT '0.00' AFTER `diagnosis`"
+    );
+
+    plugin_vehiclescheduler_add_column_if_missing(
+        'glpi_plugin_vehiclescheduler_maintenances',
+        'final_cost',
+        "`final_cost` decimal(10,2) NOT NULL DEFAULT '0.00' AFTER `estimated_cost`"
+    );
+
+    plugin_vehiclescheduler_add_column_if_missing(
+        'glpi_plugin_vehiclescheduler_maintenances',
+        'requester_id',
+        "`requester_id` int unsigned NOT NULL DEFAULT '0' AFTER `mileage`"
+    );
+
+    plugin_vehiclescheduler_add_column_if_missing(
+        'glpi_plugin_vehiclescheduler_maintenances',
+        'responsible_id',
+        "`responsible_id` int unsigned NOT NULL DEFAULT '0' AFTER `requester_id`"
+    );
+
+    plugin_vehiclescheduler_add_column_if_missing(
+        'glpi_plugin_vehiclescheduler_maintenances',
+        'approver_id',
+        "`approver_id` int unsigned NOT NULL DEFAULT '0' AFTER `responsible_id`"
+    );
+
+    plugin_vehiclescheduler_add_column_if_missing(
+        'glpi_plugin_vehiclescheduler_maintenances',
+        'approval_date',
+        "`approval_date` timestamp NULL DEFAULT NULL AFTER `approver_id`"
+    );
+
+    plugin_vehiclescheduler_add_column_if_missing(
+        'glpi_plugin_vehiclescheduler_maintenances',
+        'approval_justification',
+        "`approval_justification` text AFTER `approval_date`"
+    );
+
+    plugin_vehiclescheduler_add_column_if_missing(
+        'glpi_plugin_vehiclescheduler_maintenances',
+        'blocks_vehicle',
+        "`blocks_vehicle` tinyint NOT NULL DEFAULT '0' AFTER `approval_justification`"
+    );
+
+    plugin_vehiclescheduler_add_column_if_missing(
+        'glpi_plugin_vehiclescheduler_maintenances',
         'trigger_type',
         "`trigger_type` tinyint NOT NULL DEFAULT '1' COMMENT '1=Manual, 2=KM, 3=Data, 4=KM ou Data' AFTER `mileage`"
     );
+
+    foreach ([
+        'plugin_vehiclescheduler_workshops_id',
+        'service_order_number',
+        'approval_status',
+        'opening_date',
+    ] as $maintenanceIndex) {
+        if (
+            $DB->tableExists('glpi_plugin_vehiclescheduler_maintenances')
+            && !plugin_vehiclescheduler_index_exists('glpi_plugin_vehiclescheduler_maintenances', $maintenanceIndex)
+        ) {
+            $DB->doQuery(
+                "ALTER TABLE `glpi_plugin_vehiclescheduler_maintenances` ADD KEY `$maintenanceIndex` (`$maintenanceIndex`)"
+            );
+        }
+    }
 
     plugin_vehiclescheduler_add_column_if_missing(
         'glpi_plugin_vehiclescheduler_maintenances',
@@ -543,8 +715,6 @@ function plugin_vehiclescheduler_uninstall()
 {
     global $DB;
 
-    include_once(Plugin::getPhpDir('vehiclescheduler') . '/inc/profile.class.php');
-
     PluginVehicleschedulerProfile::uninstall();
 
     $tables = [
@@ -557,6 +727,7 @@ function plugin_vehiclescheduler_uninstall()
         'glpi_plugin_vehiclescheduler_driverfines',
         'glpi_plugin_vehiclescheduler_insuranceclaims',
         'glpi_plugin_vehiclescheduler_maintenances',
+        'glpi_plugin_vehiclescheduler_workshops',
         'glpi_plugin_vehiclescheduler_incidents',
         'glpi_plugin_vehiclescheduler_schedules',
         'glpi_plugin_vehiclescheduler_drivers',

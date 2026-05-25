@@ -1,7 +1,7 @@
 <?php
 
 if (!defined('GLPI_ROOT')) {
-    die("Acesso direto nao permitido");
+    die("Sorry. You can't access this file directly");
 }
 
 class PluginVehicleschedulerChecklistitem extends CommonDBChild
@@ -19,7 +19,7 @@ class PluginVehicleschedulerChecklistitem extends CommonDBChild
 
     public static function getTypeName($nb = 0)
     {
-        return ($nb === 1) ? 'Item' : 'Itens';
+        return ($nb === 1) ? __('Item', 'vehiclescheduler') : __('Items', 'vehiclescheduler');
     }
 
     public static function getIcon()
@@ -30,11 +30,11 @@ class PluginVehicleschedulerChecklistitem extends CommonDBChild
     public static function getItemTypes(): array
     {
         return [
-            self::TYPE_CHECKBOX  => 'Sim/Nao',
-            self::TYPE_TEXT      => 'Texto',
-            self::TYPE_NUMBER    => 'Numero',
-            self::TYPE_PHOTO     => 'Foto',
-            self::TYPE_SIGNATURE => 'Assinatura',
+            self::TYPE_CHECKBOX  => __('Yes/No', 'vehiclescheduler'),
+            self::TYPE_TEXT      => __('Text', 'vehiclescheduler'),
+            self::TYPE_NUMBER    => __('Number', 'vehiclescheduler'),
+            self::TYPE_PHOTO     => __('Photo', 'vehiclescheduler'),
+            self::TYPE_SIGNATURE => __('Signature', 'vehiclescheduler'),
         ];
     }
 
@@ -43,7 +43,7 @@ class PluginVehicleschedulerChecklistitem extends CommonDBChild
         $input = $this->normalizeInput($input);
 
         if ($input['description'] === '') {
-            Session::addMessageAfterRedirect('A descricao e obrigatoria.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Description is required.', 'vehiclescheduler'), false, ERROR);
 
             return false;
         }
@@ -70,13 +70,13 @@ class PluginVehicleschedulerChecklistitem extends CommonDBChild
         $input = $this->normalizeInput($input);
 
         if (empty($input['id'])) {
-            Session::addMessageAfterRedirect('Item invalido.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Invalid item.', 'vehiclescheduler'), false, ERROR);
 
             return false;
         }
 
         if ($input['description'] === '') {
-            Session::addMessageAfterRedirect('A descricao e obrigatoria.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Description is required.', 'vehiclescheduler'), false, ERROR);
 
             return false;
         }

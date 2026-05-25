@@ -1,6 +1,6 @@
 <?php
-include_once __DIR__ . '/../inc/common.inc.php';
-include_once __DIR__ . '/../inc/ui-helpers.php';
+include_once __DIR__ . '/../src/Bootstrap/common.php';
+include_once __DIR__ . '/../src/Bootstrap/ui-helpers.php';
 
 \Session::checkLoginUser();
 
@@ -8,6 +8,7 @@ global $CFG_GLPI;
 
 $self = filter_input(INPUT_SERVER, 'PHP_SELF', FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?: '';
 $root_doc = plugin_vehiclescheduler_get_root_doc();
+$t = static fn(string $text): string => __($text, 'vehiclescheduler');
 
 $can_request = \PluginVehicleschedulerProfile::canAccessRequester();
 $can_approve = \PluginVehicleschedulerProfile::canApproveReservations();
@@ -28,7 +29,7 @@ if ($status_filter !== null && $status_filter !== false && !in_array($status_fil
 
 $status_label = $status_filter !== null
     ? \PluginVehicleschedulerSchedule::getStatusLabel($status_filter)
-    : 'Todas';
+    : $t('All');
 
 $counts = \PluginVehicleschedulerSchedule::getApprovalQueueCounts();
 $rows   = \PluginVehicleschedulerSchedule::getApprovalQueueRows($status_filter);
@@ -95,18 +96,18 @@ $getInitials = static function (?string $name): string {
     return $initials !== '' ? $initials : '?';
 };
 
-$getStatusMeta = static function (int $status): array {
+$getStatusMeta = static function (int $status) use ($t): array {
     switch ($status) {
         case \PluginVehicleschedulerSchedule::STATUS_APPROVED:
             return [
-                'label' => 'Aprovada',
+                'label' => $t('Approved'),
                 'class' => 'vs-status-badge--approved',
                 'icon'  => 'ti ti-check',
             ];
 
         case \PluginVehicleschedulerSchedule::STATUS_REJECTED:
             return [
-                'label' => 'Recusada',
+                'label' => $t('Rejected'),
                 'class' => 'vs-status-badge--rejected',
                 'icon'  => 'ti ti-x',
             ];
@@ -114,7 +115,7 @@ $getStatusMeta = static function (int $status): array {
         case \PluginVehicleschedulerSchedule::STATUS_PENDING:
         default:
             return [
-                'label' => 'Pendente',
+                'label' => $t('Pending'),
                 'class' => 'vs-status-badge--pending',
                 'icon'  => 'ti ti-hourglass',
             ];
@@ -123,28 +124,28 @@ $getStatusMeta = static function (int $status): array {
 
 $filters = [
     [
-        'label' => 'Todas',
+        'label' => $t('All'),
         'value' => null,
         'icon'  => 'ti ti-list-details',
         'slug'  => 'all',
         'count' => count($rows),
     ],
     [
-        'label' => 'Pendentes',
+        'label' => $t('Pending'),
         'value' => \PluginVehicleschedulerSchedule::STATUS_PENDING,
         'icon'  => 'ti ti-hourglass',
         'slug'  => 'pending',
         'count' => (int) ($counts[\PluginVehicleschedulerSchedule::STATUS_PENDING] ?? 0),
     ],
     [
-        'label' => 'Aprovadas',
+        'label' => $t('Approved'),
         'value' => \PluginVehicleschedulerSchedule::STATUS_APPROVED,
         'icon'  => 'ti ti-check',
         'slug'  => 'approved',
         'count' => (int) ($counts[\PluginVehicleschedulerSchedule::STATUS_APPROVED] ?? 0),
     ],
     [
-        'label' => 'Recusadas',
+        'label' => $t('Rejected'),
         'value' => \PluginVehicleschedulerSchedule::STATUS_REJECTED,
         'icon'  => 'ti ti-x',
         'slug'  => 'rejected',
@@ -153,7 +154,7 @@ $filters = [
 ];
 
 \Html::header(
-    'Reservas',
+    $t('Reservations'),
     $self,
     'tools',
     \PluginVehicleschedulerMenu::class,
@@ -173,9 +174,9 @@ plugin_vehiclescheduler_render_back_to_management();
                     <i class="ti ti-calendar-event vs-header-icon"></i>
                 </div>
                 <div>
-                    <h2>Reservas</h2>
+                    <h2><?= $h($t('Reservations')) ?></h2>
                     <p class="vs-page-subtitle">
-                        Fila operacional para análise, atribuição de recursos e aprovação de solicitações.
+                        <?= $h($t('Operational queue for analysis, resource assignment, and request approval.')) ?>
                     </p>
                 </div>
             </div>
@@ -184,7 +185,7 @@ plugin_vehiclescheduler_render_back_to_management();
                 <?php if ($can_request || $can_edit): ?>
                     <a href="schedule.form.php" class="vs-btn-add">
                         <i class="ti ti-plus"></i>
-                        <span>Solicitar viagem</span>
+                        <span><?= $h($t('Request trip')) ?></span>
                     </a>
                 <?php endif; ?>
             </div>
@@ -194,8 +195,8 @@ plugin_vehiclescheduler_render_back_to_management();
     <div class="vs-schedule-queue-page">
         <section class="vs-schedule-status-card">
             <div class="vs-schedule-status-card__header">
-                <h3><i class="ti ti-filter"></i> Status da fila</h3>
-                <span class="vs-schedule-status-card__meta"><?php echo count($rows); ?> visível(eis)</span>
+                <h3><i class="ti ti-filter"></i> <?= $h($t('Queue status')) ?></h3>
+                <span class="vs-schedule-status-card__meta"><?php echo $h(sprintf($t('%d visible'), count($rows))); ?></span>
             </div>
 
             <div class="vs-schedule-status-strip">
@@ -225,8 +226,8 @@ plugin_vehiclescheduler_render_back_to_management();
 
         <section class="vs-schedule-table-card">
             <div class="vs-schedule-table-card__header">
-                <h3><i class="ti ti-layout-list"></i> Solicitações</h3>
-                <span class="vs-schedule-table-card__meta"><?php echo count($rows); ?> registro(s)</span>
+                <h3><i class="ti ti-layout-list"></i> <?= $h($t('Requests')) ?></h3>
+                <span class="vs-schedule-table-card__meta"><?php echo $h(sprintf($t('%d records'), count($rows))); ?></span>
             </div>
 
             <?php if ($rows === []) : ?>
@@ -235,8 +236,8 @@ plugin_vehiclescheduler_render_back_to_management();
                         <i class="ti ti-calendar-off"></i>
                     </div>
                     <div class="vs-empty-state__content">
-                        <h4>Nenhuma solicitação encontrada</h4>
-                        <p>Não há reservas para o filtro selecionado neste momento.</p>
+                        <h4><?= $h($t('No request found')) ?></h4>
+                        <p><?= $h($t('There are no reservations for the selected filter right now.')) ?></p>
                     </div>
                 </div>
             <?php else : ?>
@@ -244,15 +245,15 @@ plugin_vehiclescheduler_render_back_to_management();
                     <table class="vs-table vs-schedule-table">
                         <thead>
                             <tr>
-                                <th>Pedido</th>
-                                <th>Destino</th>
-                                <th>Status</th>
-                                <th>Saída</th>
-                                <th>Retorno</th>
-                                <th>Solicitante</th>
-                                <th>Viatura</th>
-                                <th>Motorista</th>
-                                <th class="vs-nowrap">Ações</th>
+                                <th><?= $h($t('Request')) ?></th>
+                                <th><?= $h($t('Destination')) ?></th>
+                                <th><?= $h($t('Status')) ?></th>
+                                <th><?= $h($t('Departure')) ?></th>
+                                <th><?= $h($t('Return')) ?></th>
+                                <th><?= $h($t('Requester')) ?></th>
+                                <th><?= $h($t('Vehicle')) ?></th>
+                                <th><?= $h($t('Driver')) ?></th>
+                                <th class="vs-nowrap"><?= $h($t('Actions')) ?></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -262,7 +263,7 @@ plugin_vehiclescheduler_render_back_to_management();
 
                                 $requester_name = trim((string) ($row['requester_name'] ?? ''));
                                 if ($requester_name === '') {
-                                    $requester_name = 'Não informado';
+                                    $requester_name = $t('Not informed');
                                 }
 
                                 $vehicle_name  = trim((string) ($row['vehicle_name'] ?? ''));
@@ -296,14 +297,14 @@ plugin_vehiclescheduler_render_back_to_management();
                                                 <i class="ti ti-hash"></i>
                                             </div>
                                             <div class="vs-cell-order__content">
-                                                <span class="vs-cell-order__primary">Reserva #<?php echo $h($reservation_ref); ?></span>
+                                                <span class="vs-cell-order__primary"><?= $h($t('Reservation')) ?> #<?php echo $h($reservation_ref); ?></span>
 
                                                 <?php if ($ticket_id > 0): ?>
                                                     <a class="vs-cell-order__link" href="<?php echo $h($root_doc . '/front/ticket.form.php?id=' . $ticket_id); ?>">
                                                         Ticket #<?php echo $h($ticket_label); ?>
                                                     </a>
                                                 <?php else: ?>
-                                                    <span class="vs-cell-order__muted">Sem ticket</span>
+                                                    <span class="vs-cell-order__muted"><?= $h($t('No ticket')) ?></span>
                                                 <?php endif; ?>
 
                                                 <span class="vs-cell-order__muted"><?php echo $h($formatCompactDateTime($created_at)); ?></span>
@@ -318,10 +319,10 @@ plugin_vehiclescheduler_render_back_to_management();
                                             </div>
                                             <div class="vs-cell-destination__content">
                                                 <a class="vs-cell-primary-link" href="<?php echo $h(plugin_vehiclescheduler_get_front_url('schedule.form.php') . '?id=' . (int) $row['id']); ?>">
-                                                    <?php echo $h($row['destination'] ?: 'Sem destino informado'); ?>
+                                                    <?php echo $h($row['destination'] ?: $t('No destination informed')); ?>
                                                 </a>
                                                 <div class="vs-cell-secondary">
-                                                    <span><i class="ti ti-users"></i> <?php echo (int) ($row['passengers'] ?? 0); ?> passageiro(s)</span>
+                                                    <span><i class="ti ti-users"></i> <?php echo $h(sprintf($t('%d passengers'), (int) ($row['passengers'] ?? 0))); ?></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -379,7 +380,7 @@ plugin_vehiclescheduler_render_back_to_management();
                                                 </div>
                                             </div>
                                         <?php else : ?>
-                                            <span class="vs-missing-chip"><i class="ti ti-alert-triangle"></i> A definir</span>
+                                            <span class="vs-missing-chip"><i class="ti ti-alert-triangle"></i> <?= $h($t('To be defined')) ?></span>
                                         <?php endif; ?>
                                     </td>
 
@@ -390,7 +391,7 @@ plugin_vehiclescheduler_render_back_to_management();
                                                 <span class="vs-entity-chip__label"><?php echo $h($driver_name); ?></span>
                                             </div>
                                         <?php else : ?>
-                                            <span class="vs-missing-chip"><i class="ti ti-alert-triangle"></i> A definir</span>
+                                            <span class="vs-missing-chip"><i class="ti ti-alert-triangle"></i> <?= $h($t('To be defined')) ?></span>
                                         <?php endif; ?>
                                     </td>
 
@@ -398,7 +399,7 @@ plugin_vehiclescheduler_render_back_to_management();
                                         <div class="vs-inline-actions">
                                             <a class="vs-queue-open-btn" href="<?php echo $h(plugin_vehiclescheduler_get_front_url('schedule.form.php') . '?id=' . (int) $row['id']); ?>">
                                                 <i class="ti ti-eye"></i>
-                                                <span>Abrir</span>
+                                                <span><?= $h($t('Open')) ?></span>
                                             </a>
                                         </div>
                                     </td>

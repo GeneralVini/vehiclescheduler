@@ -1,5 +1,10 @@
 <?php
 
+$vehicleschedulerAutoload = dirname(__DIR__, 2) . '/vendor/autoload.php';
+if (is_file($vehicleschedulerAutoload)) {
+    require_once $vehicleschedulerAutoload;
+}
+
 function plugin_vehiclescheduler_get_root_doc(): string
 {
     global $CFG_GLPI;
@@ -195,8 +200,9 @@ function plugin_vehiclescheduler_get_management_url(): string
     return plugin_vehiclescheduler_get_front_url('management.php');
 }
 
-function plugin_vehiclescheduler_render_back_to_management(string $label = 'Voltar para Gestão de Frota'): void
+function plugin_vehiclescheduler_render_back_to_management(?string $label = null): void
 {
+    $label ??= __('Back to Fleet Management', 'vehiclescheduler');
     $url = plugin_vehiclescheduler_get_management_url();
 
     echo "<div class='vs-page-toolbar'>";
@@ -318,14 +324,6 @@ function plugin_vehiclescheduler_apply_configured_locale(): void
 {
     global $DB;
 
-    static $applied = false;
-
-    if ($applied) {
-        return;
-    }
-
-    $applied = true;
-
     if (!class_exists('PluginVehicleschedulerConfig') || !class_exists('Session')) {
         return;
     }
@@ -336,7 +334,7 @@ function plugin_vehiclescheduler_apply_configured_locale(): void
         }
 
         $locale = PluginVehicleschedulerConfig::getPluginLocale();
-        Session::loadLanguage($locale);
+        \GlpiPlugin\Vehiclescheduler\Localization\LocaleManager::apply($locale);
     } catch (Throwable $exception) {
         // Keep GLPI's current language if plugin settings are not available yet.
     }

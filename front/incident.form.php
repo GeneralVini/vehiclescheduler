@@ -1,7 +1,7 @@
 <?php
 // front/incident.form.php
 
-include_once __DIR__ . '/../inc/common.inc.php';
+include_once __DIR__ . '/../src/Bootstrap/common.php';
 
 Session::checkLoginUser();
 

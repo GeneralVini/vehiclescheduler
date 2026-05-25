@@ -7,7 +7,7 @@
  * Sensitive personal data unrelated to fleet control must not be stored here.
  */
 if (!defined('GLPI_ROOT')) {
-    die('Acesso direto não permitido');
+    die("Sorry. You can't access this file directly");
 }
 
 class PluginVehicleschedulerDriver extends CommonDBTM
@@ -35,7 +35,7 @@ class PluginVehicleschedulerDriver extends CommonDBTM
      */
     public static function getTypeName($nb = 0)
     {
-        return ($nb === 1) ? 'Motorista' : 'Motoristas';
+        return ($nb === 1) ? __('Driver', 'vehiclescheduler') : __('Drivers', 'vehiclescheduler');
     }
 
     /**
@@ -45,7 +45,7 @@ class PluginVehicleschedulerDriver extends CommonDBTM
      */
     public static function getMenuName()
     {
-        return 'Motoristas';
+        return __('Drivers', 'vehiclescheduler');
     }
 
     /**
@@ -105,10 +105,10 @@ class PluginVehicleschedulerDriver extends CommonDBTM
     public static function getCNHCategories(): array
     {
         return [
-            self::CNH_CAT_A  => 'A - Motos',
-            self::CNH_CAT_B  => 'B - Carros',
-            self::CNH_CAT_D  => 'D - Caminhões e vans',
-            self::CNH_CAT_AB => 'AB - Motos e carros (legado)',
+            self::CNH_CAT_A  => __('A - Motorcycle', 'vehiclescheduler'),
+            self::CNH_CAT_B  => __('B - Car', 'vehiclescheduler'),
+            self::CNH_CAT_D  => __('D - Truck or van', 'vehiclescheduler'),
+            self::CNH_CAT_AB => __('AB - Motorcycles and cars (legacy)', 'vehiclescheduler'),
         ];
     }
 
@@ -120,9 +120,9 @@ class PluginVehicleschedulerDriver extends CommonDBTM
     public static function getDriverSelectableCNHCategories(): array
     {
         return [
-            self::CNH_CAT_A => 'Permite dirigir moto.',
-            self::CNH_CAT_B => 'Permite dirigir carro.',
-            self::CNH_CAT_D => 'Permite dirigir carro, caminhão e van.',
+            self::CNH_CAT_A => __('Allows motorcycle driving.', 'vehiclescheduler'),
+            self::CNH_CAT_B => __('Allows car driving.', 'vehiclescheduler'),
+            self::CNH_CAT_D => __('Allows car, truck, and van driving.', 'vehiclescheduler'),
         ];
     }
 
@@ -316,21 +316,21 @@ class PluginVehicleschedulerDriver extends CommonDBTM
     public static function getCNHExpiryBadgeData(array $status): array
     {
         $map = [
-            'ok'       => ['class' => 'vs-driver-expiry-badge--ok', 'label' => 'Válida'],
-            'warning'  => ['class' => 'vs-driver-expiry-badge--warning', 'label' => 'Vence em breve'],
-            'critical' => ['class' => 'vs-driver-expiry-badge--critical', 'label' => 'Crítica'],
-            'expired'  => ['class' => 'vs-driver-expiry-badge--expired', 'label' => 'VENCIDA'],
-            'unknown'  => ['class' => 'vs-driver-expiry-badge--unknown', 'label' => 'Sem data'],
+            'ok'       => ['class' => 'vs-driver-expiry-badge--ok', 'label' => __('Valid', 'vehiclescheduler')],
+            'warning'  => ['class' => 'vs-driver-expiry-badge--warning', 'label' => __('Expiring soon', 'vehiclescheduler')],
+            'critical' => ['class' => 'vs-driver-expiry-badge--critical', 'label' => __('Critical', 'vehiclescheduler')],
+            'expired'  => ['class' => 'vs-driver-expiry-badge--expired', 'label' => __('EXPIRED', 'vehiclescheduler')],
+            'unknown'  => ['class' => 'vs-driver-expiry-badge--unknown', 'label' => __('No date', 'vehiclescheduler')],
         ];
 
         $badge = $map[$status['status'] ?? 'unknown'] ?? $map['unknown'];
 
         if (in_array($status['status'] ?? '', ['critical', 'warning'], true) && $status['days'] !== null) {
-            $badge['label'] = "Vence em {$status['days']} dias";
+            $badge['label'] = sprintf(__('Expires in %d days', 'vehiclescheduler'), (int) $status['days']);
         } elseif (($status['status'] ?? '') === 'ok' && $status['days'] !== null) {
-            $badge['label'] = "Válida - {$status['days']} dias restantes";
+            $badge['label'] = sprintf(__('Valid - %d days remaining', 'vehiclescheduler'), (int) $status['days']);
         } elseif (($status['status'] ?? '') === 'expired' && $status['days'] !== null) {
-            $badge['label'] = "VENCIDA há {$status['days']} dias";
+            $badge['label'] = sprintf(__('EXPIRED %d days ago', 'vehiclescheduler'), (int) $status['days']);
         }
 
         return $badge;
@@ -516,27 +516,27 @@ class PluginVehicleschedulerDriver extends CommonDBTM
         $input = self::normalizeDriverInput($input);
 
         if ($input['users_id'] <= 0) {
-            Session::addMessageAfterRedirect('Selecione um usuário do GLPI para o motorista.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Select a GLPI user for the driver.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
         if ($input['cnh_category'] === '') {
-            Session::addMessageAfterRedirect('Selecione ao menos uma categoria de CNH para o motorista.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Select at least one driver license category for the driver.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
         if ($input['cnh_expiry'] === null) {
-            Session::addMessageAfterRedirect('O vencimento da CNH é obrigatório e deve ser uma data válida.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Driver license expiration is required and must be a valid date.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
         if (self::isUserAlreadyLinked($input['users_id'])) {
-            Session::addMessageAfterRedirect('Este usuário do GLPI já está vinculado a outro motorista.', false, ERROR);
+            Session::addMessageAfterRedirect(__('This GLPI user is already linked to another driver.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
         if ($input['registration'] !== '' && self::isRegistrationAlreadyUsed($input['registration'])) {
-            Session::addMessageAfterRedirect('A matrícula informada já está em uso.', false, ERROR);
+            Session::addMessageAfterRedirect(__('The informed registration is already in use.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
@@ -553,7 +553,7 @@ class PluginVehicleschedulerDriver extends CommonDBTM
             $input['is_active'] = 0;
 
             Session::addMessageAfterRedirect(
-                'Motorista cadastrado! Aguardando aprovação da gestão.',
+                __('Driver registered. Waiting for management approval.', 'vehiclescheduler'),
                 false,
                 INFO
             );
@@ -574,32 +574,32 @@ class PluginVehicleschedulerDriver extends CommonDBTM
         $input = self::normalizeDriverInput($input);
 
         if ($input['id'] <= 0) {
-            Session::addMessageAfterRedirect('ID do motorista inválido.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Invalid driver ID.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
         if ($input['users_id'] <= 0) {
-            Session::addMessageAfterRedirect('Selecione um usuário do GLPI para o motorista.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Select a GLPI user for the driver.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
         if ($input['cnh_category'] === '') {
-            Session::addMessageAfterRedirect('Selecione ao menos uma categoria de CNH para o motorista.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Select at least one driver license category for the driver.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
         if ($input['cnh_expiry'] === null) {
-            Session::addMessageAfterRedirect('O vencimento da CNH é obrigatório e deve ser uma data válida.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Driver license expiration is required and must be a valid date.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
         if (self::isUserAlreadyLinked($input['users_id'], $input['id'])) {
-            Session::addMessageAfterRedirect('Este usuário do GLPI já está vinculado a outro motorista.', false, ERROR);
+            Session::addMessageAfterRedirect(__('This GLPI user is already linked to another driver.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
         if ($input['registration'] !== '' && self::isRegistrationAlreadyUsed($input['registration'], $input['id'])) {
-            Session::addMessageAfterRedirect('A matrícula informada já está em uso.', false, ERROR);
+            Session::addMessageAfterRedirect(__('The informed registration is already in use.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
@@ -623,14 +623,14 @@ class PluginVehicleschedulerDriver extends CommonDBTM
 
         $tab[] = [
             'id'   => 'common',
-            'name' => 'Motoristas',
+            'name' => __('Drivers', 'vehiclescheduler'),
         ];
 
         $tab[] = [
             'id'            => '1',
             'table'         => $this->getTable(),
             'field'         => 'name',
-            'name'          => 'Nome',
+            'name'          => __('Name', 'vehiclescheduler'),
             'datatype'      => 'itemlink',
             'massiveaction' => false,
         ];
@@ -639,7 +639,7 @@ class PluginVehicleschedulerDriver extends CommonDBTM
             'id'       => '2',
             'table'    => 'glpi_users',
             'field'    => 'name',
-            'name'     => 'Usuário GLPI',
+            'name'     => __('GLPI user', 'vehiclescheduler'),
             'datatype' => 'dropdown',
         ];
 
@@ -647,7 +647,7 @@ class PluginVehicleschedulerDriver extends CommonDBTM
             'id'       => '3',
             'table'    => $this->getTable(),
             'field'    => 'registration',
-            'name'     => 'Matrícula Interna',
+            'name'     => __('Internal registration', 'vehiclescheduler'),
             'datatype' => 'string',
         ];
 
@@ -655,7 +655,7 @@ class PluginVehicleschedulerDriver extends CommonDBTM
             'id'         => '4',
             'table'      => $this->getTable(),
             'field'      => 'cnh_category',
-            'name'       => 'Categoria CNH',
+            'name'       => __('Driver license category', 'vehiclescheduler'),
             'datatype'   => 'specific',
             'searchtype' => ['equals', 'notequals'],
         ];
@@ -664,7 +664,7 @@ class PluginVehicleschedulerDriver extends CommonDBTM
             'id'       => '5',
             'table'    => $this->getTable(),
             'field'    => 'cnh_expiry',
-            'name'     => 'Vencimento da CNH',
+            'name'     => __('Driver license expiration', 'vehiclescheduler'),
             'datatype' => 'date',
         ];
 
@@ -672,7 +672,7 @@ class PluginVehicleschedulerDriver extends CommonDBTM
             'id'       => '6',
             'table'    => 'glpi_groups',
             'field'    => 'name',
-            'name'     => 'Departamento/Setor',
+            'name'     => __('Department / sector', 'vehiclescheduler'),
             'datatype' => 'dropdown',
         ];
 
@@ -680,7 +680,7 @@ class PluginVehicleschedulerDriver extends CommonDBTM
             'id'       => '7',
             'table'    => $this->getTable(),
             'field'    => 'contact_phone',
-            'name'     => 'Telefone',
+            'name'     => __('Phone', 'vehiclescheduler'),
             'datatype' => 'string',
         ];
 
@@ -688,7 +688,7 @@ class PluginVehicleschedulerDriver extends CommonDBTM
             'id'       => '8',
             'table'    => $this->getTable(),
             'field'    => 'is_active',
-            'name'     => 'Ativo',
+            'name'     => __('Active', 'vehiclescheduler'),
             'datatype' => 'bool',
         ];
 
@@ -696,7 +696,7 @@ class PluginVehicleschedulerDriver extends CommonDBTM
             'id'       => '9',
             'table'    => $this->getTable(),
             'field'    => 'is_approved',
-            'name'     => 'Aprovado',
+            'name'     => __('Approved', 'vehiclescheduler'),
             'datatype' => 'bool',
         ];
 
@@ -704,7 +704,7 @@ class PluginVehicleschedulerDriver extends CommonDBTM
             'id'       => '19',
             'table'    => $this->getTable(),
             'field'    => 'date_mod',
-            'name'     => 'Última modificação',
+            'name'     => __('Last modification', 'vehiclescheduler'),
             'datatype' => 'datetime',
         ];
 

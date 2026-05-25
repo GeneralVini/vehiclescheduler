@@ -89,7 +89,7 @@ The project follows a strict split between business logic and UI rendering:
 - `public/css/`: styling
 - `public/js/`: client behavior
 - `locales/`: translations
-- `inc/`: legacy-compatible classes while migration occurs
+- `src/Legacy/`: GLPI compatibility classes loaded by Composer classmap
 
 Backend/domain classes must not contain screen layout, inline CSS, inline JavaScript, page composition, or button markup.
 

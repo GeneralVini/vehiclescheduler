@@ -31,3 +31,44 @@ with duplicated page rules.
 1. Remove inline `<style>` blocks from `front/*.php`
 2. Move repeated rules from page files into `core/`
 3. Keep `app.css` as the single runtime entry point
+
+## Current inventory
+Snapshot reviewed on 2026-05-25:
+
+| Area | Files | Notes |
+| --- | ---: | --- |
+| Admin / dashboard | 2 | `admin-dashboard.css`, `dashboard.css` |
+| Calendar / booking | 2 | `calendar.css`, `booking.css` |
+| Checklists | 4 | list, form, items, response form |
+| Drivers / fines | 6 | grid, list, form, fine form, fine tab, fine render |
+| Vehicles / reports | 4 | grid, list, form, vehicle report form |
+| Incidents / claims / maintenance | 3 | form-level styles for operational records |
+| Reports | 2 | report landing and view |
+| Settings / wrappers | 4 | theme config plus thin compatibility wrappers |
+
+Largest page files:
+- `driver-grid.css`
+- `calendar.css`
+- `admin-dashboard.css`
+- `driverfine.render.css`
+- `vehicle-grid.css`
+
+## Consolidation targets
+- Grid toolbar, search, filters, result count, table shell, empty state, action link,
+  badges, and responsive behavior are repeated between vehicle, driver, and incident
+  list screens.
+- Form cards, labels, hint text, action bars, and validation spacing are repeated
+  across vehicle, driver, incident, insurance claim, maintenance, checklist, and fine
+  forms.
+- List and grid variants should converge into shared core components before new
+  maintenance screens are expanded.
+
+## Refactor order
+1. Create shared core selectors for operational grids.
+2. Migrate vehicle, driver, and incident grids to shared classes while preserving
+   their page-specific modifiers.
+3. Create shared form component rules for page cards, field grids, labels, hints,
+   action bars, and destructive actions.
+4. Remove compatibility wrapper files once no screen imports them directly.
+5. Validate the main management, vehicle, driver, incident, schedule, checklist, and
+   maintenance screens visually after each CSS reduction.

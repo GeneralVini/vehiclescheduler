@@ -1,6 +1,6 @@
 <?php
 
-include_once __DIR__ . '/../inc/common.inc.php';
+include_once __DIR__ . '/../src/Bootstrap/common.php';
 
 Session::checkRight('plugin_vehiclescheduler_management', READ);
 
@@ -28,7 +28,7 @@ function vs_vehicle_list_format_datetime(?string $value): string
     $value = trim((string) $value);
 
     if ($value === '' || $value === '0000-00-00' || $value === '0000-00-00 00:00:00') {
-        return 'Não informado';
+        return __('Not informed', 'vehiclescheduler');
     }
 
     $timestamp = strtotime($value);
@@ -148,9 +148,10 @@ function vs_vehicle_list_status_pill(string $label, string $modifier): string
 
 $vehicles = PluginVehicleschedulerVehicle::getManagementGridRows();
 $vehicleFormUrl = plugin_vehiclescheduler_get_front_url('vehicle.form.php');
+$t = static fn(string $message): string => __($message, 'vehiclescheduler');
 
 Html::header(
-    'Viaturas',
+    $t('Vehicles'),
     $_SERVER['PHP_SELF'],
     'tools',
     PluginVehicleschedulerMenu::class,
@@ -173,15 +174,15 @@ plugin_vehiclescheduler_render_back_to_management();
                 <i class="ti ti-car vs-header-icon"></i>
             </div>
             <div>
-                <h2>Gestão de Veículos</h2>
-                <p class="vs-page-subtitle">Grade operacional compacta para consulta, filtros rápidos e manutenção do cadastro.</p>
+                <h2><?= vs_vehicle_list_escape($t('Vehicle Management')) ?></h2>
+                <p class="vs-page-subtitle"><?= vs_vehicle_list_escape($t('Compact operational grid for lookup, quick filters, and registry maintenance.')) ?></p>
             </div>
         </div>
 
         <?php if (Session::haveRight('plugin_vehiclescheduler_management', CREATE)) : ?>
             <a href="<?= vs_vehicle_list_escape($vehicleFormUrl) ?>" class="vs-btn-add">
                 <i class="ti ti-plus"></i>
-                <span>Adicionar Veículo</span>
+                <span><?= vs_vehicle_list_escape($t('Add Vehicle')) ?></span>
             </a>
         <?php endif; ?>
     </div>
@@ -192,38 +193,38 @@ plugin_vehiclescheduler_render_back_to_management();
         <div class="vs-vehicle-grid__search-wrap">
             <input
                 type="search"
-                placeholder="Buscar veículo..."
-                aria-label="Buscar veículos"
+                placeholder="<?= vs_vehicle_list_escape($t('Search vehicle...')) ?>"
+                aria-label="<?= vs_vehicle_list_escape($t('Search vehicles')) ?>"
                 data-vehicle-filter-search>
         </div>
 
         <div class="vs-vehicle-grid__results-text" data-vehicle-result-count>
-            Exibindo <?= (int) count($vehicles) ?> veículos
+            <?= vs_vehicle_list_escape(sprintf($t('Showing %d vehicles'), (int) count($vehicles))) ?>
         </div>
 
         <div class="vs-vehicle-grid__filters">
             <label class="vs-vehicle-grid__filter">
-                <span>Situação</span>
+                <span><?= vs_vehicle_list_escape($t('Situation')) ?></span>
                 <select data-vehicle-filter-active>
-                    <option value="all">Todos</option>
-                    <option value="1">Ativos</option>
-                    <option value="0">Inativos</option>
+                    <option value="all"><?= vs_vehicle_list_escape($t('All')) ?></option>
+                    <option value="1"><?= vs_vehicle_list_escape($t('Active')) ?></option>
+                    <option value="0"><?= vs_vehicle_list_escape($t('Inactive')) ?></option>
                 </select>
             </label>
 
             <label class="vs-vehicle-grid__filter">
                 <span>CNH</span>
                 <select data-vehicle-filter-cnh>
-                    <option value="all">Todas</option>
-                    <option value="A">A - Moto</option>
-                    <option value="B">B - Carro</option>
-                    <option value="D">D - Caminhão ou van</option>
+                    <option value="all"><?= vs_vehicle_list_escape($t('All')) ?></option>
+                    <option value="A"><?= vs_vehicle_list_escape($t('A - Motorcycle')) ?></option>
+                    <option value="B"><?= vs_vehicle_list_escape($t('B - Car')) ?></option>
+                    <option value="D"><?= vs_vehicle_list_escape($t('D - Truck or van')) ?></option>
                 </select>
             </label>
 
             <button type="button" class="vs-vehicle-grid__clear" data-vehicle-clear-filters>
                 <i class="ti ti-eraser"></i>
-                <span>Limpar</span>
+                <span><?= vs_vehicle_list_escape($t('Clear')) ?></span>
             </button>
         </div>
     </section>
@@ -232,21 +233,21 @@ plugin_vehiclescheduler_render_back_to_management();
         <table class="vs-vehicle-grid__table">
             <thead>
                 <tr>
-                    <th>Veículo</th>
-                    <th>Placa</th>
-                    <th>Marca / Modelo</th>
-                    <th>Ano</th>
-                    <th>Passageiros</th>
-                    <th>CNH exigida</th>
-                    <th>Status</th>
-                    <th>Atualizado em</th>
-                    <th class="vs-vehicle-grid__actions-col">Ações</th>
+                    <th><?= vs_vehicle_list_escape($t('Vehicle')) ?></th>
+                    <th><?= vs_vehicle_list_escape($t('Plate')) ?></th>
+                    <th><?= vs_vehicle_list_escape($t('Brand / Model')) ?></th>
+                    <th><?= vs_vehicle_list_escape($t('Year')) ?></th>
+                    <th><?= vs_vehicle_list_escape($t('Passengers')) ?></th>
+                    <th><?= vs_vehicle_list_escape($t('Required CNH')) ?></th>
+                    <th><?= vs_vehicle_list_escape($t('Status')) ?></th>
+                    <th><?= vs_vehicle_list_escape($t('Updated at')) ?></th>
+                    <th class="vs-vehicle-grid__actions-col"><?= vs_vehicle_list_escape($t('Actions')) ?></th>
                 </tr>
             </thead>
             <tbody data-vehicle-row-list>
                 <?php foreach ($vehicles as $vehicle) : ?>
                     <?php
-                    $vehicleName = (string) (($vehicle['name'] ?? '') !== '' ? $vehicle['name'] : 'Veículo sem nome');
+                    $vehicleName = (string) (($vehicle['name'] ?? '') !== '' ? $vehicle['name'] : $t('Unnamed vehicle'));
                     $vehicleUrl = $vehicleFormUrl . '?id=' . (int) ($vehicle['id'] ?? 0);
                     $requiredCnh = (string) ($vehicle['required_cnh_category'] ?? '');
                     $requiredCnhLabel = vs_vehicle_list_cnh_label($requiredCnh);
@@ -278,26 +279,26 @@ plugin_vehiclescheduler_render_back_to_management();
                         </td>
 
                         <td>
-                            <?= vs_vehicle_list_escape((string) ((($vehicle['plate'] ?? '') !== '') ? $vehicle['plate'] : 'Não informada')) ?>
+                            <?= vs_vehicle_list_escape((string) ((($vehicle['plate'] ?? '') !== '') ? $vehicle['plate'] : $t('Not informed'))) ?>
                         </td>
 
                         <td>
                             <div class="vs-vehicle-grid__brand-model">
                                 <span class="vs-vehicle-grid__brand">
-                                    <?= vs_vehicle_list_escape((string) ((($vehicle['brand'] ?? '') !== '') ? $vehicle['brand'] : 'Marca não informada')) ?>
+                                    <?= vs_vehicle_list_escape((string) ((($vehicle['brand'] ?? '') !== '') ? $vehicle['brand'] : $t('Brand not informed'))) ?>
                                 </span>
                                 <span class="vs-vehicle-grid__model">
-                                    <?= vs_vehicle_list_escape((string) ((($vehicle['model'] ?? '') !== '') ? $vehicle['model'] : 'Modelo não informado')) ?>
+                                    <?= vs_vehicle_list_escape((string) ((($vehicle['model'] ?? '') !== '') ? $vehicle['model'] : $t('Model not informed'))) ?>
                                 </span>
                             </div>
                         </td>
 
                         <td>
-                            <?= vs_vehicle_list_escape((string) ((($vehicle['year'] ?? '') !== '') ? (string) $vehicle['year'] : 'Não informado')) ?>
+                            <?= vs_vehicle_list_escape((string) ((($vehicle['year'] ?? '') !== '') ? (string) $vehicle['year'] : $t('Not informed'))) ?>
                         </td>
 
                         <td>
-                            <?= vs_vehicle_list_escape((string) ((($vehicle['seats'] ?? '') !== '') ? (string) $vehicle['seats'] : 'Não informado')) ?>
+                            <?= vs_vehicle_list_escape((string) ((($vehicle['seats'] ?? '') !== '') ? (string) $vehicle['seats'] : $t('Not informed'))) ?>
                         </td>
 
                         <td>
@@ -307,7 +308,7 @@ plugin_vehiclescheduler_render_back_to_management();
                         <td>
                             <div class="vs-vehicle-grid__pill-stack">
                                 <?= vs_vehicle_list_status_pill(
-                                    ((int) ($vehicle['is_active'] ?? 0) === 1 ? 'Ativo' : 'Inativo'),
+                                    ((int) ($vehicle['is_active'] ?? 0) === 1 ? $t('Active') : $t('Inactive')),
                                     ((int) ($vehicle['is_active'] ?? 0) === 1 ? 'active' : 'inactive')
                                 ) ?>
                             </div>
@@ -320,7 +321,7 @@ plugin_vehiclescheduler_render_back_to_management();
                         <td class="vs-vehicle-grid__actions-col">
                             <a href="<?= vs_vehicle_list_escape($vehicleUrl) ?>" class="vs-vehicle-grid__action">
                                 <i class="ti ti-pencil"></i>
-                                <span>Abrir</span>
+                                <span><?= vs_vehicle_list_escape($t('Open')) ?></span>
                             </a>
                         </td>
                     </tr>
@@ -331,8 +332,8 @@ plugin_vehiclescheduler_render_back_to_management();
 
     <div class="vs-vehicle-grid__empty" data-vehicle-empty hidden>
         <div class="vs-vehicle-grid__empty-icon"><i class="ti ti-car"></i></div>
-        <h3>Nenhum veículo encontrado</h3>
-        <p>Revise os filtros aplicados.</p>
+        <h3><?= vs_vehicle_list_escape($t('No vehicle found')) ?></h3>
+        <p><?= vs_vehicle_list_escape($t('Review the applied filters.')) ?></p>
     </div>
 </div>
 

@@ -4,9 +4,17 @@
  * Theme configuration page.
  */
 
-include_once(__DIR__ . '/../inc/common.inc.php');
+include_once(__DIR__ . '/../src/Bootstrap/common.php');
 
 Session::checkRight('config', UPDATE);
+
+$h = static function ($value): string {
+    return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+};
+
+$t = static function (string $message): string {
+    return __($message, 'vehiclescheduler');
+};
 
 if (isset($_POST['save_theme'])) {
     $themeCode = PluginVehicleschedulerInput::enum(
@@ -17,7 +25,7 @@ if (isset($_POST['save_theme'])) {
     );
 
     if (PluginVehicleschedulerTheme::saveTheme($themeCode)) {
-        Session::addMessageAfterRedirect('Tema salvo com sucesso!', false, INFO);
+        plugin_vehiclescheduler_flash_success($t('Theme saved successfully.'));
     }
 
     Html::redirect($_SERVER['PHP_SELF']);
@@ -26,7 +34,7 @@ if (isset($_POST['save_theme'])) {
 $currentTheme = PluginVehicleschedulerTheme::getCurrentTheme();
 $allThemes    = PluginVehicleschedulerTheme::getAllThemes();
 
-Html::header('Configuração de Temas', $_SERVER['PHP_SELF'], 'config', 'plugins');
+Html::header($t('Theme settings'), $_SERVER['PHP_SELF'], 'config', 'plugins');
 
 plugin_vehiclescheduler_load_css();
 plugin_vehiclescheduler_enhance_ui();
@@ -34,17 +42,17 @@ plugin_vehiclescheduler_enhance_ui();
 <div class="vs-theme-config-page">
     <section class="vs-theme-config-hero">
         <div>
-            <p class="vs-theme-config-hero__eyebrow">Personalização visual</p>
-            <h1>Configuração de temas</h1>
-            <p>Escolha uma paleta que melhore a leitura operacional sem perder contraste entre claro e escuro.</p>
+            <p class="vs-theme-config-hero__eyebrow"><?= $h($t('Visual customization')) ?></p>
+            <h1><?= $h($t('Theme settings')) ?></h1>
+            <p><?= $h($t('Choose a palette that improves operational readability while preserving light and dark contrast.')) ?></p>
         </div>
         <div class="vs-theme-config-hero__tip">
-            <strong>Dica</strong>
-            <span>O toggle claro/escuro continua disponível nas telas do plugin.</span>
+            <strong><?= $h($t('Tip')) ?></strong>
+            <span><?= $h($t('The light/dark toggle remains available on plugin screens.')) ?></span>
         </div>
     </section>
 
-    <form method="post" action="<?= htmlspecialchars($_SERVER['PHP_SELF'], ENT_QUOTES, 'UTF-8') ?>" class="vs-theme-config-form">
+    <form method="post" action="<?= $h($_SERVER['PHP_SELF']) ?>" class="vs-theme-config-form">
         <input type="hidden" name="_glpi_csrf_token" value="<?= Session::getNewCSRFToken() ?>">
 
         <section class="vs-theme-grid">
@@ -52,18 +60,18 @@ plugin_vehiclescheduler_enhance_ui();
                 <?php $checked = $code === $currentTheme ? ' checked' : ''; ?>
                 <label class="vs-theme-card">
                     <div class="vs-theme-card__selector">
-                        <input type="radio" name="theme_code" value="<?= htmlspecialchars($code, ENT_QUOTES, 'UTF-8') ?>"<?= $checked ?>>
+                        <input type="radio" name="theme_code" value="<?= $h($code) ?>"<?= $checked ?>>
                         <div>
-                            <strong><?= htmlspecialchars($theme['name'], ENT_QUOTES, 'UTF-8') ?></strong>
-                            <span><?= htmlspecialchars($code, ENT_QUOTES, 'UTF-8') ?></span>
+                            <strong><?= $h($theme['name']) ?></strong>
+                            <span><?= $h($code) ?></span>
                         </div>
                     </div>
                     <div class="vs-theme-card__previews">
-                        <div class="vs-theme-card__preview vs-theme-card__preview--<?= htmlspecialchars($code, ENT_QUOTES, 'UTF-8') ?>-light">
-                            <span>☀ Claro</span>
+                        <div class="vs-theme-card__preview vs-theme-card__preview--<?= $h($code) ?>-light">
+                            <span>☀ <?= $h($t('Light')) ?></span>
                         </div>
-                        <div class="vs-theme-card__preview vs-theme-card__preview--<?= htmlspecialchars($code, ENT_QUOTES, 'UTF-8') ?>-dark">
-                            <span>🌙 Escuro</span>
+                        <div class="vs-theme-card__preview vs-theme-card__preview--<?= $h($code) ?>-dark">
+                            <span>🌙 <?= $h($t('Dark')) ?></span>
                         </div>
                     </div>
                 </label>
@@ -71,7 +79,7 @@ plugin_vehiclescheduler_enhance_ui();
         </section>
 
         <footer class="vs-theme-config-form__footer">
-            <button type="submit" name="save_theme" class="vs-theme-config-save">Salvar tema</button>
+            <button type="submit" name="save_theme" class="vs-theme-config-save"><?= $h($t('Save theme')) ?></button>
         </footer>
     </form>
 </div>

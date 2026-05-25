@@ -10,8 +10,7 @@
  * - stable rendering without optional frontend dependencies.
  */
 
-include_once(__DIR__ . '/../inc/common.inc.php');
-include_once(__DIR__ . '/../inc/dashboard.class.php');
+include_once(__DIR__ . '/../src/Bootstrap/common.php');
 
 if (!headers_sent()) {
     header('Content-Type: text/html; charset=UTF-8');

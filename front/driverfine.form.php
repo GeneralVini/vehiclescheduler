@@ -4,7 +4,7 @@
  * Driver fine form controller.
  */
 
-include_once __DIR__ . '/../inc/common.inc.php';
+include_once __DIR__ . '/../src/Bootstrap/common.php';
 
 PluginVehicleschedulerDriverfine::requireAdminFines();
 

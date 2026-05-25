@@ -1,0 +1,24 @@
+/* Language button loading state */
+.vs-language-button.is-loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.vs-language-button.is-loading::after {
+    content: '';
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-left: 8px;
+    border: 2px solid currentColor;
+    border-right: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

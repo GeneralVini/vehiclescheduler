@@ -18,7 +18,7 @@ if (!Session::haveRight('plugin_vehiclescheduler', UPDATE + DELETE)) {
     echo json_encode([
         'notifications' => [],
         'count' => 0,
-        'info' => 'Sem direitos de gestão'
+        'info' => __('No management rights', 'vehiclescheduler')
     ]);
     exit;
 }
@@ -60,7 +60,11 @@ try {
         $requester = getUserName($data['users_id']);
         $begin = new DateTime($data['begin_date']);
         $end = new DateTime($data['end_date']);
-        $period = $begin->format('d/m/Y H:i') . ' até ' . $end->format('d/m/Y H:i');
+        $period = sprintf(
+            __('%s to %s', 'vehiclescheduler'),
+            $begin->format('d/m/Y H:i'),
+            $end->format('d/m/Y H:i')
+        );
         
         $now = new DateTime();
         $hours_until = ($begin->getTimestamp() - $now->getTimestamp()) / 3600;

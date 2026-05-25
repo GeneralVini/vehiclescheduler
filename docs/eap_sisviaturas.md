@@ -10,7 +10,8 @@ A EAP considera:
 - separação entre backend/domínio, front/renderização, AJAX, CSS e JS;
 - internacionalização como frente própria;
 - execução obrigatória da internacionalização e do refactor estrutural antes da implementação do módulo de manutenção;
-- migração gradual de responsabilidades de `inc/` para `src/` quando não houver necessidade de compatibilidade legada;
+- eliminação do diretório legado de classes e consolidação de implementação em `src/`;
+- carregamento das classes GLPI compatibility via Composer classmap em `src/Legacy/`;
 - módulo de manutenção com MVP operacional;
 - manutenção da compatibilidade com GLPI 11;
 - uso de inglês como idioma-base técnico e `msgid`.
@@ -39,13 +40,15 @@ A EAP considera:
 
 > Ordem obrigatória de execução: concluir a frente de **Internacionalização do Plugin** e o **Refactor Estrutural de Telas e Pastas** antes de iniciar a implementação funcional do **Módulo de Manutenção - MVP**. A manutenção pode ser analisada e documentada em paralelo, mas sua codificação deve partir da base i18n e da estrutura técnica já consolidadas.
 
+> Estado atual da execução técnica: a consolidação estrutural das classes em `src/` foi executada, com classes GLPI compatibility movidas para `src/Legacy/`, helpers bootstrap movidos para `src/Bootstrap/`, autoload Composer ajustado e validação de instalação/ativação realizada. A frente de internacionalização funcional foi consolidada com catálogo gettext regenerado, locales preenchidos nos quatro idiomas e compilação validada. A próxima frente obrigatória antes da codificação da manutenção é a revisão e consolidação de CSS.
+
 ### 1. Governança e Arquitetura
 
 #### 1.1 Regras do Projeto
 
 - Manter `AGENTS.md` como fonte normativa.
 - Manter separação de responsabilidades por camada.
-- Evitar expansão desnecessária de classes legadas em `inc/`.
+- Não recriar diretório legado removido.
 - Priorizar novas classes em `src/` com namespace PSR-4.
 
 #### 1.2 Modelo Arquitetural
@@ -143,19 +146,22 @@ A EAP considera:
 
 #### 4.1 Inventário do Legado
 
-- Mapear classes em `inc/*.class.php`.
-- Identificar quais classes permanecem como compatibilidade GLPI.
+- Mapear classes GLPI compatibility em `src/Legacy/`.
+- Identificar quais classes permanecem com nomes `PluginVehiclescheduler...` por compatibilidade GLPI.
 - Identificar lógica de domínio que pode migrar para `src/`.
 - Identificar telas em `front/` com regra de negócio indevida.
 - Identificar duplicações entre telas, renderizações e helpers.
 
-#### 4.2 Migração Gradual de `inc/` para `src/`
+#### 4.2 Consolidação em `src/`
 
 - Criar classes novas em `src/` com namespace `GlpiPlugin\Vehiclescheduler`.
 - Migrar regras de negócio para serviços ou classes de domínio em `src/`.
-- Manter `inc/` apenas como camada legada ou ponte quando necessário.
+- Manter classes globais GLPI apenas em `src/Legacy/`, carregadas por Composer classmap.
 - Evitar criar novas classes legacy-style sem motivo de compatibilidade.
 - Preservar nomes e contratos públicos usados pelo GLPI durante a transição.
+- Manter helpers bootstrap compartilhados em `src/Bootstrap/`.
+- Garantir que entry points não façam include manual de arquivos de classes.
+- Regenerar autoload Composer após qualquer movimentação estrutural.
 
 #### 4.3 Organização de Telas
 
@@ -179,6 +185,11 @@ A EAP considera:
 - Nenhuma nova funcionalidade de manutenção deve depender de regra de negócio hardcoded na tela.
 - Compatibilidade com telas existentes deve ser preservada.
 - Sintaxe PHP e comportamento principal devem ser validados após cada migração.
+- Diretório legado removido não deve existir no plugin.
+- Classes globais `PluginVehiclescheduler...` devem ser carregadas por Composer classmap a partir de `src/Legacy/`.
+- Helpers compartilhados devem ser carregados a partir de `src/Bootstrap/`.
+- Referências operacionais ao diretório legado removido devem ser inexistentes no código do plugin.
+- Instalação e ativação do plugin devem continuar funcionando no GLPI.
 
 ---
 
@@ -600,14 +611,19 @@ observacoes
 - Critério definido: nenhum texto novo user-facing hardcoded.
 - Componente de alerta estabilizado.
 - Documentação de escopo atualizada.
+- Status executivo: frente consolidada; novos textos user-facing devem continuar entrando por `__($msgid, 'vehiclescheduler')` com `msgid` em inglês e tradução nos quatro locales.
 
 ### Marco 2 - Refactor Estrutural
 
-- Inventário de classes em `inc/` concluído.
+- Inventário de classes GLPI compatibility concluído em `src/Legacy/`.
 - Regras de domínio candidatas a `src/` mapeadas.
 - Telas em `front/` revisadas para manter entry points finos.
 - Helpers compartilhados revisados.
 - Padrão para novas classes em `src/` consolidado.
+- Autoload Composer com classmap para `src/Legacy/` validado.
+- Diretório legado removido e sem referências operacionais remanescentes.
+- Instalação e ativação do plugin validadas após a consolidação.
+- Status executivo: base estrutural concluída; refactors finos podem continuar por tela, sem bloquear a frente de i18n.
 
 ### Marco 3 - Revisão Visual e CSS
 
@@ -615,6 +631,7 @@ observacoes
 - Duplicidades principais identificadas.
 - Componentes visuais compartilhados definidos.
 - Padrão visual base validado em telas principais.
+- Status executivo: frente planejada; deve ser estabilizada antes de telas novas de manutenção com CSS próprio.
 
 ### Marco 4 - Preparação Técnica da Manutenção
 
@@ -622,6 +639,7 @@ observacoes
 - Campos mínimos da OS validados.
 - Fluxo operacional reduzido documentado.
 - Chaves de tradução do módulo de manutenção planejadas.
+- Status executivo: documentação preparada; codificação funcional aguarda revisão/consolidação de CSS antes de avançar para telas novas.
 
 ### Marco 5 - Oficina MVP
 

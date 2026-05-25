@@ -1,12 +1,12 @@
 <?php
 
-include_once __DIR__ . '/../inc/common.inc.php';
+include_once __DIR__ . '/../src/Bootstrap/common.php';
 
 /**
  * Public checklist response form.
  */
 
-include_once(__DIR__ . '/../inc/common.inc.php');
+include_once(__DIR__ . '/../src/Bootstrap/common.php');
 
 global $DB, $CFG_GLPI;
 

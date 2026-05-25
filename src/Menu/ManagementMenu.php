@@ -1,13 +1,10 @@
 <?php
 
-/**
- * Main management menu entry for Vehicle Scheduler.
- */
-if (!defined('GLPI_ROOT')) {
-    die("Sorry. You can't access this file directly");
-}
+namespace GlpiPlugin\Vehiclescheduler\Menu;
 
-class PluginVehicleschedulerMenu extends CommonGLPI
+use CommonGLPI;
+
+class ManagementMenu extends CommonGLPI
 {
     /**
      * ACL right used by the management menu.
@@ -23,12 +20,12 @@ class PluginVehicleschedulerMenu extends CommonGLPI
      */
     public static function getMenuContent()
     {
-        if (!PluginVehicleschedulerProfile::canViewManagement()) {
+        if (!\PluginVehicleschedulerProfile::canViewManagement()) {
             return false;
         }
 
         return [
-            'title' => 'Gestão de Frotas',
+            'title' => __('Fleet Management', 'vehiclescheduler'),
             'page'  => '/plugins/vehiclescheduler/front/management.php',
             'icon'  => 'ti ti-car-suv',
             'links' => [

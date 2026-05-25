@@ -1,7 +1,7 @@
 <?php
 
-include_once(__DIR__ . '/../inc/common.inc.php');
-include_once(__DIR__ . '/../inc/ui-helpers.php');
+include_once(__DIR__ . '/../src/Bootstrap/common.php');
+include_once(__DIR__ . '/../src/Bootstrap/ui-helpers.php');
 
 $schedule = new \PluginVehicleschedulerSchedule();
 

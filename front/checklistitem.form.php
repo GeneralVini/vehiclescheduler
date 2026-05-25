@@ -1,5 +1,5 @@
 <?php
-include_once __DIR__ . '/../inc/common.inc.php';
+include_once __DIR__ . '/../src/Bootstrap/common.php';
 
 Session::checkRight('plugin_vehiclescheduler_management', READ);
 plugin_vehiclescheduler_redirect_future_plan('CHECKLIST', 'EM OBRAS !!!');

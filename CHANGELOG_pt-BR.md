@@ -169,7 +169,7 @@ O formato segue os princípios do **Keep a Changelog** e o projeto deve preferir
 
 - `README.md` reestruturado para separar contexto público do projeto de regras internas de geração.
 
-- Regras explícitas para namespaces, imports `use`, layout PSR-4 e coexistência com legado `inc/*.class.php`.
+- Regras explícitas para namespaces, imports `use`, layout PSR-4 e coexistência com legado `src/Legacy/*.class.php`.
 
 - Regras explícitas de compatibilidade com banco de dados GLPI 11 para tratamento de SQL bruto.
 

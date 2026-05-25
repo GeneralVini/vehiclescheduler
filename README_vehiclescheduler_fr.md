@@ -77,7 +77,7 @@ Le projet suit une separation stricte entre logique metier et rendu UI :
 - `public/css/` : styles
 - `public/js/` : comportement client
 - `locales/` : traductions
-- `inc/` : classes compatibles legacy pendant la migration
+- `src/Legacy/` : classes de compatibilite GLPI chargees par le classmap Composer
 
 Les classes backend/domaine ne doivent pas contenir de mise en page d'ecran, CSS inline, JavaScript inline, composition de page ou markup de boutons.
 

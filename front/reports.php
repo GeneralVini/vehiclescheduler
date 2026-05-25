@@ -1,6 +1,6 @@
 <?php
 
-include_once __DIR__ . '/../inc/common.inc.php';
+include_once __DIR__ . '/../src/Bootstrap/common.php';
 
 Session::checkRight('plugin_vehiclescheduler_management', READ);
 plugin_vehiclescheduler_redirect_future_plan('INCIDENTES', 'EM OBRAS !!!');
@@ -10,12 +10,14 @@ exit;
  * Management reports landing page.
  */
 
-include_once(__DIR__ . '/../inc/common.inc.php');
+include_once(__DIR__ . '/../src/Bootstrap/common.php');
 
 if (!PluginVehicleschedulerProfile::canViewManagement()) {
     Html::displayRightError();
     exit;
 }
+
+$t = static fn(string $text): string => __($text, 'vehiclescheduler');
 
 $report = PluginVehicleschedulerInput::enum(
     $_GET,
@@ -29,7 +31,7 @@ if ($report !== '' && $export !== '') {
     Html::redirect('reports_' . $export . '.php?report=' . urlencode($report));
 }
 
-Html::header('Relatórios Gerenciais', $_SERVER['PHP_SELF'], 'tools', 'PluginVehicleschedulerMenug', 'reports');
+Html::header($t('Management reports'), $_SERVER['PHP_SELF'], 'tools', 'PluginVehicleschedulerMenug', 'reports');
 
 plugin_vehiclescheduler_load_css();
 plugin_vehiclescheduler_enhance_ui();
@@ -38,61 +40,61 @@ $reports = [
     [
         'code'        => 'reservas',
         'icon'        => 'ti ti-calendar-stats',
-        'title'       => 'Reservas por período',
-        'description' => 'Análise completa de reservas com solicitante, veículo, motorista, período de uso e status de aprovação.',
-        'meta'        => ['Reservas + Veículos + Motoristas', 'Gráfico de aprovações'],
+        'title'       => $t('Reservations by period'),
+        'description' => $t('Complete reservation analysis with requester, vehicle, driver, usage period, and approval status.'),
+        'meta'        => [$t('Reservations + Vehicles + Drivers'), $t('Approval chart')],
     ],
     [
         'code'        => 'manutencoes',
         'icon'        => 'ti ti-tool',
-        'title'       => 'Manutenções e custos',
-        'description' => 'Histórico de manutenções preventivas e corretivas com custos, fornecedores e leitura de gasto por veículo.',
-        'meta'        => ['Manutenções + Custos', 'Preventiva vs corretiva'],
+        'title'       => $t('Maintenances and costs'),
+        'description' => $t('Preventive and corrective maintenance history with costs, suppliers, and vehicle expense reading.'),
+        'meta'        => [$t('Maintenances + Costs'), $t('Preventive vs corrective')],
     ],
     [
         'code'        => 'incidentes',
         'icon'        => 'ti ti-alert-triangle',
-        'title'       => 'Incidentes e sinistros',
-        'description' => 'Registro de incidentes, acidentes e sinistros com seguradora, incluindo valores aprovados e cobertura.',
-        'meta'        => ['Incidentes + Sinistros', 'Análise de seguros'],
+        'title'       => $t('Incidents and claims'),
+        'description' => $t('Record of incidents, accidents, and claims with insurer, including approved amounts and coverage.'),
+        'meta'        => [$t('Incidents + Claims'), $t('Insurance analysis')],
     ],
     [
         'code'        => 'utilizacao',
         'icon'        => 'ti ti-car',
-        'title'       => 'Utilização de frota',
-        'description' => 'Taxa de uso dos veículos, quilometragem, tempo em serviço e identificação de ociosidade.',
-        'meta'        => ['Veículos + Reservas', 'Taxa de utilização'],
+        'title'       => $t('Fleet utilization'),
+        'description' => $t('Vehicle usage rate, mileage, service time, and idle capacity identification.'),
+        'meta'        => [$t('Vehicles + Reservations'), $t('Utilization rate')],
     ],
     [
         'code'        => 'motoristas',
         'icon'        => 'ti ti-id-badge',
-        'title'       => 'Motoristas e CNH',
-        'description' => 'Situação de CNH, vencimentos próximos, multas associadas e histórico de uso dos motoristas.',
-        'meta'        => ['Motoristas + Multas', 'Alertas de vencimento'],
+        'title'       => $t('Drivers and licenses'),
+        'description' => $t('Driver license status, upcoming expirations, associated fines, and driver usage history.'),
+        'meta'        => [$t('Drivers + Fines'), $t('Expiration alerts')],
     ],
     [
         'code'        => 'financeiro',
         'icon'        => 'ti ti-report-money',
-        'title'       => 'Consolidado financeiro',
-        'description' => 'Resumo financeiro com manutenção, multas, sinistros e análise mensal de gastos por categoria.',
-        'meta'        => ['Todas as fontes', 'Análise mensal'],
+        'title'       => $t('Financial consolidated'),
+        'description' => $t('Financial summary with maintenance, fines, claims, and monthly expense analysis by category.'),
+        'meta'        => [$t('All sources'), $t('Monthly analysis')],
     ],
 ];
 ?>
 <div class="vs-reports-page">
-    <a href="management.php" class="vs-reports-back">Voltar ao dashboard</a>
+    <a href="management.php" class="vs-reports-back"><?= htmlspecialchars($t('Back to dashboard'), ENT_QUOTES, 'UTF-8') ?></a>
 
     <section class="vs-reports-hero">
         <div>
-            <p class="vs-reports-hero__eyebrow">Visão gerencial</p>
-            <h1>Relatórios gerenciais</h1>
+            <p class="vs-reports-hero__eyebrow"><?= htmlspecialchars($t('Management view'), ENT_QUOTES, 'UTF-8') ?></p>
+            <h1><?= htmlspecialchars($t('Management reports'), ENT_QUOTES, 'UTF-8') ?></h1>
             <p>
-                Escolha o recorte desejado para visualizar online ou exportar em PDF e Excel sem sair do fluxo de gestão.
+                <?= htmlspecialchars($t('Choose the desired view to see it online or export it as PDF and Excel without leaving the management flow.'), ENT_QUOTES, 'UTF-8') ?>
             </p>
         </div>
         <div class="vs-reports-hero__note">
-            <strong>6 relatórios prontos</strong>
-            <span>Com foco em leitura rápida e exportação operacional.</span>
+            <strong><?= htmlspecialchars($t('6 reports ready'), ENT_QUOTES, 'UTF-8') ?></strong>
+            <span><?= htmlspecialchars($t('Focused on quick reading and operational export.'), ENT_QUOTES, 'UTF-8') ?></span>
         </div>
     </section>
 
@@ -117,7 +119,7 @@ $reports = [
 
                 <footer class="vs-report-card__actions">
                     <a href="reports_view.php?report=<?= urlencode($reportItem['code']) ?>" class="vs-report-btn vs-report-btn--primary">
-                        Visualizar
+                        <?= htmlspecialchars($t('View'), ENT_QUOTES, 'UTF-8') ?>
                     </a>
                     <a href="?report=<?= urlencode($reportItem['code']) ?>&export=pdf" class="vs-report-btn">
                         PDF

@@ -1,7 +1,7 @@
 <?php
 
-include_once __DIR__ . '/../inc/common.inc.php';
-include_once __DIR__ . '/../inc/ui-helpers.php';
+include_once __DIR__ . '/../src/Bootstrap/common.php';
+include_once __DIR__ . '/../src/Bootstrap/ui-helpers.php';
 
 $vehicle = new PluginVehicleschedulerVehicle();
 
@@ -77,7 +77,7 @@ if (isset($_POST['add'])) {
     $newID = $vehicle->add($post);
 
     if ($newID !== false) {
-        vs_vehicle_form_flash_success('Veículo cadastrado com sucesso.');
+        vs_vehicle_form_flash_success(__('Vehicle created successfully.', 'vehiclescheduler'));
         Html::redirect(plugin_vehiclescheduler_get_front_url('vehicle.php'));
         exit;
     }
@@ -88,7 +88,7 @@ if (isset($_POST['add'])) {
     Session::checkRight('plugin_vehiclescheduler_management', UPDATE);
 
     if ($post_id <= 0) {
-        vs_vehicle_form_flash_error('ID do veículo inválido.');
+        vs_vehicle_form_flash_error(__('Invalid vehicle ID.', 'vehiclescheduler'));
         Html::back();
         exit;
     }
@@ -97,14 +97,14 @@ if (isset($_POST['add'])) {
     $vehicle->check($post_id, UPDATE);
     $vehicle->update($post);
 
-    vs_vehicle_form_flash_success('Veículo atualizado com sucesso.');
+    vs_vehicle_form_flash_success(__('Vehicle updated successfully.', 'vehiclescheduler'));
     Html::redirect(plugin_vehiclescheduler_get_front_url('vehicle.php'));
     exit;
 } elseif (isset($_POST['delete'])) {
     Session::checkRight('plugin_vehiclescheduler_management', DELETE);
 
     if ($post_id <= 0) {
-        vs_vehicle_form_flash_error('ID do veículo inválido.');
+        vs_vehicle_form_flash_error(__('Invalid vehicle ID.', 'vehiclescheduler'));
         Html::back();
         exit;
     }
@@ -118,7 +118,7 @@ if (isset($_POST['add'])) {
     Session::checkRight('plugin_vehiclescheduler_management', DELETE);
 
     if ($post_id <= 0) {
-        vs_vehicle_form_flash_error('ID do veículo inválido.');
+        vs_vehicle_form_flash_error(__('Invalid vehicle ID.', 'vehiclescheduler'));
         Html::back();
         exit;
     }
@@ -132,7 +132,7 @@ if (isset($_POST['add'])) {
     Session::checkRight('plugin_vehiclescheduler_management', PURGE);
 
     if ($post_id <= 0) {
-        vs_vehicle_form_flash_error('ID do veículo inválido.');
+        vs_vehicle_form_flash_error(__('Invalid vehicle ID.', 'vehiclescheduler'));
         Html::back();
         exit;
     }
@@ -150,7 +150,7 @@ if (isset($_POST['add'])) {
     plugin_vehiclescheduler_enhance_ui();
 
     Html::header(
-        'Veículos',
+        __('Vehicles', 'vehiclescheduler'),
         $_SERVER['PHP_SELF'],
         'tools',
         PluginVehicleschedulerVehicle::class,
@@ -159,7 +159,7 @@ if (isset($_POST['add'])) {
 
     $back_url = plugin_vehiclescheduler_get_front_url('vehicle.php');
 
-    vs_render_back_button($back_url, 'Voltar');
+    vs_render_back_button($back_url, __('Back', 'vehiclescheduler'));
 
     $feedback_js_file = GLPI_ROOT . '/plugins/vehiclescheduler/public/js/form-feedback.js';
     $feedback_js_ver = is_file($feedback_js_file) ? filemtime($feedback_js_file) : PLUGIN_VEHICLESCHEDULER_VERSION;

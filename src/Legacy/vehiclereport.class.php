@@ -5,7 +5,7 @@
  */
 
 if (!defined('GLPI_ROOT')) {
-    die("Acesso direto nÃ£o permitido");
+    die("Sorry. You can't access this file directly");
 }
 
 class PluginVehicleschedulerVehiclereport extends CommonDBTM
@@ -21,12 +21,12 @@ class PluginVehicleschedulerVehiclereport extends CommonDBTM
 
     public static function getTypeName($nb = 0)
     {
-        return ($nb === 1) ? 'RelatÃ³rio de VeÃ­culo' : 'RelatÃ³rios de VeÃ­culos';
+        return ($nb === 1) ? __('Vehicle report', 'vehiclescheduler') : __('Vehicle reports', 'vehiclescheduler');
     }
 
     public static function getMenuName()
     {
-        return 'RelatÃ³rios de VeÃ­culos';
+        return __('Vehicle reports', 'vehiclescheduler');
     }
 
     public static function getIcon()
@@ -37,10 +37,10 @@ class PluginVehicleschedulerVehiclereport extends CommonDBTM
     public static function getAllTypes()
     {
         return [
-            self::TYPE_MAINTENANCE => 'Necessita ManutenÃ§Ã£o',
-            self::TYPE_PROBLEM     => 'Problema / Defeito',
-            self::TYPE_ACCIDENT    => 'Acidente',
-            self::TYPE_OBSERVATION => 'ObservaÃ§Ã£o Geral',
+            self::TYPE_MAINTENANCE => __('Needs maintenance', 'vehiclescheduler'),
+            self::TYPE_PROBLEM     => __('Problem / defect', 'vehiclescheduler'),
+            self::TYPE_ACCIDENT    => __('Accident', 'vehiclescheduler'),
+            self::TYPE_OBSERVATION => __('General observation', 'vehiclescheduler'),
         ];
     }
 
@@ -51,7 +51,7 @@ class PluginVehicleschedulerVehiclereport extends CommonDBTM
         }
 
         $menu = [];
-        $menu['title'] = 'RelatÃ³rios de VeÃ­culos';
+        $menu['title'] = __('Vehicle reports', 'vehiclescheduler');
         $menu['page'] = '/plugins/vehiclescheduler/front/vehiclereport.php';
         $menu['icon'] = self::getIcon();
         $menu['links']['search'] = '/plugins/vehiclescheduler/front/vehiclereport.php';
@@ -61,7 +61,7 @@ class PluginVehicleschedulerVehiclereport extends CommonDBTM
         }
 
         $menu['options']['vehiclereport'] = [
-            'title'          => 'RelatÃ³rios de VeÃ­culos',
+            'title'          => __('Vehicle reports', 'vehiclescheduler'),
             'page'           => '/plugins/vehiclescheduler/front/vehiclereport.php',
             'icon'           => self::getIcon(),
             'links'          => [
@@ -103,12 +103,12 @@ class PluginVehicleschedulerVehiclereport extends CommonDBTM
         $input = $this->normalizeReportInput($input);
 
         if ($input['plugin_vehiclescheduler_vehicles_id'] <= 0) {
-            Session::addMessageAfterRedirect('O veÃ­culo Ã© obrigatÃ³rio.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Vehicle is required.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
         if ($input['description'] === '') {
-            Session::addMessageAfterRedirect('A descriÃ§Ã£o Ã© obrigatÃ³ria.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Description is required.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
@@ -128,7 +128,7 @@ class PluginVehicleschedulerVehiclereport extends CommonDBTM
         $input = $this->normalizeReportInput($input);
 
         if ($input['id'] <= 0) {
-            Session::addMessageAfterRedirect('ID do relatÃ³rio invÃ¡lido.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Invalid report ID.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
@@ -138,15 +138,15 @@ class PluginVehicleschedulerVehiclereport extends CommonDBTM
     public function rawSearchOptions()
     {
         $tab = [];
-        $tab[] = ['id' => 'common', 'name' => 'RelatÃ³rios de VeÃ­culos'];
+        $tab[] = ['id' => 'common', 'name' => __('Vehicle reports', 'vehiclescheduler')];
         $tab[] = ['id' => '1', 'table' => $this->getTable(), 'field' => 'id', 'name' => 'ID', 'datatype' => 'itemlink', 'massiveaction' => false];
-        $tab[] = ['id' => '2', 'table' => 'glpi_plugin_vehiclescheduler_vehicles', 'field' => 'name', 'name' => 'VeÃ­culo', 'datatype' => 'dropdown'];
-        $tab[] = ['id' => '3', 'table' => $this->getTable(), 'field' => 'report_type', 'name' => 'Tipo', 'datatype' => 'specific'];
-        $tab[] = ['id' => '4', 'table' => 'glpi_users', 'field' => 'name', 'name' => 'Reportado por', 'datatype' => 'dropdown'];
-        $tab[] = ['id' => '5', 'table' => $this->getTable(), 'field' => 'department', 'name' => 'Departamento/Setor', 'datatype' => 'string'];
-        $tab[] = ['id' => '6', 'table' => $this->getTable(), 'field' => 'contact_phone', 'name' => 'Telefone', 'datatype' => 'string'];
-        $tab[] = ['id' => '7', 'table' => $this->getTable(), 'field' => 'report_date', 'name' => 'Data do RelatÃ³rio', 'datatype' => 'datetime'];
-        $tab[] = ['id' => '8', 'table' => $this->getTable(), 'field' => 'description', 'name' => 'DescriÃ§Ã£o', 'datatype' => 'text'];
+        $tab[] = ['id' => '2', 'table' => 'glpi_plugin_vehiclescheduler_vehicles', 'field' => 'name', 'name' => __('Vehicle', 'vehiclescheduler'), 'datatype' => 'dropdown'];
+        $tab[] = ['id' => '3', 'table' => $this->getTable(), 'field' => 'report_type', 'name' => __('Type', 'vehiclescheduler'), 'datatype' => 'specific'];
+        $tab[] = ['id' => '4', 'table' => 'glpi_users', 'field' => 'name', 'name' => __('Reported by', 'vehiclescheduler'), 'datatype' => 'dropdown'];
+        $tab[] = ['id' => '5', 'table' => $this->getTable(), 'field' => 'department', 'name' => __('Department / sector', 'vehiclescheduler'), 'datatype' => 'string'];
+        $tab[] = ['id' => '6', 'table' => $this->getTable(), 'field' => 'contact_phone', 'name' => __('Phone', 'vehiclescheduler'), 'datatype' => 'string'];
+        $tab[] = ['id' => '7', 'table' => $this->getTable(), 'field' => 'report_date', 'name' => __('Report date', 'vehiclescheduler'), 'datatype' => 'datetime'];
+        $tab[] = ['id' => '8', 'table' => $this->getTable(), 'field' => 'description', 'name' => __('Description', 'vehiclescheduler'), 'datatype' => 'text'];
 
         return $tab;
     }

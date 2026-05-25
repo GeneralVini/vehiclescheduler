@@ -6,7 +6,7 @@
  * Handles fleet vehicle registration and basic operational validation.
  */
 if (!defined('GLPI_ROOT')) {
-    die("Acesso direto não permitido");
+    die("Sorry. You can't access this file directly");
 }
 
 class PluginVehicleschedulerVehicle extends \CommonDBTM
@@ -26,12 +26,12 @@ class PluginVehicleschedulerVehicle extends \CommonDBTM
 
     public static function getTypeName($nb = 0)
     {
-        return ($nb === 1) ? 'Veículo' : 'Veículos';
+        return _n('Vehicle', 'Vehicles', $nb, 'vehiclescheduler');
     }
 
     public static function getMenuName()
     {
-        return 'Veículos';
+        return __('Vehicles', 'vehiclescheduler');
     }
 
     public static function getIcon()
@@ -42,9 +42,9 @@ class PluginVehicleschedulerVehicle extends \CommonDBTM
     public static function getRequiredCNHOptions(): array
     {
         return [
-            self::REQUIRED_CNH_A => 'A - Moto',
-            self::REQUIRED_CNH_B => 'B - Carro',
-            self::REQUIRED_CNH_D => 'D - Caminhão ou van',
+            self::REQUIRED_CNH_A => __('A - Motorcycle', 'vehiclescheduler'),
+            self::REQUIRED_CNH_B => __('B - Car', 'vehiclescheduler'),
+            self::REQUIRED_CNH_D => __('D - Truck or van', 'vehiclescheduler'),
         ];
     }
 
@@ -156,32 +156,32 @@ class PluginVehicleschedulerVehicle extends \CommonDBTM
         $input = self::normalizeVehicleInput($input);
 
         if ($input['name'] === '') {
-            Session::addMessageAfterRedirect('O nome do veÃ­culo Ã© obrigatÃ³rio.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Vehicle name is required.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
         if ($input['plate'] === '') {
-            Session::addMessageAfterRedirect('A placa Ã© obrigatÃ³ria.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Plate is required.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
         if ($input['year'] < self::MIN_YEAR || $input['year'] > self::MAX_YEAR) {
-            Session::addMessageAfterRedirect('O ano informado Ã© invÃ¡lido.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Invalid year.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
         if ($input['seats'] < self::MIN_SEATS || $input['seats'] > self::MAX_SEATS) {
-            Session::addMessageAfterRedirect('A capacidade de passageiros Ã© invÃ¡lida.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Invalid passenger capacity.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
         if (!array_key_exists($input['required_cnh_category'], self::getRequiredCNHOptions())) {
-            Session::addMessageAfterRedirect('Selecione a categoria de CNH exigida para a viatura.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Select the required CNH category for the vehicle.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
         if (self::isPlateAlreadyUsed($input['plate'])) {
-            Session::addMessageAfterRedirect('A placa informada jÃ¡ estÃ¡ em uso.', false, ERROR);
+            Session::addMessageAfterRedirect(__('The informed plate is already in use.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
@@ -197,37 +197,37 @@ class PluginVehicleschedulerVehicle extends \CommonDBTM
         $input = self::normalizeVehicleInput($input);
 
         if ($input['id'] <= 0) {
-            Session::addMessageAfterRedirect('ID do veÃ­culo invÃ¡lido.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Invalid vehicle ID.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
         if ($input['name'] === '') {
-            Session::addMessageAfterRedirect('O nome do veÃ­culo Ã© obrigatÃ³rio.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Vehicle name is required.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
         if ($input['plate'] === '') {
-            Session::addMessageAfterRedirect('A placa Ã© obrigatÃ³ria.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Plate is required.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
         if ($input['year'] < self::MIN_YEAR || $input['year'] > self::MAX_YEAR) {
-            Session::addMessageAfterRedirect('O ano informado Ã© invÃ¡lido.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Invalid year.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
         if ($input['seats'] < self::MIN_SEATS || $input['seats'] > self::MAX_SEATS) {
-            Session::addMessageAfterRedirect('A capacidade de passageiros Ã© invÃ¡lida.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Invalid passenger capacity.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
         if (!array_key_exists($input['required_cnh_category'], self::getRequiredCNHOptions())) {
-            Session::addMessageAfterRedirect('Selecione a categoria de CNH exigida para a viatura.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Select the required CNH category for the vehicle.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
         if (self::isPlateAlreadyUsed($input['plate'], $input['id'])) {
-            Session::addMessageAfterRedirect('A placa informada jÃ¡ estÃ¡ em uso.', false, ERROR);
+            Session::addMessageAfterRedirect(__('The informed plate is already in use.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
@@ -244,14 +244,14 @@ class PluginVehicleschedulerVehicle extends \CommonDBTM
 
         $tab[] = [
             'id'   => 'common',
-            'name' => 'VeÃ­culos'
+            'name' => self::getTypeName(2)
         ];
 
         $tab[] = [
             'id'            => '1',
             'table'         => $this->getTable(),
             'field'         => 'name',
-            'name'          => 'Nome',
+            'name'          => __('Name'),
             'datatype'      => 'itemlink',
             'massiveaction' => false
         ];
@@ -260,7 +260,7 @@ class PluginVehicleschedulerVehicle extends \CommonDBTM
             'id'       => '2',
             'table'    => $this->getTable(),
             'field'    => 'plate',
-            'name'     => 'Placa',
+            'name'     => __('Plate', 'vehiclescheduler'),
             'datatype' => 'string'
         ];
 
@@ -268,7 +268,7 @@ class PluginVehicleschedulerVehicle extends \CommonDBTM
             'id'       => '3',
             'table'    => $this->getTable(),
             'field'    => 'brand',
-            'name'     => 'Marca',
+            'name'     => __('Brand', 'vehiclescheduler'),
             'datatype' => 'string'
         ];
 
@@ -276,7 +276,7 @@ class PluginVehicleschedulerVehicle extends \CommonDBTM
             'id'       => '4',
             'table'    => $this->getTable(),
             'field'    => 'model',
-            'name'     => 'Modelo',
+            'name'     => __('Model', 'vehiclescheduler'),
             'datatype' => 'string'
         ];
 
@@ -284,7 +284,7 @@ class PluginVehicleschedulerVehicle extends \CommonDBTM
             'id'       => '5',
             'table'    => $this->getTable(),
             'field'    => 'year',
-            'name'     => 'Ano',
+            'name'     => __('Year', 'vehiclescheduler'),
             'datatype' => 'number'
         ];
 
@@ -292,7 +292,7 @@ class PluginVehicleschedulerVehicle extends \CommonDBTM
             'id'       => '6',
             'table'    => $this->getTable(),
             'field'    => 'seats',
-            'name'     => 'Passageiros',
+            'name'     => __('Passengers', 'vehiclescheduler'),
             'datatype' => 'number'
         ];
 
@@ -300,7 +300,7 @@ class PluginVehicleschedulerVehicle extends \CommonDBTM
             'id'       => '7',
             'table'    => $this->getTable(),
             'field'    => 'is_active',
-            'name'     => 'Ativo',
+            'name'     => __('Active', 'vehiclescheduler'),
             'datatype' => 'bool'
         ];
 
@@ -308,7 +308,7 @@ class PluginVehicleschedulerVehicle extends \CommonDBTM
             'id'         => '8',
             'table'      => $this->getTable(),
             'field'      => 'required_cnh_category',
-            'name'       => 'CNH exigida',
+            'name'       => __('Required CNH', 'vehiclescheduler'),
             'datatype'   => 'specific',
             'searchtype' => ['equals', 'notequals']
         ];
@@ -317,7 +317,7 @@ class PluginVehicleschedulerVehicle extends \CommonDBTM
             'id'       => '19',
             'table'    => $this->getTable(),
             'field'    => 'date_mod',
-            'name'     => 'Ãšltima modificaÃ§Ã£o',
+            'name'     => __('Last update', 'vehiclescheduler'),
             'datatype' => 'datetime'
         ];
 

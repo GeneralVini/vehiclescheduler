@@ -1,7 +1,7 @@
 <?php
 
 if (!defined('GLPI_ROOT')) {
-    die("Acesso direto nao permitido");
+    die("Sorry. You can't access this file directly");
 }
 
 class PluginVehicleschedulerChecklist extends CommonDBTM
@@ -15,7 +15,7 @@ class PluginVehicleschedulerChecklist extends CommonDBTM
 
     public static function getTypeName($nb = 0)
     {
-        return ($nb === 1) ? 'Checklist' : 'Checklists';
+        return ($nb === 1) ? __('Checklist', 'vehiclescheduler') : __('Checklists', 'vehiclescheduler');
     }
 
     public static function getIcon()
@@ -26,9 +26,9 @@ class PluginVehicleschedulerChecklist extends CommonDBTM
     public static function getChecklistTypes(): array
     {
         return [
-            self::TYPE_DEPARTURE => 'Saida',
-            self::TYPE_ARRIVAL   => 'Chegada',
-            self::TYPE_BOTH      => 'Ambos',
+            self::TYPE_DEPARTURE => __('Departure', 'vehiclescheduler'),
+            self::TYPE_ARRIVAL   => __('Arrival', 'vehiclescheduler'),
+            self::TYPE_BOTH      => __('Both', 'vehiclescheduler'),
         ];
     }
 
@@ -86,9 +86,9 @@ class PluginVehicleschedulerChecklist extends CommonDBTM
             'items_id'   => $ticketId,
             'users_id'   => (int) Session::getLoginUserID(),
             'content'    => "📋 CHECKLIST DE SAÍDA DISPONÍVEL\n\n"
-                . "A reserva foi aprovada e o primeiro checklist operacional já pode ser preenchido.\n\n"
-                . "Acesse: " . self::getChecklistResponseUrl($scheduleId, 'departure') . "\n\n"
-                . "Checklist: " . (string) ($checklist['name'] ?? 'Checklist de saída'),
+                . __('The reservation was approved and the first operational checklist can now be completed.', 'vehiclescheduler') . "\n\n"
+                . __('Access:', 'vehiclescheduler') . ' ' . self::getChecklistResponseUrl($scheduleId, 'departure') . "\n\n"
+                . __('Checklist:', 'vehiclescheduler') . ' ' . (string) ($checklist['name'] ?? __('Departure checklist', 'vehiclescheduler')),
             'is_private' => 0,
         ]);
     }
@@ -98,7 +98,7 @@ class PluginVehicleschedulerChecklist extends CommonDBTM
         $input = $this->normalizeInput($input);
 
         if ($input['name'] === '') {
-            Session::addMessageAfterRedirect('O nome e obrigatorio.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Name is required.', 'vehiclescheduler'), false, ERROR);
 
             return false;
         }
@@ -115,13 +115,13 @@ class PluginVehicleschedulerChecklist extends CommonDBTM
         $input = $this->normalizeInput($input);
 
         if (empty($input['id'])) {
-            Session::addMessageAfterRedirect('Checklist invalido.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Invalid checklist.', 'vehiclescheduler'), false, ERROR);
 
             return false;
         }
 
         if ($input['name'] === '') {
-            Session::addMessageAfterRedirect('O nome e obrigatorio.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Name is required.', 'vehiclescheduler'), false, ERROR);
 
             return false;
         }
@@ -133,13 +133,13 @@ class PluginVehicleschedulerChecklist extends CommonDBTM
     {
         $tab = [];
 
-        $tab[] = ['id' => 'common', 'name' => 'Checklists'];
+        $tab[] = ['id' => 'common', 'name' => __('Checklists', 'vehiclescheduler')];
 
         $tab[] = [
             'id'            => '1',
             'table'         => $this->getTable(),
             'field'         => 'name',
-            'name'          => 'Nome',
+            'name'          => __('Name', 'vehiclescheduler'),
             'datatype'      => 'itemlink',
             'massiveaction' => false,
         ];
@@ -148,7 +148,7 @@ class PluginVehicleschedulerChecklist extends CommonDBTM
             'id'       => '2',
             'table'    => $this->getTable(),
             'field'    => 'checklist_type',
-            'name'     => 'Tipo',
+            'name'     => __('Type', 'vehiclescheduler'),
             'datatype' => 'specific',
         ];
 
@@ -156,7 +156,7 @@ class PluginVehicleschedulerChecklist extends CommonDBTM
             'id'       => '3',
             'table'    => $this->getTable(),
             'field'    => 'is_active',
-            'name'     => 'Ativo',
+            'name'     => __('Active', 'vehiclescheduler'),
             'datatype' => 'bool',
         ];
 

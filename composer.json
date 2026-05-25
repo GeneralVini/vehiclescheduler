@@ -1,4 +1,13 @@
 {
+    "license": "proprietary",
+    "autoload": {
+        "psr-4": {
+            "GlpiPlugin\\Vehiclescheduler\\": "src/"
+        },
+        "classmap": [
+            "src/Legacy/"
+        ]
+    },
     "require-dev": {
         "phpstan/phpstan": "^2.1"
     }

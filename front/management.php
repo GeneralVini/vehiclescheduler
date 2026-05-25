@@ -12,8 +12,7 @@
  * - visual accessibility controls.
  */
 
-include_once __DIR__ . '/../inc/common.inc.php';
-include_once __DIR__ . '/../inc/dashboard.class.php';
+include_once __DIR__ . '/../src/Bootstrap/common.php';
 
 Session::checkRight('plugin_vehiclescheduler_management', READ);
 
@@ -23,6 +22,10 @@ $self = filter_input(INPUT_SERVER, 'PHP_SELF', FILTER_SANITIZE_FULL_SPECIAL_CHAR
 
 $h = static function ($value): string {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+};
+
+$t = static function (string $message): string {
+    return __($message, 'vehiclescheduler');
 };
 
 $urls = [
@@ -61,26 +64,26 @@ if ($request_method === 'POST') {
                 Session::checkRight('plugin_vehiclescheduler_approve', READ);
 
                 if ($schedule_id === false || $schedule_id === null) {
-                    throw new RuntimeException('Reserva inválida para aprovação.');
+                    throw new RuntimeException($t('Invalid reservation for approval.'));
                 }
 
                 PluginVehicleschedulerDashboard::approveSchedule((int) $schedule_id);
-                Session::addMessageAfterRedirect('Reserva aprovada com sucesso.', false, INFO);
+                Session::addMessageAfterRedirect($t('Reservation approved successfully'), false, INFO);
                 break;
 
             case 'reject_schedule':
                 Session::checkRight('plugin_vehiclescheduler_approve', READ);
 
                 if ($schedule_id === false || $schedule_id === null) {
-                    throw new RuntimeException('Reserva inválida para recusa.');
+                    throw new RuntimeException($t('Invalid reservation for rejection.'));
                 }
 
                 PluginVehicleschedulerDashboard::rejectSchedule((int) $schedule_id);
-                Session::addMessageAfterRedirect('Reserva recusada com sucesso.', false, INFO);
+                Session::addMessageAfterRedirect($t('Reservation rejected successfully'), false, INFO);
                 break;
 
             default:
-                Session::addMessageAfterRedirect('Ação inválida.', true, ERROR);
+                Session::addMessageAfterRedirect($t('Invalid action.'), true, ERROR);
                 break;
         }
     } catch (RuntimeException $e) {
@@ -92,7 +95,7 @@ if ($request_method === 'POST') {
         );
 
         Session::addMessageAfterRedirect(
-            'Não foi possível executar a ação solicitada.',
+            $t('Unable to execute the requested action.'),
             true,
             ERROR
         );
@@ -128,42 +131,42 @@ $get_cnh_badge_class = static function (int $days): string {
 
 $status_items = [
     [
-        'label' => 'Reservas pendentes',
+        'label' => $t('Pending reservations'),
         'value' => (string) (int) ($kpi['reservations_new'] ?? 0),
         'href'  => $urls['schedule'] . '?status=1',
         'icon'  => 'ti ti-clock-check',
         'tone'  => 'primary',
     ],
     [
-        'label' => 'Alertas CNH',
+        'label' => $t('CNH alerts'),
         'value' => (string) count($cnh_alerts),
         'href'  => $urls['driver'],
         'icon'  => 'ti ti-id-badge',
         'tone'  => count($cnh_alerts) > 0 ? 'warning' : 'neutral',
     ],
     [
-        'label' => 'Incidentes abertos',
+        'label' => $t('Open incidents'),
         'value' => (string) (int) ($kpi['incidents_open'] ?? 0),
         'href'  => $urls['incident'],
         'icon'  => 'ti ti-alert-triangle',
         'tone'  => ((int) ($kpi['incidents_open'] ?? 0)) > 0 ? 'danger' : 'neutral',
     ],
     [
-        'label' => 'Manutenções ativas',
+        'label' => $t('Active maintenances'),
         'value' => (string) (int) ($kpi['maintenances_active'] ?? 0),
         'href'  => $urls['maintenance'],
         'icon'  => 'ti ti-tool',
         'tone'  => ((int) ($kpi['maintenances_active'] ?? 0)) > 0 ? 'warning' : 'neutral',
     ],
     [
-        'label' => 'Checklists pendentes',
+        'label' => $t('Pending checklists'),
         'value' => $checklists_enabled ? (string) (int) ($kpi['checklist_pending'] ?? 0) : '-',
         'href'  => $checklists_enabled ? $urls['schedule'] . '?checklist_pending=1' : $urls['checklist'],
         'icon'  => 'ti ti-checklist',
         'tone'  => $checklists_enabled && ((int) ($kpi['checklist_pending'] ?? 0)) > 0 ? 'warning' : 'neutral',
     ],
     [
-        'label' => 'Viaturas ativas',
+        'label' => $t('Active vehicles'),
         'value' => (int) ($kpi['vehicles_active'] ?? 0) . '/' . (int) ($kpi['vehicles_total'] ?? 0),
         'href'  => $urls['vehicle'],
         'icon'  => 'ti ti-car',
@@ -173,44 +176,44 @@ $status_items = [
 
 $module_links = [
     [
-        'label' => 'Veículos',
-        'desc'  => 'Cadastro e disponibilidade',
+        'label' => $t('Vehicles'),
+        'desc'  => $t('Registry and availability'),
         'href'  => $urls['vehicle'],
         'icon'  => 'ti ti-car',
     ],
     [
-        'label' => 'Motoristas',
-        'desc'  => 'Cadastro e CNH',
+        'label' => $t('Drivers'),
+        'desc'  => $t('Registry and CNH'),
         'href'  => $urls['driver'],
         'icon'  => 'ti ti-steering-wheel',
     ],
     [
-        'label' => 'Reservas',
-        'desc'  => 'Solicitações e aprovações',
+        'label' => $t('Reservations'),
+        'desc'  => $t('Requests and approvals'),
         'href'  => $urls['schedule'],
         'icon'  => 'ti ti-calendar-event',
     ],
     [
-        'label' => 'Incidentes',
-        'desc'  => 'Sinistros e ocorrências',
+        'label' => $t('Incidents'),
+        'desc'  => $t('Claims and occurrences'),
         'href'  => $urls['incident'],
         'icon'  => 'ti ti-alert-triangle',
     ],
     [
-        'label' => 'Manutenções',
-        'desc'  => 'Preventivas e corretivas',
+        'label' => $t('Maintenances'),
+        'desc'  => $t('Preventive and corrective'),
         'href'  => $urls['maintenance'],
         'icon'  => 'ti ti-tool',
     ],
     [
-        'label' => 'Checklist',
-        'desc'  => 'Saída e regresso',
+        'label' => $t('Checklist'),
+        'desc'  => $t('Departure and return'),
         'href'  => $urls['checklist'],
         'icon'  => 'ti ti-checklist',
     ],
     [
-        'label' => 'Configurações',
-        'desc'  => 'Flags do plugin',
+        'label' => $t('Settings'),
+        'desc'  => $t('Plugin flags'),
         'href'  => $urls['config'],
         'icon'  => 'ti ti-settings',
     ],
@@ -218,15 +221,15 @@ $module_links = [
 
 if (PluginVehicleschedulerDriverfine::canAdminFines()) {
     $module_links[] = [
-        'label' => 'Multas',
-        'desc'  => 'Infrações e pontos',
+        'label' => $t('Fines'),
+        'desc'  => $t('Infractions and points'),
         'href'  => $urls['fines'],
         'icon'  => 'ti ti-file-alert',
     ];
 }
 
 Html::header(
-    'Gestão de Frota',
+    $t('Fleet Management'),
     $self,
     'tools',
     \PluginVehicleschedulerMenu::class,
@@ -249,52 +252,52 @@ $js_url  = plugin_vehiclescheduler_get_public_url('js/management.js') . '?v=' . 
                     <i class="ti ti-steering-wheel"></i>
                 </div>
                 <div class="vs-management-header__copy">
-                    <h2>Gestão de Frota</h2>
-                    <p>Fila operacional de reservas, alertas e recursos da frota.</p>
+                    <h2><?php echo $h($t('Fleet Management')); ?></h2>
+                    <p><?php echo $h($t('Operational queue for reservations, alerts, and fleet resources.')); ?></p>
                 </div>
             </div>
 
             <div class="vs-management-header__actions">
                 <div class="vs-visual-controls">
-                    <span class="vs-visual-controls__label">Visual</span>
-                    <div class="vs-theme-toggle" title="Alternar tema">
-                        <input type="checkbox" id="vsMgmtThemeToggle" aria-label="Alternar tema">
+                    <span class="vs-visual-controls__label"><?php echo $h($t('Visual')); ?></span>
+                    <div class="vs-theme-toggle" title="<?php echo $h($t('Toggle theme')); ?>">
+                        <input type="checkbox" id="vsMgmtThemeToggle" aria-label="<?php echo $h($t('Toggle theme')); ?>">
                         <label for="vsMgmtThemeToggle">
                             <span class="vs-theme-toggle__sun"><i class="ti ti-sun"></i></span>
                             <span class="vs-theme-toggle__moon"><i class="ti ti-moon"></i></span>
                         </label>
                     </div>
 
-                    <div class="vs-control-group" aria-label="Controles de fonte">
-                        <button type="button" class="vs-control-btn" id="vsFontDecrease" title="Diminuir fonte" aria-label="Diminuir fonte">
+                    <div class="vs-control-group" aria-label="<?php echo $h($t('Font controls')); ?>">
+                        <button type="button" class="vs-control-btn" id="vsFontDecrease" title="<?php echo $h($t('Decrease font')); ?>" aria-label="<?php echo $h($t('Decrease font')); ?>">
                             <i class="ti ti-minus"></i>
                         </button>
-                        <button type="button" class="vs-control-btn" id="vsFontReset" title="Resetar fonte" aria-label="Resetar fonte">
+                        <button type="button" class="vs-control-btn" id="vsFontReset" title="<?php echo $h($t('Reset font')); ?>" aria-label="<?php echo $h($t('Reset font')); ?>">
                             <i class="ti ti-refresh"></i>
                         </button>
-                        <button type="button" class="vs-control-btn" id="vsFontIncrease" title="Aumentar fonte" aria-label="Aumentar fonte">
+                        <button type="button" class="vs-control-btn" id="vsFontIncrease" title="<?php echo $h($t('Increase font')); ?>" aria-label="<?php echo $h($t('Increase font')); ?>">
                             <i class="ti ti-plus"></i>
                         </button>
                     </div>
 
-                    <button type="button" class="vs-control-btn vs-control-btn--label" id="vsVisualReset" title="Resetar visual" aria-label="Resetar visual">
+                    <button type="button" class="vs-control-btn vs-control-btn--label" id="vsVisualReset" title="<?php echo $h($t('Reset visual')); ?>" aria-label="<?php echo $h($t('Reset visual')); ?>">
                         Reset
                     </button>
                 </div>
 
                 <a href="<?php echo $h($urls['wallboard']); ?>" target="_blank" rel="noopener" class="vs-action-btn vs-action-btn--ghost">
                     <i class="ti ti-screen-share"></i>
-                    <span>Telão</span>
+                    <span><?php echo $h($t('Wallboard')); ?></span>
                 </a>
 
                 <a href="<?php echo $h($urls['schedule']); ?>" class="vs-action-btn">
                     <i class="ti ti-calendar-event"></i>
-                    <span>Reservas</span>
+                    <span><?php echo $h($t('Reservations')); ?></span>
                 </a>
             </div>
         </section>
 
-        <section class="vs-management-status" aria-label="Indicadores operacionais">
+        <section class="vs-management-status" aria-label="<?php echo $h($t('Operational indicators')); ?>">
             <?php foreach ($status_items as $item): ?>
                 <a href="<?php echo $h($item['href']); ?>" class="vs-status-item vs-status-item--<?php echo $h($item['tone']); ?>">
                     <span class="vs-status-item__icon"><i class="<?php echo $h($item['icon']); ?>"></i></span>
@@ -309,7 +312,7 @@ $js_url  = plugin_vehiclescheduler_get_public_url('js/management.js') . '?v=' . 
         <section class="vs-management-workbench">
             <div class="vs-quick-panel">
                 <div class="vs-panel-header">
-                    <span class="vs-panel-title"><i class="ti ti-layout-grid"></i> Acesso rápido</span>
+                    <span class="vs-panel-title"><i class="ti ti-layout-grid"></i> <?php echo $h($t('Quick access')); ?></span>
                 </div>
 
                 <div class="vs-module-list">
@@ -330,21 +333,21 @@ $js_url  = plugin_vehiclescheduler_get_public_url('js/management.js') . '?v=' . 
                 <section class="vs-main-grid vs-main-grid--primary">
                     <div class="vs-card">
                         <div class="vs-card-header">
-                            <span class="vs-card-title"><i class="ti ti-clock-check"></i> Reservas pendentes</span>
-                            <a href="<?php echo $h($urls['schedule'] . '?status=1'); ?>" class="vs-card-link">Abrir reservas</a>
+                            <span class="vs-card-title"><i class="ti ti-clock-check"></i> <?php echo $h($t('Pending reservations')); ?></span>
+                            <a href="<?php echo $h($urls['schedule'] . '?status=1'); ?>" class="vs-card-link"><?php echo $h($t('Open reservations')); ?></a>
                         </div>
 
                         <?php if (empty($pending_reservations)): ?>
-                            <div class="vs-empty-state">Nenhuma reserva aguardando análise.</div>
+                            <div class="vs-empty-state"><?php echo $h($t('No reservations awaiting analysis.')); ?></div>
                         <?php else: ?>
                             <table class="vs-table">
                                 <thead>
                                     <tr>
-                                        <th>Solicitante</th>
-                                        <th>Veículo</th>
-                                        <th>Período</th>
-                                        <th>Destino</th>
-                                        <th>Ações</th>
+                                        <th><?php echo $h($t('Requester')); ?></th>
+                                        <th><?php echo $h($t('Vehicle')); ?></th>
+                                        <th><?php echo $h($t('Period')); ?></th>
+                                        <th><?php echo $h($t('Destination')); ?></th>
+                                        <th><?php echo $h($t('Actions')); ?></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -365,23 +368,23 @@ $js_url  = plugin_vehiclescheduler_get_public_url('js/management.js') . '?v=' . 
                                                             <input type="hidden" name="action" value="approve_schedule">
                                                             <input type="hidden" name="schedule_id" value="<?php echo (int) ($reservation['id'] ?? 0); ?>">
                                                             <?php echo Html::hidden('_glpi_csrf_token', ['value' => Session::getNewCSRFToken()]); ?>
-                                                            <button type="submit" class="vs-btn-sm vs-btn-sm--success">Aprovar</button>
+                                                            <button type="submit" class="vs-btn-sm vs-btn-sm--success"><?php echo $h($t('Approve')); ?></button>
                                                         </form>
 
                                                         <form method="post">
                                                             <input type="hidden" name="action" value="reject_schedule">
                                                             <input type="hidden" name="schedule_id" value="<?php echo (int) ($reservation['id'] ?? 0); ?>">
                                                             <?php echo Html::hidden('_glpi_csrf_token', ['value' => Session::getNewCSRFToken()]); ?>
-                                                            <button type="submit" class="vs-btn-sm vs-btn-sm--danger">Recusar</button>
+                                                            <button type="submit" class="vs-btn-sm vs-btn-sm--danger"><?php echo $h($t('Reject')); ?></button>
                                                         </form>
 
-                                                        <a href="<?php echo $h($urls['schedule_form'] . '?id=' . (int) ($reservation['id'] ?? 0)); ?>" class="vs-icon-link" title="Ver reserva">
+                                                        <a href="<?php echo $h($urls['schedule_form'] . '?id=' . (int) ($reservation['id'] ?? 0)); ?>" class="vs-icon-link" title="<?php echo $h($t('View reservation')); ?>">
                                                             <i class="ti ti-eye"></i>
                                                         </a>
                                                     </div>
                                                 <?php else: ?>
                                                     <a href="<?php echo $h($urls['schedule_form'] . '?id=' . (int) ($reservation['id'] ?? 0)); ?>" class="vs-btn-sm vs-btn-sm--neutral">
-                                                        Ver
+                                                        <?php echo $h($t('View')); ?>
                                                     </a>
                                                 <?php endif; ?>
                                             </td>
@@ -396,20 +399,20 @@ $js_url  = plugin_vehiclescheduler_get_public_url('js/management.js') . '?v=' . 
                 <section class="vs-main-grid">
                     <div class="vs-card">
                         <div class="vs-card-header">
-                            <span class="vs-card-title"><i class="ti ti-id-badge"></i> Alertas de CNH</span>
-                            <a href="<?php echo $h($urls['driver']); ?>" class="vs-card-link">Ver todos</a>
+                            <span class="vs-card-title"><i class="ti ti-id-badge"></i> <?php echo $h($t('CNH alerts')); ?></span>
+                            <a href="<?php echo $h($urls['driver']); ?>" class="vs-card-link"><?php echo $h($t('View all')); ?></a>
                         </div>
 
                         <?php if (empty($cnh_alerts)): ?>
-                            <div class="vs-empty-state">Nenhuma CNH vencendo nos próximos 90 dias.</div>
+                            <div class="vs-empty-state"><?php echo $h($t('No CNH expiring in the next 90 days.')); ?></div>
                         <?php else: ?>
                             <table class="vs-table">
                                 <thead>
                                     <tr>
-                                        <th>Motorista</th>
-                                        <th>Categoria</th>
-                                        <th>Vencimento</th>
-                                        <th>Status</th>
+                                        <th><?php echo $h($t('Driver')); ?></th>
+                                        <th><?php echo $h($t('Category')); ?></th>
+                                        <th><?php echo $h($t('Expiry')); ?></th>
+                                        <th><?php echo $h($t('Status')); ?></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -424,7 +427,7 @@ $js_url  = plugin_vehiclescheduler_get_public_url('js/management.js') . '?v=' . 
                                             <td><?php echo Html::convDate((string) ($driver['cnh_expiry'] ?? '')); ?></td>
                                             <td>
                                                 <span class="<?php echo $get_cnh_badge_class((int) ($driver['days_to_expiry'] ?? 0)); ?>">
-                                                    <?php echo (int) ($driver['days_to_expiry'] ?? 0); ?> dias
+                                                    <?php echo sprintf($h($t('%d days')), (int) ($driver['days_to_expiry'] ?? 0)); ?>
                                                 </span>
                                             </td>
                                         </tr>
@@ -436,19 +439,19 @@ $js_url  = plugin_vehiclescheduler_get_public_url('js/management.js') . '?v=' . 
 
                     <div class="vs-card">
                         <div class="vs-card-header">
-                            <span class="vs-card-title"><i class="ti ti-alert-triangle"></i> Incidentes recentes</span>
-                            <a href="<?php echo $h($urls['incident']); ?>" class="vs-card-link">Ver todos</a>
+                            <span class="vs-card-title"><i class="ti ti-alert-triangle"></i> <?php echo $h($t('Recent incidents')); ?></span>
+                            <a href="<?php echo $h($urls['incident']); ?>" class="vs-card-link"><?php echo $h($t('View all')); ?></a>
                         </div>
 
                         <?php if (empty($recent_incidents)): ?>
-                            <div class="vs-empty-state">Nenhum incidente registrado.</div>
+                            <div class="vs-empty-state"><?php echo $h($t('No incidents registered.')); ?></div>
                         <?php else: ?>
                             <table class="vs-table">
                                 <thead>
                                     <tr>
-                                        <th>Veículo</th>
-                                        <th>Data</th>
-                                        <th>Tipo</th>
+                                        <th><?php echo $h($t('Vehicle')); ?></th>
+                                        <th><?php echo $h($t('Date')); ?></th>
+                                        <th><?php echo $h($t('Type')); ?></th>
                                     </tr>
                                 </thead>
                                 <tbody>

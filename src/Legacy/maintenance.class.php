@@ -24,7 +24,7 @@ class PluginVehicleschedulerMaintenance extends CommonDBTM
 
     public static function getMenuName()
     {
-        return 'Manutencoes';
+        return __('Maintenances', 'vehiclescheduler');
     }
 
     public static function getIcon()
@@ -65,18 +65,18 @@ class PluginVehicleschedulerMaintenance extends CommonDBTM
     public static function getAllTypes(): array
     {
         return [
-            self::TYPE_PREVENTIVE => 'Preventiva',
-            self::TYPE_CORRECTIVE => 'Corretiva',
+            self::TYPE_PREVENTIVE => __('Preventive', 'vehiclescheduler'),
+            self::TYPE_CORRECTIVE => __('Corrective', 'vehiclescheduler'),
         ];
     }
 
     public static function getAllStatus(): array
     {
         return [
-            self::STATUS_SCHEDULED   => 'Agendada',
-            self::STATUS_IN_PROGRESS => 'Em Andamento',
-            self::STATUS_DONE        => 'Concluida',
-            self::STATUS_CANCELLED   => 'Cancelada',
+            self::STATUS_SCHEDULED   => __('Scheduled', 'vehiclescheduler'),
+            self::STATUS_IN_PROGRESS => __('In Progress', 'vehiclescheduler'),
+            self::STATUS_DONE        => __('Done', 'vehiclescheduler'),
+            self::STATUS_CANCELLED   => __('Cancelled', 'vehiclescheduler'),
         ];
     }
 
@@ -94,7 +94,7 @@ class PluginVehicleschedulerMaintenance extends CommonDBTM
         $input = $this->normalizeInput($input);
 
         if ((int) ($input['plugin_vehiclescheduler_vehicles_id'] ?? 0) <= 0) {
-            Session::addMessageAfterRedirect('O veiculo e obrigatorio.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Vehicle is required.', 'vehiclescheduler'), false, ERROR);
 
             return false;
         }
@@ -115,13 +115,13 @@ class PluginVehicleschedulerMaintenance extends CommonDBTM
         $input = $this->normalizeInput($input);
 
         if ((int) ($input['id'] ?? 0) <= 0) {
-            Session::addMessageAfterRedirect('Manutencao invalida.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Invalid maintenance.', 'vehiclescheduler'), false, ERROR);
 
             return false;
         }
 
         if ((int) ($input['plugin_vehiclescheduler_vehicles_id'] ?? 0) <= 0) {
-            Session::addMessageAfterRedirect('O veiculo e obrigatorio.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Vehicle is required.', 'vehiclescheduler'), false, ERROR);
 
             return false;
         }
@@ -151,7 +151,7 @@ class PluginVehicleschedulerMaintenance extends CommonDBTM
             'id'       => '2',
             'table'    => 'glpi_plugin_vehiclescheduler_vehicles',
             'field'    => 'name',
-            'name'     => 'Veiculo',
+            'name'     => __('Vehicle', 'vehiclescheduler'),
             'datatype' => 'dropdown',
         ];
 
@@ -159,7 +159,7 @@ class PluginVehicleschedulerMaintenance extends CommonDBTM
             'id'         => '3',
             'table'      => $this->getTable(),
             'field'      => 'type',
-            'name'       => 'Tipo',
+            'name'       => __('Type', 'vehiclescheduler'),
             'datatype'   => 'specific',
             'searchtype' => ['equals'],
         ];
@@ -177,7 +177,7 @@ class PluginVehicleschedulerMaintenance extends CommonDBTM
             'id'       => '5',
             'table'    => $this->getTable(),
             'field'    => 'scheduled_date',
-            'name'     => 'Data Agendada',
+            'name'     => __('Scheduled date', 'vehiclescheduler'),
             'datatype' => 'date',
         ];
 
@@ -185,7 +185,7 @@ class PluginVehicleschedulerMaintenance extends CommonDBTM
             'id'       => '6',
             'table'    => $this->getTable(),
             'field'    => 'cost',
-            'name'     => 'Custo (R$)',
+            'name'     => __('Cost', 'vehiclescheduler'),
             'datatype' => 'decimal',
         ];
 
@@ -193,7 +193,7 @@ class PluginVehicleschedulerMaintenance extends CommonDBTM
             'id'       => '7',
             'table'    => $this->getTable(),
             'field'    => 'supplier',
-            'name'     => 'Fornecedor',
+            'name'     => __('Supplier', 'vehiclescheduler'),
             'datatype' => 'string',
         ];
 

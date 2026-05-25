@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Vehicle Scheduler 1.0.0\n"
 "Report-Msgid-Bugs-To: generalvini@gmail.com\n"
-"POT-Creation-Date: 2026-04-14 00:00+0000\n"
+"POT-Creation-Date: 2026-05-25 15:50-0300\n"
 "PO-Revision-Date: 2026-04-14 00:00+0000\n"
 "Last-Translator: Vinicius Lopes <generalvini@gmail.com>\n"
 "Language-Team: es_ES\n"
@@ -18,431 +18,1752 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Domain: vehiclescheduler\n"
 
-msgid "Vehicle Scheduler"
-msgstr "Planificador de vehículos"
+#: ajax/dashboard_alerts.php:16
+msgid "Access denied."
+msgstr "Acceso denegado."
 
-msgid "Fleet Management"
-msgstr "Gestión de flotas"
+#: ajax/dashboard_alerts.php:39
+msgid "Unable to get dashboard alerts."
+msgstr "No se pudieron obtener las alertas del panel."
 
+#: ajax/set_theme.php:9
+msgid "Method not allowed"
+msgstr "Método no permitido"
+
+#: ajax/set_theme.php:18
+msgid "Theme not specified"
+msgstr "Tema no especificado"
+
+#: front/booking.php:79
+#, fuzzy
 msgid "Fleet Reservation"
 msgstr "Reserva de flota"
 
-msgid "Dashboard"
-msgstr "Panel"
-
-msgid "Calendar"
-msgstr "Calendario"
-
-msgid "Management"
-msgstr "Gestión"
-
-msgid "Administration"
-msgstr "Administración"
-
-msgid "Reports"
-msgstr "Informes"
-
-msgid "Settings"
-msgstr "Configuración"
-
-msgid "Vehicle"
-msgstr "Vehículo"
-
-msgid "Vehicles"
-msgstr "Vehículos"
-
-msgid "Driver"
-msgstr "Conductor"
-
-msgid "Drivers"
-msgstr "Conductores"
-
-msgid "Schedule"
-msgstr "Reserva"
-
-msgid "Schedules"
-msgstr "Reservas"
-
-msgid "Reservation"
-msgstr "Reserva"
-
-msgid "Reservations"
-msgstr "Reservas"
-
-msgid "Incident"
-msgstr "Incidente"
-
-msgid "Incidents"
-msgstr "Incidentes"
-
-msgid "Maintenance"
-msgstr "Mantenimiento"
-
-msgid "Maintenances"
-msgstr "Mantenimientos"
-
-msgid "Insurance Claim"
-msgstr "Siniestro"
-
-msgid "Insurance Claims"
-msgstr "Siniestros"
-
-msgid "Fine"
-msgstr "Multa"
-
-msgid "Fines"
-msgstr "Multas"
-
-msgid "Plate"
-msgstr "Matrícula"
-
-msgid "Brand"
-msgstr "Marca"
-
-msgid "Model"
-msgstr "Modelo"
-
-msgid "Year"
-msgstr "Año"
-
-msgid "Color"
-msgstr "Color"
-
-msgid "Category"
-msgstr "Categoría"
-
-msgid "Fuel"
-msgstr "Combustible"
-
-msgid "Seats"
-msgstr "Asientos"
-
-msgid "Mileage"
-msgstr "Kilometraje"
-
-msgid "Status"
-msgstr "Estado"
-
-msgid "Available"
-msgstr "Disponible"
-
-msgid "Unavailable"
-msgstr "No disponible"
-
-msgid "In maintenance"
-msgstr "En mantenimiento"
-
-msgid "Vehicle Scheduling"
-msgstr "Programación de vehículos"
-
-msgid "Reservation Request"
-msgstr "Solicitud de reserva"
-
-msgid "Reservation %s - %s"
-msgstr "Reserva %s - %s"
-
-msgid "Requester"
-msgstr "Solicitante"
-
-msgid "Request date"
-msgstr "Fecha de solicitud"
-
-msgid "Start date"
-msgstr "Fecha de inicio"
-
-msgid "End date"
-msgstr "Fecha de fin"
-
-msgid "Start time"
-msgstr "Hora de salida"
-
-msgid "End time"
-msgstr "Hora de regreso"
-
-msgid "Departure"
-msgstr "Salida"
-
-msgid "Return"
-msgstr "Retorno"
-
-msgid "Origin"
-msgstr "Origen"
-
-msgid "Destination"
-msgstr "Destino"
-
-msgid "Purpose"
-msgstr "Finalidad"
-
-msgid "Description"
-msgstr "Descripción"
-
-msgid "Description/Purpose"
-msgstr "Descripción/Finalidad"
-
-msgid "Describe the purpose of this reservation"
-msgstr "Describa la finalidad de esta reserva"
-
-msgid "Number of passengers"
-msgstr "Número de pasajeros"
-
-msgid "Passengers"
-msgstr "Pasajeros"
-
-msgid "Assigned driver"
-msgstr "Conductor asignado"
-
-msgid "Assigned vehicle"
-msgstr "Vehículo asignado"
-
-msgid "Contact Phone"
-msgstr "Teléfono de contacto"
-
-msgid "Department/Sector"
-msgstr "Departamento/Sector"
-
-msgid "Additional Comments"
-msgstr "Comentarios adicionales"
-
-msgid "Additional observations"
-msgstr "Observaciones adicionales"
-
-msgid "Related Ticket"
-msgstr "Ticket relacionado"
-
-msgid "Vehicle Report"
-msgstr "Reporte de vehículo"
-
-msgid "Vehicle Reports"
-msgstr "Reportes de vehículo"
-
-msgid "Report Type"
-msgstr "Tipo de reporte"
-
-msgid "Report Date"
-msgstr "Fecha del reporte"
-
-msgid "Reporter"
-msgstr "Reportado por"
-
-msgid "Maintenance Needed"
-msgstr "Requiere mantenimiento"
-
-msgid "Problem/Issue"
-msgstr "Problema/Incidencia"
-
-msgid "Accident"
-msgstr "Accidente"
-
-msgid "Observation"
-msgstr "Observación"
-
-msgid "Describe the issue, observation or situation in detail"
-msgstr "Describa el problema, la observación o la situación en detalle"
-
-msgid "New"
-msgstr "Nuevo"
-
-msgid "Pending"
-msgstr "Pendiente"
-
-msgid "Approved"
-msgstr "Aprobado"
-
-msgid "Rejected"
-msgstr "Rechazado"
-
-msgid "Cancelled"
-msgstr "Cancelado"
-
-msgid "Completed"
-msgstr "Completado"
-
-msgid "Active"
-msgstr "Activo"
-
-msgid "Closed"
-msgstr "Cerrado"
-
-msgid "Open"
-msgstr "Abrir"
-
-msgid "View"
-msgstr "Ver"
-
-msgid "Add"
-msgstr "Agregar"
-
-msgid "Create"
-msgstr "Crear"
-
-msgid "Edit"
-msgstr "Editar"
-
-msgid "Update"
-msgstr "Actualizar"
-
-msgid "Save"
-msgstr "Guardar"
-
-msgid "Delete"
-msgstr "Eliminar"
-
-msgid "Approve"
-msgstr "Aprobar"
-
-msgid "Reject"
-msgstr "Rechazar"
-
-msgid "Cancel"
-msgstr "Cancelar"
-
-msgid "Close"
-msgstr "Cerrar"
-
-msgid "Filter"
-msgstr "Filtrar"
-
-msgid "Search"
-msgstr "Buscar"
-
-msgid "Clear filters"
-msgstr "Limpiar filtros"
-
-msgid "Approved reservations"
-msgstr "Reservas aprobadas"
-
-msgid "Pending requests"
-msgstr "Solicitudes pendientes"
-
-msgid "Rejected requests"
-msgstr "Solicitudes rechazadas"
-
-msgid "Reservations by status"
-msgstr "Reservas por estado"
-
-msgid "Operational overview"
-msgstr "Vista operativa"
-
-msgid "Management overview"
-msgstr "Vista de gestión"
-
-msgid "Executive overview"
-msgstr "Vista ejecutiva"
-
-msgid "Department is required"
-msgstr "El departamento es obligatorio"
-
-msgid "Contact phone is required"
-msgstr "El teléfono de contacto es obligatorio"
-
-msgid "Description/Purpose is required"
-msgstr "La descripción/finalidad es obligatoria"
-
-msgid "Description is required"
-msgstr "La descripción es obligatoria"
-
-msgid "Vehicle is required"
-msgstr "El vehículo es obligatorio"
-
-msgid "Start date is required"
-msgstr "La fecha de inicio es obligatoria"
-
-msgid "End date is required"
-msgstr "La fecha de fin es obligatoria"
-
-msgid "Destination is required"
-msgstr "El destino es obligatorio"
-
-msgid "Driver is required"
-msgstr "El conductor es obligatorio"
-
-msgid "Invalid period"
-msgstr "Período inválido"
-
-msgid "The selected vehicle is not available for this period"
-msgstr "El vehículo seleccionado no está disponible para este período"
-
-msgid "The selected driver is not available for this period"
-msgstr "El conductor seleccionado no está disponible para este período"
-
-msgid "Item added successfully"
-msgstr "Elemento agregado con éxito"
-
-msgid "Item updated successfully"
-msgstr "Elemento actualizado con éxito"
-
-msgid "Item deleted successfully"
-msgstr "Elemento eliminado con éxito"
-
-msgid "Reservation approved successfully"
-msgstr "Reserva aprobada con éxito"
-
-msgid "Reservation rejected successfully"
-msgstr "Reserva rechazada con éxito"
-
-msgid "Unable to save data"
-msgstr "No se pudieron guardar los datos"
-
-msgid "An unexpected error occurred"
-msgstr "Ocurrió un error inesperado"
-
-msgid "Vehicle Reservation: %s - %s"
-msgstr "Reserva de vehículo: %s - %s"
-
-msgid "Vehicle Reservation Details:\\n\\nVehicle: %s\\nRequester: %s\\nStart: %s\\nEnd: %s\\nDestination: %s\\nPassengers: %d\\nPurpose: %s"
-msgstr "Detalles de la reserva de vehículo:\\n\\nVehículo: %s\\nSolicitante: %s\\nInicio: %s\\nFin: %s\\nDestino: %s\\nPasajeros: %d\\nFinalidad: %s"
-
-msgid "Portuguese"
-msgstr "Portugués"
-
-msgid "English"
-msgstr "Inglés"
-
-msgid "Spanish"
-msgstr "Español"
-
-msgid "French"
-msgstr "Francés"
-
+#: front/config.form.php:10
+#, fuzzy
 msgid "You are not allowed to access plugin settings."
 msgstr "No tiene permiso para acceder a la configuración del plugin."
 
+#: front/config.form.php:17 front/config.form.php:39
+#, fuzzy
 msgid "You are not allowed to change plugin settings."
 msgstr "No tiene permiso para cambiar la configuración del plugin."
 
+#: front/config.form.php:28
+#, fuzzy
 msgid "Settings saved successfully."
 msgstr "Configuración guardada con éxito."
 
+#: front/config.form.php:30
+#, fuzzy
 msgid "Unable to save plugin settings."
 msgstr "No se pudo guardar la configuración del plugin."
 
+#: front/config.form.php:52
+#, fuzzy
 msgid "Plugin language saved successfully."
 msgstr "Idioma del plugin guardado con éxito."
 
+#: front/config.form.php:54
+#, fuzzy
 msgid "Unable to save plugin language."
 msgstr "No se pudo guardar el idioma del plugin."
 
+#: front/config.form.php:64 front/config.form.php:78
+#, fuzzy
 msgid "Plugin settings"
 msgstr "Configuración del plugin"
 
+#: front/config.form.php:79
+#, fuzzy
 msgid "Operational settings for SisViaturas behavior."
 msgstr "Configuración operativa para ajustar el comportamiento de SisViaturas."
 
+#: front/config.form.php:85
+#, fuzzy
+msgid "Save"
+msgstr "Guardar"
+
+#: front/config.form.php:97 src/Legacy/checklist.class.php:18
+#: src/Maintenance/WorkOrder.php:40
+#, fuzzy
 msgid "Checklist"
 msgstr "Checklist"
 
+#: front/config.form.php:101
+#, fuzzy
 msgid "Automatic departure checklist"
 msgstr "Checklist de salida automático"
 
+#: front/config.form.php:102
+#, fuzzy
 msgid "Open the first checklist after reservation approval."
 msgstr "Abre el primer checklist después de la aprobación de la reserva."
 
+#: front/config.form.php:110
+#, fuzzy
 msgid "Language"
 msgstr "Idioma"
 
+#: front/config.form.php:111 front/config.form.php:115
+#, fuzzy
 msgid "Plugin language"
 msgstr "Idioma del plugin"
 
+#: front/config.form.php:112
+#, fuzzy
 msgid "Choose the language used by SisViaturas screens."
 msgstr "Elija el idioma usado en las pantallas de SisViaturas."
+
+#: front/dashboard.php:8
+#, fuzzy
+msgid "Fleet Dashboard"
+msgstr "Dashboard de flota"
+
+#: front/dashboard.php:200
+#, fuzzy
+msgid "New Reservation"
+msgstr "Nueva reserva"
+
+#: front/dashboard.php:204
+#, fuzzy
+msgid "Open Calendar"
+msgstr "Abrir calendario"
+
+#: front/dashboard.php:208
+#, fuzzy
+msgid "Report Incident"
+msgstr "Informar incidente"
+
+#: front/dashboard.php:212
+#, fuzzy
+msgid "Schedule Maintenance"
+msgstr "Programar mantenimiento"
+
+#: front/dashboard.php:216
+#, fuzzy
+msgid "Open Insurance Claim"
+msgstr "Abrir siniestro"
+
+#: front/dashboard.php:223
+#, fuzzy
+msgid "Active Vehicles"
+msgstr "Vehículos activos"
+
+#: front/dashboard.php:224
+#, fuzzy
+msgid "Active Drivers"
+msgstr "Conductores activos"
+
+#: front/dashboard.php:225
+#, fuzzy
+msgid "Pending Approval"
+msgstr "Pendiente de aprobación"
+
+#: front/dashboard.php:225
+#, fuzzy
+msgid "Reservations"
+msgstr "Reservas"
+
+#: front/dashboard.php:226
+#, fuzzy
+msgid "Approved Reservations"
+msgstr "Reservas aprobadas"
+
+#: front/dashboard.php:227 front/dashboard.php:328
+#, fuzzy
+msgid "Open Incidents"
+msgstr "Abrir incidentes"
+
+#: front/dashboard.php:228
+#, fuzzy
+msgid "Scheduled Maintenances"
+msgstr "Mantenimientos programados"
+
+#: front/dashboard.php:229
+#, fuzzy
+msgid "Open Claims"
+msgstr "Siniestros abiertos"
+
+#: front/dashboard.php:230
+#, fuzzy
+msgid "Open Fines"
+msgstr "Abrir multas"
+
+#: front/dashboard.php:250
+#, fuzzy
+msgid "Reservations Pending Approval"
+msgstr "Reservas pendientes de aprobación"
+
+#: front/dashboard.php:250 front/dashboard.php:288 front/dashboard.php:328
+#: front/dashboard.php:370 front/dashboard.php:421
+#, fuzzy
+msgid "View all"
+msgstr "Ver todos"
+
+#: front/dashboard.php:253
+#, fuzzy
+msgid "No pending reservations"
+msgstr "Ninguna reserva pendiente"
+
+#: front/dashboard.php:258
+msgid "Requester"
+msgstr "Solicitante"
+
+#: front/dashboard.php:259 front/dashboard.php:338 front/dashboard.php:378
+#: front/dashboard.php:430 src/Legacy/maintenance.class.php:154
+#: src/Legacy/vehicle.class.php:29 src/Legacy/vehiclereport.class.php:143
+#, fuzzy
+msgid "Vehicle"
+msgid_plural "Vehicles"
+msgstr[0] "Vehículo"
+msgstr[1] "Vehículo"
+
+#: front/dashboard.php:260
+#, fuzzy
+msgid "Dates"
+msgstr "Fechas"
+
+#: front/dashboard.php:261 front/dashboard.php:339 front/dashboard.php:381
+#: front/dashboard.php:434 src/Legacy/schedule.class.php:286
+msgid "Status"
+msgstr "Estado"
+
+#: front/dashboard.php:278
+#, fuzzy
+msgid "New"
+msgstr "Nuevo"
+
+#: front/dashboard.php:288
+#, fuzzy
+msgid "CNH Expiry Alerts (next 90 days)"
+msgstr "Alertas de vencimiento de CNH (próximos 90 días)"
+
+#: front/dashboard.php:291
+#, fuzzy
+msgid "No CNH expiring soon"
+msgstr "Ninguna CNH vence pronto"
+
+#: front/dashboard.php:296 src/Legacy/driver.class.php:38
+#, fuzzy
+msgid "Driver"
+msgstr "Conductor"
+
+#: front/dashboard.php:298
+#, fuzzy
+msgid "Expiry"
+msgstr "Vencimiento"
+
+#: front/dashboard.php:331
+#, fuzzy
+msgid "No open incidents"
+msgstr "Ningún incidente abierto"
+
+#: front/dashboard.php:336
+#, fuzzy
+msgid "Date"
+msgstr "Fecha"
+
+#: front/dashboard.php:337 front/dashboard.php:379
+#: src/Legacy/checklist.class.php:151 src/Legacy/maintenance.class.php:162
+#: src/Legacy/vehiclereport.class.php:144 src/Legacy/workshop.class.php:96
+#, fuzzy
+msgid "Type"
+msgstr "Tipo"
+
+#: front/dashboard.php:349 src/Maintenance/WorkOrder.php:64
+#, fuzzy
+msgid "Open"
+msgstr "Abrir"
+
+#: front/dashboard.php:350
+#, fuzzy
+msgid "Analyzing"
+msgstr "En análisis"
+
+#: front/dashboard.php:370
+#, fuzzy
+msgid "Upcoming Maintenances"
+msgstr "Próximos mantenimientos"
+
+#: front/dashboard.php:373
+#, fuzzy
+msgid "No maintenances pending"
+msgstr "Ningún mantenimiento pendiente"
+
+#: front/dashboard.php:380 front/dashboard.php:394
+#: src/Legacy/maintenance.class.php:76
+#, fuzzy
+msgid "Scheduled"
+msgstr "Programada"
+
+#: front/dashboard.php:395 src/Legacy/maintenance.class.php:77
+#, fuzzy
+msgid "In Progress"
+msgstr "En curso"
+
+#: front/dashboard.php:399
+#, fuzzy
+msgid "Overdue"
+msgstr "Atrasado"
+
+#: front/dashboard.php:421
+#, fuzzy
+msgid "Insurance Claims in Progress"
+msgstr "Siniestros en curso"
+
+#: front/dashboard.php:424
+#, fuzzy
+msgid "No open claims"
+msgstr "No hay siniestros abiertos"
+
+#: front/dashboard.php:432
+#, fuzzy
+msgid "Opened"
+msgstr "Abierto"
+
+#: front/driver.php:32 front/driver.php:56 front/incident.php:18
+#: front/maintenance.php:17 front/vehicle.php:31
+#, fuzzy
+msgid "Not informed"
+msgstr "No informado"
+
+#: front/driver.php:154 front/driver.render.php:36
+#: src/Legacy/driver.class.php:323
+#, fuzzy
+msgid "No date"
+msgstr "Sin fecha"
+
+#: front/get_available_resources.php:15
+#, fuzzy
+msgid "No permission"
+msgstr "Sin permiso"
+
+#: front/get_manager_notifications.php:21
+#, fuzzy
+msgid "No management rights"
+msgstr "Sin permisos de gestión"
+
+#: front/get_manager_notifications.php:64
+#, fuzzy, php-format
+msgid "%s to %s"
+msgstr "%s hasta %s"
+
+#: front/requester.php:27 front/requester.php:43
+msgid "Fleet vehicles"
+msgstr "Vehículos"
+
+#: front/requester.php:38
+msgid "Fleet portal"
+msgstr "Portal de flota"
+
+#: front/requester.php:47
+msgid ""
+"Request a vehicle in a simple way and follow the evolution of the fleet "
+"service portal."
+msgstr ""
+"Solicite un vehículo de forma simple y siga la evolución del portal de "
+"atención de flota."
+
+#: front/requester.php:57
+msgid "Schedule vehicle"
+msgstr "Programar vehículo"
+
+#: front/requester.php:60
+msgid "Open the request form to reserve a vehicle and start the service flow."
+msgstr ""
+"Abra el formulario de solicitud para reservar un vehículo e iniciar el flujo "
+"de atención."
+
+#: front/requester.php:66 front/requester.php:101
+msgid "Open form"
+msgstr "Abrir formulario"
+
+#: front/requester.php:75
+msgid "My reservations"
+msgstr "Mis reservas"
+
+#: front/requester.php:78
+msgid ""
+"Check opened requests, follow statuses, and view your reservation history."
+msgstr ""
+"Consulte solicitudes abiertas, siga los estados y vea su historial de "
+"reservas."
+
+#: front/requester.php:83
+msgid "Coming soon"
+msgstr "Próximamente"
+
+#: front/requester.php:92
+msgid "Report claim"
+msgstr "Informar siniestro"
+
+#: front/requester.php:95
+msgid "Register accidents, damage, and events related to vehicle use."
+msgstr ""
+"Registre accidentes, daños y eventos relacionados con el uso del vehículo."
+
+#: front/requester.php:107
+msgid "Note:"
+msgstr "Nota:"
+
+#: front/requester.php:108
+msgid ""
+"Use this address as the destination for the Fleet vehicles card on the self-"
+"service home."
+msgstr ""
+"Use esta dirección como destino de la tarjeta Vehículos en la página de "
+"autoservicio."
+
+#: front/requester.php:109
+msgid "In this first stage, the active flow is scheduling."
+msgstr "En esta primera etapa, el flujo activo es la programación."
+
+#: front/vehicle.form.php:80
+#, fuzzy
+msgid "Vehicle created successfully."
+msgstr "Vehículo creado correctamente."
+
+#: front/vehicle.form.php:91 front/vehicle.form.php:107
+#: front/vehicle.form.php:121 front/vehicle.form.php:135
+#: src/Legacy/vehicle.class.php:200
+#, fuzzy
+msgid "Invalid vehicle ID."
+msgstr "ID de vehículo inválido."
+
+#: front/vehicle.form.php:100
+#, fuzzy
+msgid "Vehicle updated successfully."
+msgstr "Vehículo actualizado correctamente."
+
+#: front/vehicle.form.php:153 src/Legacy/vehicle.class.php:34
+#, fuzzy
+msgid "Vehicles"
+msgstr "Vehículos"
+
+#: front/vehicle.form.php:162 front/vehiclereport.form.php:95
+#, fuzzy
+msgid "Back"
+msgstr "Volver"
+
+#: front/vehiclereport.form.php:86
+#, fuzzy
+msgid "Vehicle Reports"
+msgstr "Reportes de vehículo"
+
+#: setup.php:96
+msgid "This plugin requires GLPI >= "
+msgstr "Este plugin requiere GLPI >= "
+
+#: setup.php:101
+msgid "This plugin requires GLPI < "
+msgstr "Este plugin requiere GLPI < "
+
+#: setup.php:106
+msgid "This plugin requires PHP >= 8.1"
+msgstr "Este plugin requiere PHP >= 8.1"
+
+#: src/Bootstrap/common.php:205
+#, fuzzy
+msgid "Back to Fleet Management"
+msgstr "Volver a Gestión de Flota"
+
+#: src/Legacy/checklist.class.php:18 src/Legacy/checklist.class.php:136
+msgid "Checklists"
+msgstr "Checklists"
+
+#: src/Legacy/checklist.class.php:29
+#, fuzzy
+msgid "Departure"
+msgstr "Salida"
+
+#: src/Legacy/checklist.class.php:30
+msgid "Arrival"
+msgstr "Llegada"
+
+#: src/Legacy/checklist.class.php:31
+msgid "Both"
+msgstr "Ambos"
+
+#: src/Legacy/checklist.class.php:89
+msgid ""
+"The reservation was approved and the first operational checklist can now be "
+"completed."
+msgstr ""
+"La reserva fue aprobada y el primer checklist operativo ya puede completarse."
+
+#: src/Legacy/checklist.class.php:90
+msgid "Access:"
+msgstr "Acceso:"
+
+#: src/Legacy/checklist.class.php:91
+msgid "Checklist:"
+msgstr "Checklist:"
+
+#: src/Legacy/checklist.class.php:91
+msgid "Departure checklist"
+msgstr "Checklist de salida"
+
+#: src/Legacy/checklist.class.php:101 src/Legacy/checklist.class.php:124
+msgid "Name is required."
+msgstr "El nombre es obligatorio."
+
+#: src/Legacy/checklist.class.php:118
+msgid "Invalid checklist."
+msgstr "Checklist inválido."
+
+#: src/Legacy/checklist.class.php:142 src/Legacy/driver.class.php:633
+#: src/Legacy/vehicle.class.php:254 src/Legacy/workshop.class.php:88
+#, fuzzy
+msgid "Name"
+msgstr "Nombre"
+
+#: src/Legacy/checklist.class.php:159 src/Legacy/driver.class.php:691
+#: src/Legacy/vehicle.class.php:303 src/Legacy/workshop.class.php:105
+#, fuzzy
+msgid "Active"
+msgstr "Activo"
+
+#: src/Legacy/checklistitem.class.php:22
+msgid "Item"
+msgstr "Ítem"
+
+#: src/Legacy/checklistitem.class.php:22
+msgid "Items"
+msgstr "Ítems"
+
+#: src/Legacy/checklistitem.class.php:33
+msgid "Yes/No"
+msgstr "Sí/No"
+
+#: src/Legacy/checklistitem.class.php:34
+msgid "Text"
+msgstr "Texto"
+
+#: src/Legacy/checklistitem.class.php:35
+msgid "Number"
+msgstr "Número"
+
+#: src/Legacy/checklistitem.class.php:36
+msgid "Photo"
+msgstr "Foto"
+
+#: src/Legacy/checklistitem.class.php:37
+msgid "Signature"
+msgstr "Firma"
+
+#: src/Legacy/checklistitem.class.php:46 src/Legacy/checklistitem.class.php:79
+#: src/Legacy/vehiclereport.class.php:111
+msgid "Description is required."
+msgstr "La descripción es obligatoria."
+
+#: src/Legacy/checklistitem.class.php:73
+msgid "Invalid item."
+msgstr "Ítem inválido."
+
+#: src/Legacy/driver.class.php:38 src/Legacy/driver.class.php:48
+#: src/Legacy/driver.class.php:626
+#, fuzzy
+msgid "Drivers"
+msgstr "Conductores"
+
+#: src/Legacy/driver.class.php:108 src/Legacy/vehicle.class.php:45
+#, fuzzy
+msgid "A - Motorcycle"
+msgstr "A - Moto"
+
+#: src/Legacy/driver.class.php:109 src/Legacy/vehicle.class.php:46
+#, fuzzy
+msgid "B - Car"
+msgstr "B - Coche"
+
+#: src/Legacy/driver.class.php:110 src/Legacy/vehicle.class.php:47
+#, fuzzy
+msgid "D - Truck or van"
+msgstr "D - Camión o furgoneta"
+
+#: src/Legacy/driver.class.php:111
+msgid "AB - Motorcycles and cars (legacy)"
+msgstr "AB - Motocicletas y autos (legado)"
+
+#: src/Legacy/driver.class.php:123
+msgid "Allows motorcycle driving."
+msgstr "Permite conducir motocicleta."
+
+#: src/Legacy/driver.class.php:124
+msgid "Allows car driving."
+msgstr "Permite conducir auto."
+
+#: src/Legacy/driver.class.php:125
+msgid "Allows car, truck, and van driving."
+msgstr "Permite conducir auto, camión y furgoneta."
+
+#: src/Legacy/driver.class.php:319
+#, fuzzy
+msgid "Valid"
+msgstr "Válida"
+
+#: src/Legacy/driver.class.php:320
+msgid "Expiring soon"
+msgstr "Vence pronto"
+
+#: src/Legacy/driver.class.php:321 src/Maintenance/WorkOrder.php:54
+#, fuzzy
+msgid "Critical"
+msgstr "Crítica"
+
+#: src/Legacy/driver.class.php:322
+msgid "EXPIRED"
+msgstr "VENCIDA"
+
+#: src/Legacy/driver.class.php:329
+#, php-format
+msgid "Expires in %d days"
+msgstr "Vence en %d días"
+
+#: src/Legacy/driver.class.php:331
+#, php-format
+msgid "Valid - %d days remaining"
+msgstr "Válida - quedan %d días"
+
+#: src/Legacy/driver.class.php:333
+#, php-format
+msgid "EXPIRED %d days ago"
+msgstr "VENCIDA hace %d días"
+
+#: src/Legacy/driver.class.php:519 src/Legacy/driver.class.php:582
+msgid "Select a GLPI user for the driver."
+msgstr "Seleccione un usuario de GLPI para el conductor."
+
+#: src/Legacy/driver.class.php:524 src/Legacy/driver.class.php:587
+msgid "Select at least one driver license category for the driver."
+msgstr "Seleccione al menos una categoría de licencia para el conductor."
+
+#: src/Legacy/driver.class.php:529 src/Legacy/driver.class.php:592
+msgid "Driver license expiration is required and must be a valid date."
+msgstr ""
+"El vencimiento de la licencia es obligatorio y debe ser una fecha válida."
+
+#: src/Legacy/driver.class.php:534 src/Legacy/driver.class.php:597
+msgid "This GLPI user is already linked to another driver."
+msgstr "Este usuario de GLPI ya está vinculado a otro conductor."
+
+#: src/Legacy/driver.class.php:539 src/Legacy/driver.class.php:602
+msgid "The informed registration is already in use."
+msgstr "La matrícula informada ya está en uso."
+
+#: src/Legacy/driver.class.php:556
+msgid "Driver registered. Waiting for management approval."
+msgstr "Conductor registrado. Esperando aprobación de gestión."
+
+#: src/Legacy/driver.class.php:577
+msgid "Invalid driver ID."
+msgstr "ID de conductor inválido."
+
+#: src/Legacy/driver.class.php:642
+msgid "GLPI user"
+msgstr "Usuario GLPI"
+
+#: src/Legacy/driver.class.php:650
+#, fuzzy
+msgid "Internal registration"
+msgstr "Matrícula interna"
+
+#: src/Legacy/driver.class.php:658
+msgid "Driver license category"
+msgstr "Categoría de licencia"
+
+#: src/Legacy/driver.class.php:667
+msgid "Driver license expiration"
+msgstr "Vencimiento de licencia"
+
+#: src/Legacy/driver.class.php:675 src/Legacy/vehiclereport.class.php:146
+msgid "Department / sector"
+msgstr "Departamento / sector"
+
+#: src/Legacy/driver.class.php:683 src/Legacy/vehiclereport.class.php:147
+#, fuzzy
+msgid "Phone"
+msgstr "Teléfono"
+
+#: src/Legacy/driver.class.php:699 src/Maintenance/WorkOrder.php:84
+#, fuzzy
+msgid "Approved"
+msgstr "Aprobado"
+
+#: src/Legacy/driver.class.php:707
+msgid "Last modification"
+msgstr "Última modificación"
+
+#: src/Legacy/incident.class.php:26 src/Maintenance/WorkOrder.php:39
+#, fuzzy
+msgid "Incident"
+msgid_plural "Incidents"
+msgstr[0] "Incidente"
+msgstr[1] "Incidente"
+
+#: src/Legacy/incident.class.php:31
+#, fuzzy
+msgid "Incidents"
+msgstr "Incidentes"
+
+#: src/Legacy/insuranceclaim.class.php:20
+msgid "Insurance Claim"
+msgid_plural "Insurance Claims"
+msgstr[0] "Siniestro"
+msgstr[1] "Siniestro"
+
+#: src/Legacy/maintenance.class.php:22
+msgid "Maintenance"
+msgid_plural "Maintenances"
+msgstr[0] "Mantenimiento"
+msgstr[1] "Mantenimiento"
+
+#: src/Legacy/maintenance.class.php:27
+#, fuzzy
+msgid "Maintenances"
+msgstr "Mantenimientos"
+
+#: src/Legacy/maintenance.class.php:68 src/Maintenance/WorkOrder.php:41
+#, fuzzy
+msgid "Preventive"
+msgstr "Preventiva"
+
+#: src/Legacy/maintenance.class.php:69
+#, fuzzy
+msgid "Corrective"
+msgstr "Correctiva"
+
+#: src/Legacy/maintenance.class.php:78
+#, fuzzy
+msgid "Done"
+msgstr "Concluida"
+
+#: src/Legacy/maintenance.class.php:79 src/Maintenance/WorkOrder.php:72
+#, fuzzy
+msgid "Cancelled"
+msgstr "Cancelado"
+
+#: src/Legacy/maintenance.class.php:97 src/Legacy/maintenance.class.php:124
+#: src/Legacy/vehiclereport.class.php:106
+#, fuzzy
+msgid "Vehicle is required."
+msgstr "El vehículo es obligatorio."
+
+#: src/Legacy/maintenance.class.php:118
+#, fuzzy
+msgid "Invalid maintenance."
+msgstr "Mantenimiento inválido."
+
+#: src/Legacy/maintenance.class.php:180
+#, fuzzy
+msgid "Scheduled date"
+msgstr "Fecha programada"
+
+#: src/Legacy/maintenance.class.php:188
+#, fuzzy
+msgid "Cost"
+msgstr "Costo"
+
+#: src/Legacy/maintenance.class.php:196
+#, fuzzy
+msgid "Supplier"
+msgstr "Proveedor"
+
+#: src/Legacy/profile.class.php:37 src/Legacy/profile.class.php:46
+#: src/Legacy/profile.class.php:59
+msgid "Read"
+msgstr "Lectura"
+
+#: src/Legacy/profile.class.php:47
+msgid "Update"
+msgstr "Actualizar"
+
+#: src/Legacy/profile.class.php:48
+msgid "Create"
+msgstr "Crear"
+
+#: src/Legacy/profile.class.php:49
+msgid "Delete"
+msgstr "Eliminar"
+
+#: src/Legacy/profile.class.php:50
+msgid "Delete permanently"
+msgstr "Eliminar permanentemente"
+
+#: src/Legacy/schedule.class.php:260
+msgid "Characteristics"
+msgstr "Características"
+
+#: src/Legacy/schedule.class.php:268
+msgid "Destino"
+msgstr "Destino"
+
+#: src/Legacy/schedule.class.php:277 src/Legacy/workshop.class.php:79
+#, fuzzy
+msgid "ID"
+msgstr "ID"
+
+#: src/Legacy/schedule.class.php:295
+msgid "Saída"
+msgstr "Salida"
+
+#: src/Legacy/schedule.class.php:304
+msgid "Retorno"
+msgstr "Retorno"
+
+#: src/Legacy/schedule.class.php:314
+msgid "Solicitante"
+msgstr "Solicitante"
+
+#: src/Legacy/schedule.class.php:324
+msgid "Viatura"
+msgstr "Vehículo"
+
+#: src/Legacy/schedule.class.php:334
+msgid "Motorista"
+msgstr "Conductor"
+
+#: src/Legacy/schedule.class.php:343
+msgid "Departamento"
+msgstr "Departamento"
+
+#: src/Legacy/schedule.class.php:352
+msgid "Passageiros"
+msgstr "Pasajeros"
+
+#: src/Legacy/schedule.class.php:362
+msgid "Aprovado por"
+msgstr "Aprobado por"
+
+#: src/Legacy/schedule.class.php:371
+msgid "Data da aprovação"
+msgstr "Fecha de aprobación"
+
+#: src/Legacy/schedule.class.php:380
+msgid "Criação"
+msgstr "Creación"
+
+#: src/Legacy/vehicle.class.php:159 src/Legacy/vehicle.class.php:205
+#, fuzzy
+msgid "Vehicle name is required."
+msgstr "El nombre del vehículo es obligatorio."
+
+#: src/Legacy/vehicle.class.php:164 src/Legacy/vehicle.class.php:210
+#, fuzzy
+msgid "Plate is required."
+msgstr "La placa es obligatoria."
+
+#: src/Legacy/vehicle.class.php:169 src/Legacy/vehicle.class.php:215
+#, fuzzy
+msgid "Invalid year."
+msgstr "Año inválido."
+
+#: src/Legacy/vehicle.class.php:174 src/Legacy/vehicle.class.php:220
+#, fuzzy
+msgid "Invalid passenger capacity."
+msgstr "Capacidad de pasajeros inválida."
+
+#: src/Legacy/vehicle.class.php:179 src/Legacy/vehicle.class.php:225
+#, fuzzy
+msgid "Select the required CNH category for the vehicle."
+msgstr "Seleccione la categoría CNH requerida para el vehículo."
+
+#: src/Legacy/vehicle.class.php:184 src/Legacy/vehicle.class.php:230
+#, fuzzy
+msgid "The informed plate is already in use."
+msgstr "La placa informada ya está en uso."
+
+#: src/Legacy/vehicle.class.php:263
+#, fuzzy
+msgid "Plate"
+msgstr "Matrícula"
+
+#: src/Legacy/vehicle.class.php:271
+#, fuzzy
+msgid "Brand"
+msgstr "Marca"
+
+#: src/Legacy/vehicle.class.php:279
+#, fuzzy
+msgid "Model"
+msgstr "Modelo"
+
+#: src/Legacy/vehicle.class.php:287
+#, fuzzy
+msgid "Year"
+msgstr "Año"
+
+#: src/Legacy/vehicle.class.php:295
+#, fuzzy
+msgid "Passengers"
+msgstr "Pasajeros"
+
+#: src/Legacy/vehicle.class.php:311
+#, fuzzy
+msgid "Required CNH"
+msgstr "CNH requerida"
+
+#: src/Legacy/vehicle.class.php:320
+#, fuzzy
+msgid "Last update"
+msgstr "Última modificación"
+
+#: src/Legacy/vehiclereport.class.php:24
+msgid "Vehicle report"
+msgstr "Informe de vehículo"
+
+#: src/Legacy/vehiclereport.class.php:24 src/Legacy/vehiclereport.class.php:29
+#: src/Legacy/vehiclereport.class.php:54 src/Legacy/vehiclereport.class.php:64
+#: src/Legacy/vehiclereport.class.php:141
+msgid "Vehicle reports"
+msgstr "Informes de vehículos"
+
+#: src/Legacy/vehiclereport.class.php:40
+msgid "Needs maintenance"
+msgstr "Necesita mantenimiento"
+
+#: src/Legacy/vehiclereport.class.php:41
+msgid "Problem / defect"
+msgstr "Problema / defecto"
+
+#: src/Legacy/vehiclereport.class.php:42
+#, fuzzy
+msgid "Accident"
+msgstr "Accidente"
+
+#: src/Legacy/vehiclereport.class.php:43
+msgid "General observation"
+msgstr "Observación general"
+
+#: src/Legacy/vehiclereport.class.php:131
+msgid "Invalid report ID."
+msgstr "ID de informe inválido."
+
+#: src/Legacy/vehiclereport.class.php:145
+msgid "Reported by"
+msgstr "Informado por"
+
+#: src/Legacy/vehiclereport.class.php:148
+msgid "Report date"
+msgstr "Fecha del informe"
+
+#: src/Legacy/vehiclereport.class.php:149
+msgid "Description"
+msgstr "Descripción"
+
+#: src/Legacy/workshop.class.php:16
+msgid "Workshop"
+msgid_plural "Workshops"
+msgstr[0] "Taller"
+msgstr[1] "Taller"
+
+#: src/Legacy/workshop.class.php:39 src/Legacy/workshop.class.php:62
+#, fuzzy
+msgid "Workshop name is required."
+msgstr "El nombre del taller es obligatorio."
+
+#: src/Legacy/workshop.class.php:56
+#, fuzzy
+msgid "Invalid workshop."
+msgstr "Taller inválido."
+
+#: src/Legacy/workshop.class.php:114
+#, fuzzy
+msgid "City"
+msgstr "Ciudad"
+
+#: src/Legacy/workshop.class.php:122
+#, fuzzy
+msgid "State"
+msgstr "Estado"
+
+#: src/Localization/LocaleManager.php:16
+#, fuzzy
+msgid "Portuguese"
+msgstr "Portugués"
+
+#: src/Localization/LocaleManager.php:20
+#, fuzzy
+msgid "English"
+msgstr "Inglés"
+
+#: src/Localization/LocaleManager.php:24
+#, fuzzy
+msgid "Spanish"
+msgstr "Español"
+
+#: src/Localization/LocaleManager.php:28
+#, fuzzy
+msgid "French"
+msgstr "Francés"
+
+#: src/Maintenance/WorkOrder.php:38
+#, fuzzy
+msgid "Manual"
+msgstr "Manual"
+
+#: src/Maintenance/WorkOrder.php:51
+#, fuzzy
+msgid "Low"
+msgstr "Baja"
+
+#: src/Maintenance/WorkOrder.php:52
+#, fuzzy
+msgid "Normal"
+msgstr "Normal"
+
+#: src/Maintenance/WorkOrder.php:53
+#, fuzzy
+msgid "High"
+msgstr "Alta"
+
+#: src/Maintenance/WorkOrder.php:65
+#, fuzzy
+msgid "Analysis"
+msgstr "Análisis"
+
+#: src/Maintenance/WorkOrder.php:66
+#, fuzzy
+msgid "Workshop linked"
+msgstr "Taller vinculado"
+
+#: src/Maintenance/WorkOrder.php:67
+#, fuzzy
+msgid "Diagnosis / estimate"
+msgstr "Diagnóstico / presupuesto"
+
+#: src/Maintenance/WorkOrder.php:68
+#, fuzzy
+msgid "Approval"
+msgstr "Aprobación"
+
+#: src/Maintenance/WorkOrder.php:69
+#, fuzzy
+msgid "Execution"
+msgstr "Ejecución"
+
+#: src/Maintenance/WorkOrder.php:70
+#, fuzzy
+msgid "Concluded"
+msgstr "Concluida"
+
+#: src/Maintenance/WorkOrder.php:71
+#, fuzzy
+msgid "Vehicle released"
+msgstr "Vehículo liberado"
+
+#: src/Maintenance/WorkOrder.php:82
+#, fuzzy
+msgid "Not required"
+msgstr "No requerida"
+
+#: src/Maintenance/WorkOrder.php:83
+#, fuzzy
+msgid "Pending"
+msgstr "Pendiente"
+
+#: src/Maintenance/WorkOrder.php:85
+#, fuzzy
+msgid "Rejected"
+msgstr "Rechazado"
+
+#: src/Maintenance/Workshop.php:29
+#, fuzzy
+msgid "Internal"
+msgstr "Propia"
+
+#: src/Maintenance/Workshop.php:30
+#, fuzzy
+msgid "Accredited"
+msgstr "Acreditada"
+
+#: src/Maintenance/Workshop.php:40
+#, fuzzy
+msgid "Mechanical"
+msgstr "Mecánica"
+
+#: src/Maintenance/Workshop.php:41
+#, fuzzy
+msgid "Electrical"
+msgstr "Eléctrica"
+
+#: src/Maintenance/Workshop.php:42
+#, fuzzy
+msgid "Bodywork"
+msgstr "Chapa"
+
+#: src/Maintenance/Workshop.php:43
+#, fuzzy
+msgid "Painting"
+msgstr "Pintura"
+
+#: src/Maintenance/Workshop.php:44
+#, fuzzy
+msgid "Tires"
+msgstr "Neumáticos"
+
+#: src/Maintenance/Workshop.php:45
+#, fuzzy
+msgid "Brakes"
+msgstr "Frenos"
+
+#: src/Maintenance/Workshop.php:46
+#, fuzzy
+msgid "Suspension"
+msgstr "Suspensión"
+
+#: src/Maintenance/Workshop.php:47
+#, fuzzy
+msgid "Engine"
+msgstr "Motor"
+
+#: src/Maintenance/Workshop.php:48
+#, fuzzy
+msgid "Transmission"
+msgstr "Cambio"
+
+#: src/Maintenance/Workshop.php:49
+#, fuzzy
+msgid "Air conditioning"
+msgstr "Aire acondicionado"
+
+#: src/Maintenance/Workshop.php:50
+#, fuzzy
+msgid "Diagnostics"
+msgstr "Diagnóstico"
+
+#: src/Maintenance/Workshop.php:51
+#, fuzzy
+msgid "Other"
+msgstr "Otros"
+
+#: src/Menu/ManagementMenu.php:28
+#, fuzzy
+msgid "Fleet Management"
+msgstr "Gestión de flotas"
+
+#, php-format
+#~ msgid "%d days"
+#~ msgstr "%d días"
+
+#~ msgid "Actions"
+#~ msgstr "Acciones"
+
+#~ msgid "Active maintenances"
+#~ msgstr "Mantenimientos activos"
+
+#~ msgid "Active vehicles"
+#~ msgstr "Vehículos activos"
+
+#~ msgid "Add Driver"
+#~ msgstr "Añadir conductor"
+
+#~ msgid "Add Vehicle"
+#~ msgstr "Añadir vehículo"
+
+#~ msgid "All"
+#~ msgstr "Todos"
+
+#~ msgid "Approve"
+#~ msgstr "Aprobar"
+
+#~ msgid "Brand / Model"
+#~ msgstr "Marca / Modelo"
+
+#~ msgid "Brand not informed"
+#~ msgstr "Marca no informada"
+
+#~ msgid "CNH alerts"
+#~ msgstr "Alertas de licencia"
+
+#~ msgid "CNH categories"
+#~ msgstr "Categorías CNH"
+
+#~ msgid "CNH expiry"
+#~ msgstr "Vencimiento de CNH"
+
+#~ msgid "Category"
+#~ msgstr "Categoría"
+
+#~ msgid ""
+#~ "Choose a palette that improves operational readability while preserving "
+#~ "light and dark contrast."
+#~ msgstr ""
+#~ "Elija una paleta que mejore la lectura operativa sin perder contraste "
+#~ "entre claro y oscuro."
+
+#~ msgid "Claims and occurrences"
+#~ msgstr "Siniestros y ocurrencias"
+
+#~ msgid "Clear"
+#~ msgstr "Limpiar"
+
+#~ msgid "Contact phone"
+#~ msgstr "Teléfono de contacto"
+
+#~ msgid "Create the first maintenance work order."
+#~ msgstr "Cree la primera orden de servicio de mantenimiento."
+
+#~ msgid "Dark"
+#~ msgstr "Oscuro"
+
+#~ msgid "Date / Time"
+#~ msgstr "Fecha / Hora"
+
+#~ msgid "Decrease font"
+#~ msgstr "Disminuir fuente"
+
+#~ msgid "Department / Sector"
+#~ msgstr "Departamento / Sector"
+
+#~ msgid "Departure and return"
+#~ msgstr "Salida y regreso"
+
+#~ msgid "Destination"
+#~ msgstr "Destino"
+
+#~ msgid "Driver Management"
+#~ msgstr "Gestión de conductores"
+
+#~ msgid "Driver registration"
+#~ msgstr "Registro de conductor"
+
+#~ msgid "Essential fields for fleet management with privacy by default."
+#~ msgstr ""
+#~ "Campos esenciales para la gestión de flota con privacidad por defecto."
+
+#~ msgid "Essential operational control for maintenance work orders."
+#~ msgstr ""
+#~ "Control operacional esencial de las órdenes de servicio de mantenimiento."
+
+#~ msgid ""
+#~ "Essential operational data for fleet availability, allocation, and "
+#~ "traceability."
+#~ msgstr ""
+#~ "Datos operativos esenciales para disponibilidad, asignación y "
+#~ "trazabilidad de la flota."
+
+#~ msgid "Estimated cost"
+#~ msgstr "Costo estimado"
+
+#~ msgid "Example: 2025"
+#~ msgstr "Ej.: 2025"
+
+#~ msgid "Example: 5"
+#~ msgstr "Ej.: 5"
+
+#~ msgid "Example: ABC1D23"
+#~ msgstr "Ej.: ABC1D23"
+
+#~ msgid "Example: Administrative Vehicle 01"
+#~ msgstr "Ej.: Vehículo Administrativo 01"
+
+#~ msgid "Example: Hilux"
+#~ msgstr "Ej.: Hilux"
+
+#~ msgid "Example: Toyota"
+#~ msgstr "Ej.: Toyota"
+
+#~ msgid "Expired"
+#~ msgstr "Vencida"
+
+#~ msgid "Fines"
+#~ msgstr "Multas"
+
+#~ msgid "Font controls"
+#~ msgstr "Controles de fuente"
+
+#~ msgid "Group"
+#~ msgstr "Grupo"
+
+#~ msgid "Inactive"
+#~ msgstr "Inactivo"
+
+#~ msgid "Inactive vehicles are hidden from operational allocation."
+#~ msgstr ""
+#~ "Los vehículos inactivos dejan de aparecer en la asignación operativa."
+
+#~ msgid "Incident Management"
+#~ msgstr "Gestión de incidentes"
+
+#~ msgid "Increase font"
+#~ msgstr "Aumentar fuente"
+
+#~ msgid "Infractions and points"
+#~ msgstr "Infracciones y puntos"
+
+#~ msgid "Invalid action."
+#~ msgstr "Acción inválida."
+
+#~ msgid "Invalid reservation for approval."
+#~ msgstr "Reserva inválida para aprobación."
+
+#~ msgid "Invalid reservation for rejection."
+#~ msgstr "Reserva inválida para rechazo."
+
+#~ msgid ""
+#~ "Keep only operational information required for fleet allocation and "
+#~ "compliance."
+#~ msgstr ""
+#~ "Mantenga solo la información operativa necesaria para asignación y "
+#~ "conformidad de la flota."
+
+#~ msgid "LGPD notice:"
+#~ msgstr "Aviso LGPD:"
+
+#~ msgid "Light"
+#~ msgstr "Claro"
+
+#~ msgid "Location"
+#~ msgstr "Ubicación"
+
+#~ msgid ""
+#~ "MVP rule: motorcycles require A, cars accept B or D, and trucks/vans "
+#~ "require D."
+#~ msgstr ""
+#~ "Regla del MVP: motos requieren A, coches aceptan B o D, y camiones/"
+#~ "furgonetas requieren D."
+
+#~ msgid "Maintenance Work Orders"
+#~ msgstr "Órdenes de servicio de mantenimiento"
+
+#~ msgid "Model not informed"
+#~ msgstr "Modelo no informado"
+
+#~ msgid "New Work Order"
+#~ msgstr "Nueva OS"
+
+#~ msgid "No CNH expiring in the next 90 days."
+#~ msgstr "Ninguna CNH vence en los próximos 90 días."
+
+#~ msgid "No description"
+#~ msgstr "Sin descripción"
+
+#~ msgid "No driver found"
+#~ msgstr "No se encontró ningún conductor"
+
+#~ msgid "No incident found"
+#~ msgstr "No se encontró ningún incidente"
+
+#~ msgid "No incidents registered."
+#~ msgstr "No hay incidentes registrados."
+
+#~ msgid "No link"
+#~ msgstr "Sin vínculo"
+
+#~ msgid "No maintenance found"
+#~ msgstr "No se encontró ningún mantenimiento"
+
+#~ msgid "No plate"
+#~ msgstr "Sin placa"
+
+#~ msgid "No reservations awaiting analysis."
+#~ msgstr "No hay reservas esperando análisis."
+
+#~ msgid "No vehicle found"
+#~ msgstr "No se encontró ningún vehículo"
+
+#~ msgid "Notes"
+#~ msgstr "Observaciones"
+
+#~ msgid "Open incidents"
+#~ msgstr "Incidentes abiertos"
+
+#~ msgid "Open reservations"
+#~ msgstr "Abrir reservas"
+
+#~ msgid "Operational indicators"
+#~ msgstr "Indicadores operativos"
+
+#~ msgid "Operational queue for reservations, alerts, and fleet resources."
+#~ msgstr "Cola operativa de reservas, alertas y recursos de la flota."
+
+#~ msgid "Operational tracking of claims, damages, and fleet incidents."
+#~ msgstr ""
+#~ "Seguimiento operacional de siniestros, daños e incidentes de la flota."
+
+#~ msgid "Passenger capacity"
+#~ msgstr "Capacidad de pasajeros"
+
+#~ msgid "Pending checklists"
+#~ msgstr "Checklists pendientes"
+
+#~ msgid "Pending reservations"
+#~ msgstr "Reservas pendientes"
+
+#~ msgid "Period"
+#~ msgstr "Período"
+
+#~ msgid "Plugin flags"
+#~ msgstr "Flags del plugin"
+
+#~ msgid "Preventive and corrective"
+#~ msgstr "Preventivos y correctivos"
+
+#~ msgid "Quick access"
+#~ msgstr "Acceso rápido"
+
+#~ msgid "Recent incidents"
+#~ msgstr "Incidentes recientes"
+
+#~ msgid "Registration"
+#~ msgstr "Matrícula"
+
+#~ msgid "Registry and CNH"
+#~ msgstr "Registro y licencia"
+
+#~ msgid "Registry and availability"
+#~ msgstr "Registro y disponibilidad"
+
+#~ msgid "Reject"
+#~ msgstr "Rechazar"
+
+#~ msgid "Report Claim"
+#~ msgstr "Informar siniestro"
+
+#~ msgid "Requests and approvals"
+#~ msgstr "Solicitudes y aprobaciones"
+
+#~ msgid "Reservation approved successfully"
+#~ msgstr "Reserva aprobada con éxito"
+
+#~ msgid "Reservation rejected successfully"
+#~ msgstr "Reserva rechazada con éxito"
+
+#~ msgid "Reset font"
+#~ msgstr "Restablecer fuente"
+
+#~ msgid "Reset visual"
+#~ msgstr "Restablecer visual"
+
+#~ msgid "Review the applied filters."
+#~ msgstr "Revise los filtros aplicados."
+
+#~ msgid "Save theme"
+#~ msgstr "Guardar tema"
+
+#~ msgid "Search driver..."
+#~ msgstr "Buscar conductor..."
+
+#~ msgid "Search drivers"
+#~ msgstr "Buscar conductores"
+
+#~ msgid "Search incident..."
+#~ msgstr "Buscar incidente..."
+
+#~ msgid "Search incidents"
+#~ msgstr "Buscar incidentes"
+
+#~ msgid "Search maintenance..."
+#~ msgstr "Buscar mantenimiento..."
+
+#~ msgid "Search maintenances"
+#~ msgstr "Buscar mantenimientos"
+
+#~ msgid "Search vehicle..."
+#~ msgstr "Buscar vehículo..."
+
+#~ msgid "Search vehicles"
+#~ msgstr "Buscar vehículos"
+
+#~ msgid "Settings"
+#~ msgstr "Configuración"
+
+#, php-format
+#~ msgid "Showing %d drivers"
+#~ msgstr "Mostrando %d conductores"
+
+#, php-format
+#~ msgid "Showing %d incidents"
+#~ msgstr "Mostrando %d incidentes"
+
+#, php-format
+#~ msgid "Showing %d maintenances"
+#~ msgstr "Mostrando %d mantenimientos"
+
+#, php-format
+#~ msgid "Showing %d vehicles"
+#~ msgstr "Mostrando %d vehículos"
+
+#~ msgid "Situation"
+#~ msgstr "Situación"
+
+#~ msgid "The driver name will be filled automatically from the selected user."
+#~ msgstr ""
+#~ "El nombre del conductor se completará automáticamente a partir del "
+#~ "usuario seleccionado."
+
+#~ msgid "The light/dark toggle remains available on plugin screens."
+#~ msgstr ""
+#~ "El selector claro/oscuro sigue disponible en las pantallas del plugin."
+
+#~ msgid "Theme saved successfully."
+#~ msgstr "Tema guardado con éxito."
+
+#~ msgid "Theme settings"
+#~ msgstr "Configuración de temas"
+
+#~ msgid "Tip"
+#~ msgstr "Consejo"
+
+#~ msgid "Toggle theme"
+#~ msgstr "Alternar tema"
+
+#~ msgid "Trip / Request"
+#~ msgstr "Viaje / Solicitud"
+
+#~ msgid "Unable to execute the requested action."
+#~ msgstr "No se pudo ejecutar la acción solicitada."
+
+#~ msgid "Unlinked user"
+#~ msgstr "Usuario no vinculado"
+
+#~ msgid "Unnamed driver"
+#~ msgstr "Conductor sin nombre"
+
+#~ msgid "Unnamed vehicle"
+#~ msgstr "Vehículo sin nombre"
+
+#~ msgid "Untitled"
+#~ msgstr "Sin título"
+
+#~ msgid "Updated at"
+#~ msgstr "Actualizado el"
+
+#~ msgid ""
+#~ "Use this field for useful operational guidance, avoiding sensitive "
+#~ "personal data."
+#~ msgstr ""
+#~ "Use este campo para orientaciones operativas útiles, evitando datos "
+#~ "personales sensibles."
+
+#~ msgid "User (GLPI)"
+#~ msgstr "Usuario (GLPI)"
+
+#~ msgid "Vehicle Management"
+#~ msgstr "Gestión de vehículos"
+
+#~ msgid "Vehicle name"
+#~ msgstr "Nombre del vehículo"
+
+#~ msgid "Vehicle registration"
+#~ msgstr "Registro de vehículo"
+
+#~ msgid "View"
+#~ msgstr "Ver"
+
+#~ msgid "View reservation"
+#~ msgstr "Ver reserva"
+
+#~ msgid "Visual"
+#~ msgstr "Visual"
+
+#~ msgid "Visual customization"
+#~ msgstr "Personalización visual"
+
+#~ msgid "Wallboard"
+#~ msgstr "Panel de pantalla"
+
+#~ msgid "Warning"
+#~ msgstr "Alerta"
+
+#~ msgid ""
+#~ "We collect only the minimum required data. We do not store CPF, RG, CNH "
+#~ "number, or biometrics. Legal basis: contract execution and legitimate "
+#~ "operational interest."
+#~ msgstr ""
+#~ "Recopilamos solo los datos mínimos necesarios. No almacenamos CPF, RG, "
+#~ "número de CNH ni biometría. Base legal: ejecución de contrato e interés "
+#~ "operativo legítimo."
+
+#~ msgid "Work Order"
+#~ msgstr "Orden de servicio"
+
+#~ msgid "optional"
+#~ msgstr "opcional"
+
+#~ msgid "Maintenance coming soon: this module is not available yet."
+#~ msgstr "Mantenimiento próximamente: este módulo aún no está disponible."
+
+#~ msgid "Vehicle Scheduler"
+#~ msgstr "Planificador de vehículos"
+
+#~ msgid "Reports"
+#~ msgstr "Informes"
+
+#~ msgid "Schedules"
+#~ msgstr "Reservas"
+
+#~ msgid "Fine"
+#~ msgstr "Multa"
+
+#~ msgid "Color"
+#~ msgstr "Color"
+
+#~ msgid "Fuel"
+#~ msgstr "Combustible"
+
+#~ msgid "Seats"
+#~ msgstr "Asientos"
+
+#~ msgid "Mileage"
+#~ msgstr "Kilometraje"
+
+#~ msgid "Available"
+#~ msgstr "Disponible"
+
+#~ msgid "Unavailable"
+#~ msgstr "No disponible"
+
+#~ msgid "Vehicle Scheduling"
+#~ msgstr "Programación de vehículos"
+
+#~ msgid "Reservation Request"
+#~ msgstr "Solicitud de reserva"
+
+#~ msgid "Reservation %s - %s"
+#~ msgstr "Reserva %s - %s"
+
+#~ msgid "Request date"
+#~ msgstr "Fecha de solicitud"
+
+#~ msgid "Start time"
+#~ msgstr "Hora de salida"
+
+#~ msgid "End time"
+#~ msgstr "Hora de regreso"
+
+#~ msgid "Return"
+#~ msgstr "Retorno"
+
+#~ msgid "Origin"
+#~ msgstr "Origen"
+
+#~ msgid "Purpose"
+#~ msgstr "Finalidad"
+
+#~ msgid "Description/Purpose"
+#~ msgstr "Descripción/Finalidad"
+
+#~ msgid "Describe the purpose of this reservation"
+#~ msgstr "Describa la finalidad de esta reserva"
+
+#~ msgid "Number of passengers"
+#~ msgstr "Número de pasajeros"
+
+#~ msgid "Additional Comments"
+#~ msgstr "Comentarios adicionales"
+
+#~ msgid "Additional observations"
+#~ msgstr "Observaciones adicionales"
+
+#~ msgid "Related Ticket"
+#~ msgstr "Ticket relacionado"
+
+#~ msgid "Vehicle Report"
+#~ msgstr "Reporte de vehículo"
+
+#~ msgid "Report Type"
+#~ msgstr "Tipo de reporte"
+
+#~ msgid "Reporter"
+#~ msgstr "Reportado por"
+
+#~ msgid "Maintenance Needed"
+#~ msgstr "Requiere mantenimiento"
+
+#~ msgid "Problem/Issue"
+#~ msgstr "Problema/Incidencia"
+
+#~ msgid "Observation"
+#~ msgstr "Observación"
+
+#~ msgid "Describe the issue, observation or situation in detail"
+#~ msgstr "Describa el problema, la observación o la situación en detalle"
+
+#~ msgid "Completed"
+#~ msgstr "Completado"
+
+#~ msgid "Closed"
+#~ msgstr "Cerrado"
+
+#~ msgid "Add"
+#~ msgstr "Agregar"
+
+#~ msgid "Edit"
+#~ msgstr "Editar"
+
+#~ msgid "Cancel"
+#~ msgstr "Cancelar"
+
+#~ msgid "Close"
+#~ msgstr "Cerrar"
+
+#~ msgid "Filter"
+#~ msgstr "Filtrar"
+
+#~ msgid "Clear filters"
+#~ msgstr "Limpiar filtros"
+
+#~ msgid "Pending requests"
+#~ msgstr "Solicitudes pendientes"
+
+#~ msgid "Rejected requests"
+#~ msgstr "Solicitudes rechazadas"
+
+#~ msgid "Reservations by status"
+#~ msgstr "Reservas por estado"
+
+#~ msgid "Operational overview"
+#~ msgstr "Vista operativa"
+
+#~ msgid "Management overview"
+#~ msgstr "Vista de gestión"
+
+#~ msgid "Executive overview"
+#~ msgstr "Vista ejecutiva"
+
+#~ msgid "Department is required"
+#~ msgstr "El departamento es obligatorio"
+
+#~ msgid "Description/Purpose is required"
+#~ msgstr "La descripción/finalidad es obligatoria"
+
+#~ msgid "Description is required"
+#~ msgstr "La descripción es obligatoria"
+
+#~ msgid "Start date is required"
+#~ msgstr "La fecha de inicio es obligatoria"
+
+#~ msgid "Destination is required"
+#~ msgstr "El destino es obligatorio"
+
+#~ msgid "The selected vehicle is not available for this period"
+#~ msgstr "El vehículo seleccionado no está disponible para este período"
+
+#~ msgid "The selected driver is not available for this period"
+#~ msgstr "El conductor seleccionado no está disponible para este período"
+
+#~ msgid "Item added successfully"
+#~ msgstr "Elemento agregado con éxito"
+
+#~ msgid "Item deleted successfully"
+#~ msgstr "Elemento eliminado con éxito"
+
+#~ msgid "Unable to save data"
+#~ msgstr "No se pudieron guardar los datos"
+
+#~ msgid "An unexpected error occurred"
+#~ msgstr "Ocurrió un error inesperado"
+
+#~ msgid "Vehicle Reservation: %s - %s"
+#~ msgstr "Reserva de vehículo: %s - %s"
+
+#~ msgid ""
+#~ "Vehicle Reservation Details:\\n\\nVehicle: %s\\nRequester: %s\\nStart: %s"
+#~ "\\nEnd: %s\\nDestination: %s\\nPassengers: %d\\nPurpose: %s"
+#~ msgstr ""
+#~ "Detalles de la reserva de vehículo:\\n\\nVehículo: %s\\nSolicitante: %s"
+#~ "\\nInicio: %s\\nFin: %s\\nDestino: %s\\nPasajeros: %d\\nFinalidad: %s"
+

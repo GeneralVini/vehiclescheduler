@@ -38,7 +38,7 @@ Default plugin mental model:
 - `locales/` for translations
 - `tools/` for helper scripts
 
-`inc/*.class.php` is legacy compatibility only, not the preferred target for new code.
+`src/` is the only implementation source for plugin PHP classes. Do not recreate legacy class directories.
 
 ## Hard architectural rule
 Backend/domain PHP classes are for business logic only.
@@ -152,8 +152,8 @@ These are usually thin entry points:
 They may still import namespaced classes with `use`.
 
 ### Legacy classes
-- Legacy `inc/*.class.php` may remain in `PluginVehiclescheduler...` format while migrating
-- Do not create new legacy-style classes without a compatibility reason
+- Compatibility classes in `PluginVehiclescheduler...` format must live under `src/Legacy/`
+- Do not create legacy-style classes without a compatibility reason
 
 ## GLPI 11 database rules
 Never use raw SQL through:
