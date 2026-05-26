@@ -25,6 +25,7 @@ Thumbs.db
 /glpi.sh
 
 # Dependencies generated locally
+/vendor/
 node_modules/
 
 # Tests / reports / cache
