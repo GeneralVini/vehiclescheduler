@@ -1,0 +1,7 @@
+Backup/espelho de chats do Codex
+Última execução: 2026-05-26T08:34:50-03:00
+Host: DCTIM-PEBA-APP-PRD
+Usuário: root
+Origem: /root/.codex
+Destino: /var/www/glpi/plugins/vehiclescheduler/scripts/chats
+Regra: arquivos mais novos prevalecem
