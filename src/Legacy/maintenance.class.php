@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Maintenance entity for Vehicle Scheduler.
+ *
+ * @method void addDefaultFormTab(array &$ong)
+ * @method void addStandardTab(string $itemtype, array &$ong, array $options = [])
+ */
+
 if (!defined('GLPI_ROOT')) {
     die("Sorry. You can't access this file directly");
 }

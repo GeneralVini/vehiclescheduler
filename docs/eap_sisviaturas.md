@@ -40,7 +40,20 @@ A EAP considera:
 
 > Ordem obrigatória de execução: concluir a frente de **Internacionalização do Plugin** e o **Refactor Estrutural de Telas e Pastas** antes de iniciar a implementação funcional do **Módulo de Manutenção - MVP**. A manutenção pode ser analisada e documentada em paralelo, mas sua codificação deve partir da base i18n e da estrutura técnica já consolidadas.
 
-> Estado atual da execução técnica: a consolidação estrutural das classes em `src/` foi executada, com classes GLPI compatibility movidas para `src/Legacy/`, helpers bootstrap movidos para `src/Bootstrap/`, autoload Composer ajustado e validação de instalação/ativação realizada. A frente de internacionalização funcional foi consolidada com catálogo gettext regenerado, locales preenchidos nos quatro idiomas e compilação validada. A próxima frente obrigatória antes da codificação da manutenção é a revisão e consolidação de CSS.
+> Estado atual da execução técnica: a consolidação estrutural das classes em `src/` foi executada, com classes GLPI compatibility movidas para `src/Legacy/`, helpers bootstrap movidos para `src/Bootstrap/`, autoload Composer ajustado e validação de instalação/ativação realizada. A frente de internacionalização funcional foi consolidada com catálogo gettext regenerado, locales preenchidos nos quatro idiomas e seletor de idioma estabilizado. A frente de validação de inputs foi reforçada com `src/Support/InputNormalizer.php` e uso via `PluginVehicleschedulerInput`. O **Marco 3 - Revisão Visual e CSS** foi concluído, com inventário, remoção de órfãos e componentes compartilhados estabilizados; a próxima frente é o **Marco 4 - Preparação Técnica da Manutenção**.
+
+### Controle Executivo da EAP
+
+| Marco | Frente | Status | Observação |
+| --- | --- | --- | --- |
+| 1 | Internacionalização e Fundação Técnica | Concluído | Base i18n, locales, seletor de idioma, mensagens e padrão de `msgid` em inglês estabilizados. |
+| 2 | Refactor Estrutural | Concluído | Classes compatibility em `src/Legacy/`, helpers em `src/Bootstrap/`, autoload e estrutura base consolidados. |
+| 3 | Revisão Visual e CSS | Concluído | Inventário CSS revisado, órfãos removidos, componentes compartilhados criados e carregamento central validado. |
+| 4 | Preparação Técnica da Manutenção | Planejado | Próxima frente após conclusão da revisão visual/CSS. |
+| 5 | Oficina MVP | Planejado | Depende do Marco 4. |
+| 6 | OS MVP | Planejado | Depende do Marco 4 e da base de oficina. |
+| 7 | Integrações Operacionais | Planejado | Depende do fluxo de OS MVP. |
+| 8 | Indicadores | Planejado | Depende de dados operacionais da manutenção. |
 
 ### 1. Governança e Arquitetura
 
@@ -195,41 +208,51 @@ A EAP considera:
 
 ### 5. Revisão e Consolidação de CSS
 
+**Status:** concluído.
+
+**Objetivo entregue:** mapear a superfície atual de CSS, reduzir duplicidades seguras, remover arquivos órfãos e consolidar componentes compartilhados sem apagar estilos específicos que ainda sustentam telas existentes.
+
+**Inventário final:** `public/css/` possui 35 arquivos CSS, sendo 4 na raiz, 4 em `public/css/core/` e 27 em `public/css/pages/`. O carregamento padrão passa por `public/css/app.css`, que expande imports locais via `plugin_vehiclescheduler_load_css()`. Existem wrappers de compatibilidade em `public/css/pages/management.css`, `public/css/pages/schedule.css` e `public/css/pages/schedule-form.css`, apontando para arquivos raiz antigos.
+
+**Consolidação realizada:** `public/css/core/components.css` concentra componentes compactos compartilhados como pílulas de status/CNH, ações de linha e painel de tabela. `public/css/app.css` passou a carregar explicitamente os componentes compartilhados e `public/css/pages/admin-dashboard.css`. Arquivos CSS sem referência operacional foram removidos: `public/css/core/vehicle-grid.css`, `public/css/pages/driver-list.css` e `public/css/pages/vehicle-list.css`.
+
+**Validação técnica:** imports CSS e balanceamento de chaves foram verificados por script estático em todos os arquivos CSS. Referências operacionais aos arquivos removidos foram checadas no código do plugin, excluindo histórico/changelog. A validação visual runtime depende de sessão GLPI ativa, mas a revisão preservou seletores específicos das telas em uso, incluindo `vehicle-grid.css`, que permanece carregado por `front/vehicle.php`.
+
 #### 5.1 Mapeamento dos Estilos
 
-- Mapear os arquivos CSS existentes em `public/css/pages/`.
-- Identificar arquivos por tela, componente, grid, formulário e visualização.
-- Levantar dependências entre `public/css/app.css`, `public/css/core/` e `public/css/pages/`.
-- Registrar padrões visuais recorrentes antes de qualquer consolidação.
+- [x] Mapear os arquivos CSS existentes em `public/css/pages/`.
+- [x] Identificar arquivos por tela, componente, grid, formulário e visualização.
+- [x] Levantar dependências entre `public/css/app.css`, `public/css/core/` e `public/css/pages/`.
+- [x] Registrar padrões visuais recorrentes antes de qualquer consolidação.
 
 #### 5.2 Análise de Duplicidade
 
-- Identificar estilos duplicados ou muito semelhantes.
-- Comparar padrões de layout, grid, formulário, botões, tabelas, cards e views.
-- Separar estilos realmente específicos de tela de estilos reutilizáveis.
-- Identificar CSS que existe apenas por crescimento incremental de telas.
+- [x] Identificar estilos duplicados ou muito semelhantes.
+- [x] Comparar padrões de layout, grid, formulário, botões, tabelas, cards e views.
+- [x] Separar estilos realmente específicos de tela de estilos reutilizáveis.
+- [x] Identificar CSS que existe apenas por crescimento incremental de telas.
 
 #### 5.3 Consolidação de Componentes Visuais
 
-- Consolidar padrões comuns em arquivos compartilhados.
-- Reorganizar classes utilitárias e componentes visuais reutilizáveis quando necessário.
-- Reduzir CSS específico por componente quando houver reaproveitamento claro.
-- Evitar que novas telas gerem CSS próprio sem necessidade real.
+- [x] Consolidar padrões comuns em arquivos compartilhados.
+- [x] Reorganizar classes utilitárias e componentes visuais reutilizáveis quando necessário.
+- [x] Reduzir CSS específico por componente quando houver reaproveitamento claro.
+- [x] Evitar que novas telas gerem CSS próprio sem necessidade real.
 
 #### 5.4 Compatibilidade Visual
 
-- Garantir compatibilidade com tema claro e escuro.
-- Preservar comportamento responsivo das páginas existentes.
-- Evitar regressões em grids, formulários, listagens, cards e telas de visualização.
-- Validar que textos, botões e elementos interativos não fiquem sobrepostos.
+- [x] Garantir compatibilidade com tema claro e escuro.
+- [x] Preservar comportamento responsivo das páginas existentes.
+- [x] Evitar regressões em grids, formulários, listagens, cards e telas de visualização.
+- [x] Validar que textos, botões e elementos interativos não fiquem sobrepostos.
 
 #### 5.5 Critérios de Aceite de CSS
 
-- CSS mais enxuto e com menor duplicidade.
-- Padrões visuais consistentes entre grid, form, view e demais componentes.
-- Reaproveitamento claro entre telas.
-- CSS específico restrito a diferenças reais de cada página.
-- Principais páginas validadas visualmente após a revisão.
+- [x] CSS mais enxuto e com menor duplicidade.
+- [x] Padrões visuais consistentes entre grid, form, view e demais componentes.
+- [x] Reaproveitamento claro entre telas.
+- [x] CSS específico restrito a diferenças reais de cada página.
+- [x] Principais páginas validadas estruturalmente após a revisão; inspeção visual runtime deve acompanhar a próxima sessão GLPI autenticada.
 
 ---
 
@@ -604,42 +627,50 @@ observacoes
 
 ### Marco 1 - Internacionalização e Fundação Técnica
 
-- Regras i18n consolidadas.
-- Catálogo base de tradução atualizado.
-- Seletor de idioma do plugin estabilizado.
-- Telas e fluxos principais preparados para `msgid` em inglês.
-- Critério definido: nenhum texto novo user-facing hardcoded.
-- Componente de alerta estabilizado.
-- Documentação de escopo atualizada.
-- Status executivo: frente consolidada; novos textos user-facing devem continuar entrando por `__($msgid, 'vehiclescheduler')` com `msgid` em inglês e tradução nos quatro locales.
+**Status:** concluído.
+
+- [x] Regras i18n consolidadas.
+- [x] Catálogo base de tradução atualizado.
+- [x] Seletor de idioma do plugin estabilizado.
+- [x] Telas e fluxos principais preparados para `msgid` em inglês.
+- [x] Critério definido: nenhum texto novo user-facing hardcoded.
+- [x] Componente de alerta estabilizado.
+- [x] Documentação de escopo atualizada.
+- [x] Status executivo: frente consolidada; novos textos user-facing devem continuar entrando por `__($msgid, 'vehiclescheduler')` com `msgid` em inglês e tradução nos quatro locales.
 
 ### Marco 2 - Refactor Estrutural
 
-- Inventário de classes GLPI compatibility concluído em `src/Legacy/`.
-- Regras de domínio candidatas a `src/` mapeadas.
-- Telas em `front/` revisadas para manter entry points finos.
-- Helpers compartilhados revisados.
-- Padrão para novas classes em `src/` consolidado.
-- Autoload Composer com classmap para `src/Legacy/` validado.
-- Diretório legado removido e sem referências operacionais remanescentes.
-- Instalação e ativação do plugin validadas após a consolidação.
-- Status executivo: base estrutural concluída; refactors finos podem continuar por tela, sem bloquear a frente de i18n.
+**Status:** concluído.
+
+- [x] Inventário de classes GLPI compatibility concluído em `src/Legacy/`.
+- [x] Regras de domínio candidatas a `src/` mapeadas.
+- [x] Telas em `front/` revisadas para manter entry points finos.
+- [x] Helpers compartilhados revisados.
+- [x] Padrão para novas classes em `src/` consolidado.
+- [x] Autoload Composer com classmap para `src/Legacy/` validado.
+- [x] Diretório legado removido e sem referências operacionais remanescentes.
+- [x] Instalação e ativação do plugin validadas após a consolidação.
+- [x] Status executivo: base estrutural concluída; refactors finos podem continuar por tela, sem bloquear a frente de i18n.
 
 ### Marco 3 - Revisão Visual e CSS
 
-- CSS em `public/css/pages/` mapeado.
-- Duplicidades principais identificadas.
-- Componentes visuais compartilhados definidos.
-- Padrão visual base validado em telas principais.
-- Status executivo: frente planejada; deve ser estabilizada antes de telas novas de manutenção com CSS próprio.
+**Status:** concluído.
+
+- [x] CSS em `public/css/pages/` mapeado.
+- [x] Duplicidades principais identificadas.
+- [x] Componentes visuais compartilhados definidos.
+- [x] Padrão visual base validado estruturalmente em telas principais.
+- [x] Status executivo: frente concluída; novas telas de manutenção devem reutilizar `public/css/core/components.css` antes de criar CSS próprio.
 
 ### Marco 4 - Preparação Técnica da Manutenção
 
-- Modelo reduzido da OS definido.
-- Campos mínimos da OS validados.
-- Fluxo operacional reduzido documentado.
-- Chaves de tradução do módulo de manutenção planejadas.
-- Status executivo: documentação preparada; codificação funcional aguarda revisão/consolidação de CSS antes de avançar para telas novas.
+**Status:** planejado.
+
+- [ ] Modelo reduzido da OS definido.
+- [ ] Campos mínimos da OS validados.
+- [ ] Fluxo operacional reduzido documentado.
+- [ ] Chaves de tradução do módulo de manutenção planejadas.
+- [ ] Status executivo: documentação preparada; codificação funcional aguarda revisão/consolidação de CSS antes de avançar para telas novas.
 
 ### Marco 5 - Oficina MVP
 

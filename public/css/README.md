@@ -13,6 +13,8 @@ with duplicated page rules.
 
 ## Current transition strategy
 - `core/legacy-base.css` contains the previous shared application styles
+- `core/components.css` contains shared compact UI components extracted from
+  repeated page patterns
 - `pages/*.css` wrap the existing page files while we migrate them gradually
 - legacy top-level files such as `management.css` and `schedule.css` are still used
   internally through the new page wrappers
@@ -33,18 +35,28 @@ with duplicated page rules.
 3. Keep `app.css` as the single runtime entry point
 
 ## Current inventory
-Snapshot reviewed on 2026-05-25:
+Snapshot reviewed on 2026-05-25 after Marco 3:
 
 | Area | Files | Notes |
 | --- | ---: | --- |
 | Admin / dashboard | 2 | `admin-dashboard.css`, `dashboard.css` |
 | Calendar / booking | 2 | `calendar.css`, `booking.css` |
 | Checklists | 4 | list, form, items, response form |
-| Drivers / fines | 6 | grid, list, form, fine form, fine tab, fine render |
-| Vehicles / reports | 4 | grid, list, form, vehicle report form |
+| Drivers / fines | 6 | grid, form, fines page, fine form, fine tab, fine render |
+| Vehicles / reports | 3 | grid, form, vehicle report form |
 | Incidents / claims / maintenance | 3 | form-level styles for operational records |
 | Reports | 2 | report landing and view |
-| Settings / wrappers | 4 | theme config plus thin compatibility wrappers |
+| Settings | 2 | config and theme config |
+| Page wrappers | 3 | management, schedule, schedule form |
+| Shared core | 4 | compatibility base, components, feedback, flash |
+| Root entry / legacy wrappers | 4 | app entry plus top-level compatibility files |
+
+Total CSS files: 35.
+
+Removed orphan files:
+- `core/vehicle-grid.css`
+- `pages/driver-list.css`
+- `pages/vehicle-list.css`
 
 Largest page files:
 - `driver-grid.css`
@@ -57,6 +69,8 @@ Largest page files:
 - Grid toolbar, search, filters, result count, table shell, empty state, action link,
   badges, and responsive behavior are repeated between vehicle, driver, and incident
   list screens.
+- Shared compact pills, row actions, and table panels now have base selectors in
+  `core/components.css`.
 - Form cards, labels, hint text, action bars, and validation spacing are repeated
   across vehicle, driver, incident, insurance claim, maintenance, checklist, and fine
   forms.

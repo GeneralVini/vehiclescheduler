@@ -9,13 +9,13 @@ document.addEventListener('DOMContentLoaded', function () {
             event.preventDefault();
 
             const locale = button.value;
+            const form = button.closest('form');
+            const ajaxUrl = form?.dataset.localeUrl;
 
-            // Build the correct AJAX URL
-            const ajaxUrl = new URL(window.location.href);
-            ajaxUrl.pathname = ajaxUrl.pathname.replace(/front\/.*/, 'ajax/set_locale.php');
-
-            console.log('[SisViaturas] Changing locale to:', locale);
-            console.log('[SisViaturas] AJAX URL:', ajaxUrl.toString());
+            if (!form || !ajaxUrl) {
+                form?.requestSubmit(button);
+                return;
+            }
 
             // Show loading state
             button.classList.add('is-loading');
@@ -37,16 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 body: formData,
             })
             .then(response => {
-                console.log('[SisViaturas] Response status:', response.status);
-                
                 return response.text().then(text => {
-                    console.log('[SisViaturas] Response body length:', text.length);
-                    if (text.length > 500) {
-                        console.log('[SisViaturas] Response (first 200 chars):', text.substring(0, 200));
-                    } else {
-                        console.log('[SisViaturas] Response:', text);
-                    }
-                    
                     // Try to parse as JSON
                     try {
                         const data = JSON.parse(text);
@@ -58,10 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             })
             .then(result => {
-                console.log('[SisViaturas] Parsed result:', result);
-                
                 if (result.data && result.data.success) {
-                    console.log('[SisViaturas] Language changed successfully, reloading...');
                     window.location.reload();
                 } else if (result.data && result.data.error) {
                     alert('Erro: ' + result.data.error);
@@ -78,7 +66,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             })
             .catch(error => {
-                console.error('[SisViaturas] Error:', error);
                 alert('Erro ao mudar de idioma: ' + error.message);
                 button.classList.remove('is-loading');
                 button.disabled = false;

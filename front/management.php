@@ -46,24 +46,20 @@ $urls = [
 $request_method = strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET'));
 
 if ($request_method === 'POST') {
-    $action = trim((string) (filter_input(INPUT_POST, 'action', FILTER_UNSAFE_RAW) ?? ''));
-    $schedule_id = filter_input(
-        INPUT_POST,
-        'schedule_id',
-        FILTER_VALIDATE_INT,
-        [
-            'options' => [
-                'min_range' => 1,
-            ],
-        ]
+    $action = PluginVehicleschedulerInput::enum(
+        $_POST,
+        'action',
+        ['approve_schedule', 'reject_schedule'],
+        ''
     );
+    $schedule_id = PluginVehicleschedulerInput::int($_POST, 'schedule_id', 0, 1);
 
     try {
         switch ($action) {
             case 'approve_schedule':
                 Session::checkRight('plugin_vehiclescheduler_approve', READ);
 
-                if ($schedule_id === false || $schedule_id === null) {
+                if ($schedule_id <= 0) {
                     throw new RuntimeException($t('Invalid reservation for approval.'));
                 }
 
@@ -74,7 +70,7 @@ if ($request_method === 'POST') {
             case 'reject_schedule':
                 Session::checkRight('plugin_vehiclescheduler_approve', READ);
 
-                if ($schedule_id === false || $schedule_id === null) {
+                if ($schedule_id <= 0) {
                     throw new RuntimeException($t('Invalid reservation for rejection.'));
                 }
 

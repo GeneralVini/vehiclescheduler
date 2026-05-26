@@ -83,7 +83,7 @@ echo              vs_incident_list_escape(sprintf($t('Showing %d incidents'), (i
 echo "        </div>";
 echo "        <div class='vs-driver-grid__filters'>";
 echo "            <label class='vs-driver-grid__filter'>";
-echo "                <span>Status</span>";
+echo "                <span>" . vs_incident_list_escape($t('Status')) . "</span>";
 echo "                <select data-driver-filter-active>";
 echo "                    <option value='all'>" . vs_incident_list_escape($t('All')) . "</option>";
 

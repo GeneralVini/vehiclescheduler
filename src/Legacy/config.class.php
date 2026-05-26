@@ -51,22 +51,6 @@ class PluginVehicleschedulerConfig extends CommonDBTM
 
     public static function getPluginLocale(): string
     {
-        global $DB;
-        
-        // Try to get user-specific locale first
-        if (Session::getLoginUserID()) {
-            $result = $DB->request([
-                'FROM' => self::getTable(),
-                'WHERE' => ['users_id' => Session::getLoginUserID()]
-            ])->current();
-            
-            if ($result && !empty($result['plugin_locale'])) {
-                $locale = $result['plugin_locale'];
-                return \GlpiPlugin\Vehiclescheduler\Localization\LocaleManager::normalize($locale);
-            }
-        }
-        
-        // Fall back to global setting
         $locale = self::getString(
             'plugin_locale',
             \GlpiPlugin\Vehiclescheduler\Localization\LocaleManager::DEFAULT_LOCALE
@@ -81,31 +65,6 @@ class PluginVehicleschedulerConfig extends CommonDBTM
             return false;
         }
 
-        // If user is logged in, save per-user setting
-        if (Session::getLoginUserID()) {
-            global $DB;
-            $user_id = Session::getLoginUserID();
-            
-            $existing = $DB->request([
-                'FROM' => self::getTable(),
-                'WHERE' => ['users_id' => $user_id]
-            ])->current();
-
-            if ($existing) {
-                return (bool) $DB->update(self::getTable(), [
-                    'plugin_locale' => $locale
-                ], [
-                    'users_id' => $user_id
-                ]);
-            } else {
-                return (bool) $DB->insert(self::getTable(), [
-                    'users_id' => $user_id,
-                    'plugin_locale' => $locale
-                ]);
-            }
-        }
-
-        // Fall back to global setting
         return self::setString('plugin_locale', $locale);
     }
 }

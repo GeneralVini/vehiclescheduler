@@ -17,7 +17,9 @@ function vs_checklist_response_escape(?string $value): string
 
 function vs_checklist_response_type_label(string $type): string
 {
-    return $type === 'departure' ? 'Saída' : 'Chegada';
+    return $type === 'departure'
+        ? __('Departure', 'vehiclescheduler')
+        : __('Arrival', 'vehiclescheduler');
 }
 
 function vs_checklist_response_icon(string $type): string
@@ -271,7 +273,10 @@ if (isset($_POST['submit_checklist'])) {
     Html::back();
 }
 
-Html::header('Checklist de ' . vs_checklist_response_type_label($type), $_SERVER['PHP_SELF']);
+Html::header(
+    sprintf(__('Checklist response: %s', 'vehiclescheduler'), vs_checklist_response_type_label($type)),
+    $_SERVER['PHP_SELF']
+);
 
 plugin_vehiclescheduler_load_css();
 plugin_vehiclescheduler_enhance_ui();

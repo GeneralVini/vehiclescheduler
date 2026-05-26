@@ -47,7 +47,7 @@ foreach ($checklists as $checklist) {
     );
 }
 
-Html::header('Checklists', $_SERVER['PHP_SELF'], 'tools', 'PluginVehicleschedulerMenug', 'checklist');
+Html::header(__('Checklists', 'vehiclescheduler'), $_SERVER['PHP_SELF'], 'tools', 'PluginVehicleschedulerMenug', 'checklist');
 
 plugin_vehiclescheduler_load_css();
 plugin_vehiclescheduler_enhance_ui();

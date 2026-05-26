@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Incident entity for Vehicle Scheduler.
+ *
+ * @method void addDefaultFormTab(array &$ong)
+ * @method void addStandardTab(string $itemtype, array &$ong, array $options = [])
+ */
+
 if (!defined('GLPI_ROOT')) {
     die("Sorry. You can't access this file directly");
 }
@@ -69,22 +76,22 @@ class PluginVehicleschedulerIncident extends CommonDBTM
     public static function getAllTypes(): array
     {
         return [
-            self::TYPE_ACCIDENT    => 'Acidente',
-            self::TYPE_BREAKDOWN   => 'Pane/Falha',
-            self::TYPE_THEFT       => 'Roubo/Furto',
-            self::TYPE_DAMAGE      => 'Dano/Avaria',
-            self::TYPE_OBSERVATION => 'Observacao',
-            self::TYPE_OTHER       => 'Outro',
+            self::TYPE_ACCIDENT    => __('Accident', 'vehiclescheduler'),
+            self::TYPE_BREAKDOWN   => __('Breakdown', 'vehiclescheduler'),
+            self::TYPE_THEFT       => __('Theft', 'vehiclescheduler'),
+            self::TYPE_DAMAGE      => __('Damage', 'vehiclescheduler'),
+            self::TYPE_OBSERVATION => __('Observation', 'vehiclescheduler'),
+            self::TYPE_OTHER       => __('Other', 'vehiclescheduler'),
         ];
     }
 
     public static function getAllStatus(): array
     {
         return [
-            self::STATUS_OPEN      => 'Aberto',
-            self::STATUS_ANALYZING => 'Analisando',
-            self::STATUS_RESOLVED  => 'Resolvido',
-            self::STATUS_CLOSED    => 'Fechado',
+            self::STATUS_OPEN      => __('Open', 'vehiclescheduler'),
+            self::STATUS_ANALYZING => __('Analyzing', 'vehiclescheduler'),
+            self::STATUS_RESOLVED  => __('Resolved', 'vehiclescheduler'),
+            self::STATUS_CLOSED    => __('Closed', 'vehiclescheduler'),
         ];
     }
 
@@ -154,7 +161,7 @@ class PluginVehicleschedulerIncident extends CommonDBTM
 
         $this->showFormHeader($options);
 
-        require_once GLPI_ROOT . '/plugins/vehiclescheduler/front/incident.render.php';
+        require_once dirname(__DIR__, 2) . '/front/incident.render.php';
 
         echo "<tr><td colspan='4'>";
         plugin_vehiclescheduler_render_incident_form($this, (int) $ID);
@@ -218,11 +225,11 @@ class PluginVehicleschedulerIncident extends CommonDBTM
                 'id'             => (int) ($row['id'] ?? 0),
                 'name'           => (string) ($row['name'] ?? ''),
                 'type'           => (int) ($row['incident_type'] ?? self::TYPE_OTHER),
-                'type_label'     => $types[(int) ($row['incident_type'] ?? self::TYPE_OTHER)] ?? 'Incidente',
+                'type_label'     => $types[(int) ($row['incident_type'] ?? self::TYPE_OTHER)] ?? __('Incident', 'vehiclescheduler'),
                 'schedule_id'    => $scheduleId,
                 'schedule_label'  => $scheduleSummary,
                 'status'         => $status,
-                'status_label'   => $statuses[$status] ?? 'Aberto',
+                'status_label'   => $statuses[$status] ?? __('Open', 'vehiclescheduler'),
                 'status_modifier' => self::getStatusModifier($status),
                 'incident_date'  => (string) ($row['incident_date'] ?? ''),
                 'location'       => (string) ($row['location'] ?? ''),
@@ -252,20 +259,20 @@ class PluginVehicleschedulerIncident extends CommonDBTM
         }
 
         if ((int) ($input['plugin_vehiclescheduler_vehicles_id'] ?? 0) <= 0) {
-            Session::addMessageAfterRedirect('Veiculo e obrigatorio.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Vehicle is required.', 'vehiclescheduler'), false, ERROR);
 
             return false;
         }
 
         if ($input['description'] === '') {
-            Session::addMessageAfterRedirect('Descricao e obrigatoria.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Description is required.', 'vehiclescheduler'), false, ERROR);
 
             return false;
         }
 
         if ($input['name'] === '') {
             $types = self::getAllTypes();
-            $typeLabel = $types[(int) ($input['incident_type'] ?? self::TYPE_OTHER)] ?? 'Incidente';
+            $typeLabel = $types[(int) ($input['incident_type'] ?? self::TYPE_OTHER)] ?? __('Incident', 'vehiclescheduler');
             $input['name'] = $typeLabel . ' - ' . date('d/m/Y');
         }
 
@@ -301,19 +308,19 @@ class PluginVehicleschedulerIncident extends CommonDBTM
         $input = $this->normalizeInput($input);
 
         if ((int) ($input['id'] ?? 0) <= 0) {
-            Session::addMessageAfterRedirect('Incidente invalido.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Invalid incident.', 'vehiclescheduler'), false, ERROR);
 
             return false;
         }
 
         if ((int) ($input['plugin_vehiclescheduler_vehicles_id'] ?? 0) <= 0) {
-            Session::addMessageAfterRedirect('Veiculo e obrigatorio.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Vehicle is required.', 'vehiclescheduler'), false, ERROR);
 
             return false;
         }
 
         if ($input['description'] === '') {
-            Session::addMessageAfterRedirect('Descricao e obrigatoria.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Description is required.', 'vehiclescheduler'), false, ERROR);
 
             return false;
         }

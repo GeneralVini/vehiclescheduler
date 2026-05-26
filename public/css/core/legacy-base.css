@@ -1115,36 +1115,6 @@
     box-shadow: 0 12px 24px rgba(15, 23, 42, 0.10)
 }
 
-.vs-page-toolbar {
-    display: flex;
-    justify-content: flex-start;
-    margin: 0 0 14px 0
-}
-
-.vs-btn-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    min-height: 40px;
-    padding: 10px 14px;
-    border-radius: 12px;
-    text-decoration: none;
-    font-weight: 800;
-    color: #1e3a8a;
-    background: rgba(255, 255, 255, 0.92);
-    border: 1px solid rgba(148, 163, 184, 0.20);
-    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
-    transition: transform .15s ease, box-shadow .15s ease, background .15s ease
-}
-
-.vs-btn-back:hover {
-    text-decoration: none;
-    color: #1d4ed8;
-    background: #ffffff;
-    transform: translateY(-1px);
-    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.10)
-}
-
 #vs-schedule-form-root {
     min-height: 100%
 }

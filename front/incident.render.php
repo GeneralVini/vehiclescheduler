@@ -8,11 +8,12 @@ if (!defined('GLPI_ROOT')) {
 
 function plugin_vehiclescheduler_render_incident_form(PluginVehicleschedulerIncident $incident, int $incidentId): void
 {
+    $t = static fn(string $text): string => __($text, 'vehiclescheduler');
     $fields = $incident->fields;
     $statuses = PluginVehicleschedulerIncident::getAllStatus();
     $types = PluginVehicleschedulerIncident::getAllTypes();
     $statusValue = (int) ($fields['status'] ?? PluginVehicleschedulerIncident::STATUS_OPEN);
-    $statusLabel = $statuses[$statusValue] ?? 'Novo reporte';
+    $statusLabel = $statuses[$statusValue] ?? $t('New report');
     $statusClassMap = [
         PluginVehicleschedulerIncident::STATUS_OPEN      => 'vs-incident-form-pill-dot--open',
         PluginVehicleschedulerIncident::STATUS_ANALYZING => 'vs-incident-form-pill-dot--analyzing',
@@ -31,30 +32,33 @@ function plugin_vehiclescheduler_render_incident_form(PluginVehicleschedulerInci
     echo "<div class='vs-incident-form-head'>";
     echo '<div>';
     echo "<h3 class='vs-incident-form-title'><i class='ti ti-alert-triangle'></i>"
-        . ($incidentId > 0 ? 'Detalhes do Sinistro' : 'Informar Sinistro')
+        . plugin_vehiclescheduler_incident_escape($incidentId > 0 ? $t('Claim details') : $t('Report Claim'))
         . '</h3>';
-    echo "<div class='vs-incident-form-subtitle'>Registre acidentes, avarias, furtos ou ocorrências relacionadas ao uso da viatura.</div>";
+    echo "<div class='vs-incident-form-subtitle'>"
+        . plugin_vehiclescheduler_incident_escape($t('Register accidents, damages, thefts, or occurrences related to fleet vehicle usage.'))
+        . '</div>';
     echo '</div>';
     echo "<div class='vs-incident-form-pill'><span class='vs-incident-form-pill-dot "
         . plugin_vehiclescheduler_incident_escape($statusDotClass)
         . "'></span>"
-        . plugin_vehiclescheduler_incident_escape($incidentId > 0 ? $statusLabel : 'Novo reporte')
+        . plugin_vehiclescheduler_incident_escape($incidentId > 0 ? $statusLabel : $t('New report'))
         . '</div>';
     echo '</div>';
 
     echo "<div class='vs-incident-form-alert' data-incident-alert>";
-    echo '<strong>Atenção:</strong> em caso de acidente com vítimas, acione imediatamente os canais oficiais de emergência antes de registrar o sinistro.';
+    echo '<strong>' . plugin_vehiclescheduler_incident_escape($t('Attention:')) . '</strong> '
+        . plugin_vehiclescheduler_incident_escape($t('In case of an accident with victims, immediately contact official emergency channels before registering the claim.'));
     echo '</div>';
 
     echo "<div class='vs-form-feedback' data-incident-validation hidden></div>";
     echo "<div class='vs-incident-form-grid'>";
 
     echo "<div class='vs-incident-form-field'>";
-    echo "<div class='vs-incident-form-label'>Viagem/Solicitação relacionada</div>";
+    echo "<div class='vs-incident-form-label'>" . plugin_vehiclescheduler_incident_escape($t('Related trip/request')) . '</div>';
     $scheduleId = (int) ($fields['plugin_vehiclescheduler_schedules_id'] ?? 0);
     if ($canManage) {
         echo "<select name='plugin_vehiclescheduler_schedules_id' data-incident-schedule>";
-        echo "<option value='0'>Sem vínculo</option>";
+        echo "<option value='0'>" . plugin_vehiclescheduler_incident_escape($t('No link')) . '</option>';
         foreach (plugin_vehiclescheduler_incident_schedule_options() as $option) {
             $selected = $scheduleId === (int) $option['id'] ? ' selected' : '';
             echo "<option value='" . (int) $option['id'] . "'" . $selected . '>'
@@ -65,13 +69,13 @@ function plugin_vehiclescheduler_render_incident_form(PluginVehicleschedulerInci
     } else {
         echo Html::hidden('plugin_vehiclescheduler_schedules_id', ['value' => $scheduleId]);
         echo "<div class='vs-incident-form-readonly'>"
-            . plugin_vehiclescheduler_incident_escape((string) (($fields['schedule_label'] ?? '') !== '' ? $fields['schedule_label'] : 'Sem vínculo'))
+            . plugin_vehiclescheduler_incident_escape((string) (($fields['schedule_label'] ?? '') !== '' ? $fields['schedule_label'] : $t('No link')))
             . '</div>';
     }
     echo '</div>';
 
     echo "<div class='vs-incident-form-field'>";
-    echo "<div class='vs-incident-form-label'>Solicitante <span class='red'>*</span></div>";
+    echo "<div class='vs-incident-form-label'>" . plugin_vehiclescheduler_incident_escape($t('Requester')) . " <span class='red'>*</span></div>";
     $requesterId = (int) ($fields['users_id'] ?? Session::getLoginUserID());
     if ($canManage) {
         User::dropdown([
@@ -89,7 +93,7 @@ function plugin_vehiclescheduler_render_incident_form(PluginVehicleschedulerInci
     echo '</div>';
 
     echo "<div class='vs-incident-form-field'>";
-    echo "<div class='vs-incident-form-label'>Departamento/Setor</div>";
+    echo "<div class='vs-incident-form-label'>" . plugin_vehiclescheduler_incident_escape($t('Department / Sector')) . '</div>';
     Group::dropdown([
         'name'   => 'groups_id',
         'value'  => (int) ($fields['groups_id'] ?? 0),
@@ -98,7 +102,7 @@ function plugin_vehiclescheduler_render_incident_form(PluginVehicleschedulerInci
     echo '</div>';
 
     echo "<div class='vs-incident-form-field'>";
-    echo "<div class='vs-incident-form-label'>Veículo <span class='red'>*</span></div>";
+    echo "<div class='vs-incident-form-label'>" . plugin_vehiclescheduler_incident_escape($t('Vehicle')) . " <span class='red'>*</span></div>";
     PluginVehicleschedulerVehicle::dropdown([
         'name'  => 'plugin_vehiclescheduler_vehicles_id',
         'value' => (int) ($fields['plugin_vehiclescheduler_vehicles_id'] ?? 0),
@@ -106,7 +110,7 @@ function plugin_vehiclescheduler_render_incident_form(PluginVehicleschedulerInci
     echo '</div>';
 
     echo "<div class='vs-incident-form-field'>";
-    echo "<div class='vs-incident-form-label'>Motorista no momento</div>";
+    echo "<div class='vs-incident-form-label'>" . plugin_vehiclescheduler_incident_escape($t('Driver at the moment')) . '</div>';
     PluginVehicleschedulerDriver::dropdown([
         'name'  => 'plugin_vehiclescheduler_drivers_id',
         'value' => (int) ($fields['plugin_vehiclescheduler_drivers_id'] ?? 0),
@@ -114,7 +118,7 @@ function plugin_vehiclescheduler_render_incident_form(PluginVehicleschedulerInci
     echo '</div>';
 
     echo "<div class='vs-incident-form-field'>";
-    echo "<label class='vs-incident-form-label' for='vs-incident-type'>Tipo de ocorrência <span class='red'>*</span></label>";
+    echo "<label class='vs-incident-form-label' for='vs-incident-type'>" . plugin_vehiclescheduler_incident_escape($t('Occurrence type')) . " <span class='red'>*</span></label>";
     echo "<select id='vs-incident-type' name='incident_type' data-incident-type>";
 
     foreach ($types as $typeId => $typeLabel) {
@@ -130,21 +134,21 @@ function plugin_vehiclescheduler_render_incident_form(PluginVehicleschedulerInci
     echo '</div>';
 
     echo "<div class='vs-incident-form-field'>";
-    echo "<label class='vs-incident-form-label' for='vs-incident-date'>Data/Hora da ocorrência <span class='red'>*</span></label>";
+    echo "<label class='vs-incident-form-label' for='vs-incident-date'>" . plugin_vehiclescheduler_incident_escape($t('Occurrence date/time')) . " <span class='red'>*</span></label>";
     echo "<input type='datetime-local' id='vs-incident-date' name='incident_date' value='"
         . plugin_vehiclescheduler_incident_escape(plugin_vehiclescheduler_incident_to_datetime_local((string) ($fields['incident_date'] ?? date('Y-m-d H:i:s'))))
         . "'>";
     echo '</div>';
 
     echo "<div class='vs-incident-form-field'>";
-    echo "<label class='vs-incident-form-label' for='vs-incident-location'>Local da ocorrência</label>";
+    echo "<label class='vs-incident-form-label' for='vs-incident-location'>" . plugin_vehiclescheduler_incident_escape($t('Occurrence location')) . '</label>';
     echo "<input type='text' id='vs-incident-location' name='location' value='"
         . plugin_vehiclescheduler_incident_escape((string) ($fields['location'] ?? ''))
-        . "' maxlength='255' placeholder='Onde aconteceu?'>";
+        . "' maxlength='255' placeholder='" . plugin_vehiclescheduler_incident_escape($t('Where did it happen?')) . "'>";
     echo '</div>';
 
     echo "<div class='vs-incident-form-field'>";
-    echo "<label class='vs-incident-form-label' for='vs-incident-phone'>Telefone para contato</label>";
+    echo "<label class='vs-incident-form-label' for='vs-incident-phone'>" . plugin_vehiclescheduler_incident_escape($t('Contact phone')) . '</label>';
     echo "<input type='tel' id='vs-incident-phone' name='contact_phone' value='"
         . plugin_vehiclescheduler_incident_escape((string) ($fields['contact_phone'] ?? ''))
         . "' maxlength='20' data-incident-phone>";
@@ -152,7 +156,7 @@ function plugin_vehiclescheduler_render_incident_form(PluginVehicleschedulerInci
 
     if ($canManage || $incidentId > 0) {
         echo "<div class='vs-incident-form-field'>";
-        echo "<label class='vs-incident-form-label' for='vs-incident-status'>Status</label>";
+        echo "<label class='vs-incident-form-label' for='vs-incident-status'>" . plugin_vehiclescheduler_incident_escape($t('Status')) . '</label>';
         echo "<select id='vs-incident-status' name='status'" . ($canManage ? '' : ' disabled') . '>';
 
         foreach ($statuses as $value => $label) {
@@ -168,14 +172,14 @@ function plugin_vehiclescheduler_render_incident_form(PluginVehicleschedulerInci
 
     if ($canManage) {
         echo "<div class='vs-incident-form-field'>";
-        echo "<label class='vs-incident-form-label' for='vs-incident-maintenance'>Requer manutenção?</label>";
+        echo "<label class='vs-incident-form-label' for='vs-incident-maintenance'>" . plugin_vehiclescheduler_incident_escape($t('Requires maintenance?')) . '</label>';
         echo "<select id='vs-incident-maintenance' name='needs_maintenance'>";
         echo plugin_vehiclescheduler_render_incident_yes_no_options((int) ($fields['needs_maintenance'] ?? 0));
         echo '</select>';
         echo '</div>';
 
         echo "<div class='vs-incident-form-field'>";
-        echo "<label class='vs-incident-form-label' for='vs-incident-insurance'>Requer seguro?</label>";
+        echo "<label class='vs-incident-form-label' for='vs-incident-insurance'>" . plugin_vehiclescheduler_incident_escape($t('Requires insurance?')) . '</label>';
         echo "<select id='vs-incident-insurance' name='needs_insurance'>";
         echo plugin_vehiclescheduler_render_incident_yes_no_options((int) ($fields['needs_insurance'] ?? 0));
         echo '</select>';
@@ -183,8 +187,8 @@ function plugin_vehiclescheduler_render_incident_form(PluginVehicleschedulerInci
     }
 
     echo "<div class='vs-incident-form-field vs-incident-form-field--full'>";
-    echo "<label class='vs-incident-form-label' for='vs-incident-description'>Descrição detalhada <span class='red'>*</span></label>";
-    echo "<textarea id='vs-incident-description' name='description' placeholder='Descreva o que aconteceu com o máximo de detalhes possível...' required>"
+    echo "<label class='vs-incident-form-label' for='vs-incident-description'>" . plugin_vehiclescheduler_incident_escape($t('Detailed description')) . " <span class='red'>*</span></label>";
+    echo "<textarea id='vs-incident-description' name='description' placeholder='" . plugin_vehiclescheduler_incident_escape($t('Describe what happened with as much detail as possible.')) . "' required>"
         . plugin_vehiclescheduler_incident_escape((string) ($fields['description'] ?? ''))
         . '</textarea>';
     echo '</div>';
@@ -192,7 +196,9 @@ function plugin_vehiclescheduler_render_incident_form(PluginVehicleschedulerInci
     echo '</div>';
 
     echo "<div class='vs-incident-form-actions'>";
-    echo "<a href='" . plugin_vehiclescheduler_incident_escape($backUrl) . "' class='vs-incident-form-link'><i class='ti ti-arrow-left'></i>Voltar</a>";
+    echo "<a href='" . plugin_vehiclescheduler_incident_escape($backUrl) . "' class='vs-incident-form-link'><i class='ti ti-arrow-left'></i>"
+        . plugin_vehiclescheduler_incident_escape($t('Back'))
+        . '</a>';
     echo '</div>';
 
     if ($canManage && $incidentId > 0) {
@@ -208,9 +214,13 @@ function plugin_vehiclescheduler_render_incident_form(PluginVehicleschedulerInci
             . $incidentId;
 
         echo "<div class='vs-incident-form-quick-actions'>";
-        echo "<div class='vs-incident-form-quick-title'>Ações rápidas</div>";
-        echo "<a href='" . plugin_vehiclescheduler_incident_escape($maintenanceUrl) . "' class='vs-incident-form-quick-link'><i class='ti ti-tool'></i>Criar manutenção corretiva</a>";
-        echo "<a href='" . plugin_vehiclescheduler_incident_escape($insuranceUrl) . "' class='vs-incident-form-quick-link'><i class='ti ti-shield'></i>Abrir sinistro de seguro</a>";
+        echo "<div class='vs-incident-form-quick-title'>" . plugin_vehiclescheduler_incident_escape($t('Quick actions')) . '</div>';
+        echo "<a href='" . plugin_vehiclescheduler_incident_escape($maintenanceUrl) . "' class='vs-incident-form-quick-link'><i class='ti ti-tool'></i>"
+            . plugin_vehiclescheduler_incident_escape($t('Create corrective maintenance'))
+            . '</a>';
+        echo "<a href='" . plugin_vehiclescheduler_incident_escape($insuranceUrl) . "' class='vs-incident-form-quick-link'><i class='ti ti-shield'></i>"
+            . plugin_vehiclescheduler_incident_escape($t('Open insurance claim'))
+            . '</a>';
         echo '</div>';
     }
 

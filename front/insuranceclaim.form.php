@@ -3,7 +3,7 @@
 include_once __DIR__ . '/../src/Bootstrap/common.php';
 
 Session::checkRight('plugin_vehiclescheduler_management', READ);
-plugin_vehiclescheduler_redirect_future_plan('INCIDENTES', 'EM OBRAS !!!');
+plugin_vehiclescheduler_redirect_future_plan('Incidents');
 exit;
 require_once(__DIR__ . '/insuranceclaim.render.php');
 

@@ -12,6 +12,33 @@ if (!PluginVehicleschedulerProfile::canViewManagement()) {
     exit;
 }
 
+if (isset($_POST['set_plugin_locale'])) {
+    if (!PluginVehicleschedulerProfile::canViewManagement()) {
+        plugin_vehiclescheduler_flash_error(__('You are not allowed to change plugin settings.', 'vehiclescheduler'));
+        Html::redirect($managementUrl);
+        exit;
+    }
+
+    $locale = PluginVehicleschedulerInput::enum(
+        $_POST,
+        'set_plugin_locale',
+        array_keys($supportedLocales),
+        ''
+    );
+
+    if ($locale === '') {
+        plugin_vehiclescheduler_flash_error(__('Unable to save plugin language.', 'vehiclescheduler'));
+    } elseif (PluginVehicleschedulerConfig::setPluginLocale($locale)) {
+        plugin_vehiclescheduler_apply_configured_locale();
+        plugin_vehiclescheduler_flash_success(__('Plugin language saved successfully.', 'vehiclescheduler'));
+    } else {
+        plugin_vehiclescheduler_flash_error(__('Unable to save plugin language.', 'vehiclescheduler'));
+    }
+
+    Html::redirect($formUrl);
+    exit;
+}
+
 if (isset($_POST['save_config'])) {
     if (!PluginVehicleschedulerProfile::canViewManagement()) {
         plugin_vehiclescheduler_flash_error(__('You are not allowed to change plugin settings.', 'vehiclescheduler'));
@@ -70,7 +97,12 @@ plugin_vehiclescheduler_render_back_to_management();
 
 <div class="vs-driver-grid">
 
-    <form id="vsPluginConfigForm" method="post" action="<?= htmlspecialchars($formUrl, ENT_QUOTES, 'UTF-8') ?>">
+    <form
+        id="vsPluginConfigForm"
+        method="post"
+        action="<?= htmlspecialchars($formUrl, ENT_QUOTES, 'UTF-8') ?>"
+        data-locale-url="<?= htmlspecialchars(plugin_vehiclescheduler_get_root_doc() . '/plugins/vehiclescheduler/ajax/set_locale.php', ENT_QUOTES, 'UTF-8') ?>"
+    >
         <input type="hidden" name="_glpi_csrf_token" value="<?= Session::getNewCSRFToken() ?>">
 
         <section class="vs-driver-grid__toolbar">
@@ -106,7 +138,7 @@ plugin_vehiclescheduler_render_back_to_management();
                     $localeFlagUrl = plugin_vehiclescheduler_get_public_asset_url($localeFlagMap[$localeCode] ?? 'img/flags/gb.svg');
                     ?>
                     <button
-                        type="button"
+                        type="submit"
                         name="set_plugin_locale"
                         value="<?= htmlspecialchars($localeCode, ENT_QUOTES, 'UTF-8') ?>"
                         class="vs-language-button<?= $isCurrentLocale ? ' vs-language-button--active' : '' ?>"

@@ -4,6 +4,9 @@
  * Vehicle entity for Vehicle Scheduler.
  *
  * Handles fleet vehicle registration and basic operational validation.
+ *
+ * @method void addDefaultFormTab(array &$ong)
+ * @method void addStandardTab(string $itemtype, array &$ong, array $options = [])
  */
 if (!defined('GLPI_ROOT')) {
     die("Sorry. You can't access this file directly");
@@ -138,11 +141,18 @@ class PluginVehicleschedulerVehicle extends \CommonDBTM
 
     public function showForm($ID, array $options = [])
     {
+        if (!function_exists('plugin_vehiclescheduler_apply_configured_locale')) {
+            require_once dirname(__DIR__, 2) . '/src/Bootstrap/common.php';
+        }
+
+        plugin_vehiclescheduler_apply_configured_locale();
+
         $this->initForm($ID, $options);
         $this->showFormHeader($options);
+        plugin_vehiclescheduler_apply_configured_locale();
 
         echo "<tr><td colspan='4'>";
-        require_once GLPI_ROOT . '/plugins/vehiclescheduler/front/vehicle.render.php';
+        require_once dirname(__DIR__, 2) . '/front/vehicle.render.php';
         vs_render_vehicle_form($this);
         echo "</td></tr>";
 

@@ -33,12 +33,13 @@ $realtime           = $exec['realtime'];
 $management_url = plugin_vehiclescheduler_get_front_url('management.php');
 $normal_url     = plugin_vehiclescheduler_get_front_url('admin_dashboard.php');
 $standalone_url = plugin_vehiclescheduler_get_front_url('admin_dashboard.php') . '?standalone=1';
+$pageTitle = __('Executive Fleet View', 'vehiclescheduler');
 
 if ($standalone) {
-    Html::nullHeader('Visão Executiva da Frota', $management_url);
+    Html::nullHeader($pageTitle, $management_url);
     echo "<script>document.body.classList.add('vs-wallboard-standalone-body');</script>";
 } else {
-    Html::header('Visão Executiva da Frota', $_SERVER['PHP_SELF'], 'tools');
+    Html::header($pageTitle, $_SERVER['PHP_SELF'], 'tools');
 }
 
 plugin_vehiclescheduler_load_css();

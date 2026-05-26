@@ -1,7 +1,10 @@
 <?php
-/**
+ /**
  * Plugin Vehicle Scheduler for GLPI.
  * Vehicle reports for fleet operations.
+ *
+ * @method void addDefaultFormTab(array &$ong)
+ * @method void addStandardTab(string $itemtype, array &$ong, array $options = [])
  */
 
 if (!defined('GLPI_ROOT')) {
@@ -89,7 +92,7 @@ class PluginVehicleschedulerVehiclereport extends CommonDBTM
         $this->showFormHeader($options);
 
         echo "<tr><td colspan='4'>";
-        require_once GLPI_ROOT . '/plugins/vehiclescheduler/front/vehiclereport.render.php';
+        require_once dirname(__DIR__, 2) . '/front/vehiclereport.render.php';
         vs_render_vehiclereport_form($this);
         echo "</td></tr>";
 

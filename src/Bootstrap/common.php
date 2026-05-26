@@ -214,6 +214,24 @@ function plugin_vehiclescheduler_render_back_to_management(?string $label = null
 }
 
 /**
+ * Redirect unfinished screens to the management hub with a translated notice.
+ */
+function plugin_vehiclescheduler_redirect_future_plan(string $feature, string $legacyMessage = ''): void
+{
+    $feature = trim($feature);
+    $label = $feature !== '' ? __($feature, 'vehiclescheduler') : __('This feature', 'vehiclescheduler');
+
+    plugin_vehiclescheduler_flash_warning(
+        sprintf(
+            __('%s is planned for a future release.', 'vehiclescheduler'),
+            $label
+        )
+    );
+
+    \Html::redirect(plugin_vehiclescheduler_get_management_url());
+}
+
+/**
  * Apply glassmorphism classes to existing GLPI elements
  */
 function plugin_vehiclescheduler_enhance_ui(): void

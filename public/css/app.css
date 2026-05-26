@@ -1,5 +1,7 @@
 @import url("./core/legacy-base.css");
 @import url("./core/form-feedback.css");
+@import url("./core/components.css");
+@import url("./pages/admin-dashboard.css");
 @import url("./pages/management.css");
 @import url("./pages/schedule.css");
 @import url("./pages/schedule-form.css");
@@ -25,4 +27,3 @@
 @import url("./pages/vehiclereport-form.css");
 @import url("./pages/driverfine.render.css");
 @import url("./core/flash.css");
-

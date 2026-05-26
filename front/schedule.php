@@ -20,7 +20,10 @@ if (!$can_approve && !$can_manage) {
     exit;
 }
 
-$status_filter  = filter_input(INPUT_GET, 'status', FILTER_VALIDATE_INT);
+$status_filter = PluginVehicleschedulerInput::int($_GET, 'status', -1, 0);
+if ($status_filter < 0) {
+    $status_filter = null;
+}
 $valid_statuses = array_keys(\PluginVehicleschedulerSchedule::getStatusOptions());
 
 if ($status_filter !== null && $status_filter !== false && !in_array($status_filter, $valid_statuses, true)) {

@@ -41,29 +41,14 @@ try {
     $supportedLocales = PluginVehicleschedulerConfig::getSupportedLocales();
     if (!array_key_exists($new_locale, $supportedLocales)) {
         http_response_code(400);
-        echo json_encode(['error' => 'Invalid language: ' . $new_locale]);
+        echo json_encode(['error' => __('Unable to save plugin language.', 'vehiclescheduler')]);
         exit;
     }
 
-    global $DB;
-    $user_id = Session::getLoginUserID();
-    
-    $existing = $DB->request([
-        'FROM' => 'glpi_plugin_vehiclescheduler_configs',
-        'WHERE' => ['users_id' => $user_id]
-    ])->current();
-
-    if ($existing) {
-        $DB->update('glpi_plugin_vehiclescheduler_configs', [
-            'plugin_locale' => $new_locale
-        ], [
-            'users_id' => $user_id
-        ]);
-    } else {
-        $DB->insert('glpi_plugin_vehiclescheduler_configs', [
-            'users_id' => $user_id,
-            'plugin_locale' => $new_locale
-        ]);
+    if (!PluginVehicleschedulerConfig::setPluginLocale($new_locale)) {
+        http_response_code(500);
+        echo json_encode(['error' => __('Unable to save plugin language.', 'vehiclescheduler')]);
+        exit;
     }
 
     plugin_vehiclescheduler_apply_configured_locale();

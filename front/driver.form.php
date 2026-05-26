@@ -14,7 +14,7 @@ global $CFG_GLPI;
  */
 function vs_driver_form_get_id(): int
 {
-    return isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+    return PluginVehicleschedulerInput::int($_REQUEST, 'id', 0, 0);
 }
 
 $driver = new PluginVehicleschedulerDriver();
@@ -32,13 +32,13 @@ if (isset($_POST['add'])) {
 }
 
 if (isset($_POST['update'])) {
-    $driver->check((int) $_POST['id'], UPDATE);
+    $driver->check(PluginVehicleschedulerInput::int($_POST, 'id', 0, 0), UPDATE);
     $driver->update($_POST);
     Html::back();
 }
 
 if (isset($_POST['purge'])) {
-    $driver->check((int) $_POST['id'], PURGE);
+    $driver->check(PluginVehicleschedulerInput::int($_POST, 'id', 0, 0), PURGE);
     $driver->delete($_POST, 1);
 
     Html::redirect(
@@ -52,13 +52,17 @@ if ($driverId > 0) {
     $driver->check(-1, CREATE);
 }
 
+plugin_vehiclescheduler_apply_configured_locale();
+
 Html::header(
-    'Motoristas',
+    __('Drivers', 'vehiclescheduler'),
     $_SERVER['PHP_SELF'],
     'tools',
     PluginVehicleschedulerMenu::class,
     'management'
 );
+
+plugin_vehiclescheduler_apply_configured_locale();
 
 plugin_vehiclescheduler_load_css();
 plugin_vehiclescheduler_enhance_ui();

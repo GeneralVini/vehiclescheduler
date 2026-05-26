@@ -7,7 +7,7 @@ Session::checkLoginUser();
 
 function vs_incident_form_get_id(): int
 {
-    return isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+    return PluginVehicleschedulerInput::int($_REQUEST, 'id', 0, 0);
 }
 
 $incident = new PluginVehicleschedulerIncident();
@@ -36,14 +36,14 @@ if (isset($_POST['add'])) {
 }
 
 if (isset($_POST['update'])) {
-    $postId = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+    $postId = PluginVehicleschedulerInput::int($_POST, 'id', 0, 0);
     $incident->check($postId, UPDATE);
     $incident->update($_POST);
     Html::back();
 }
 
 if (isset($_POST['purge'])) {
-    $postId = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+    $postId = PluginVehicleschedulerInput::int($_POST, 'id', 0, 0);
     $incident->check($postId, PURGE);
     $incident->delete($_POST, 1);
 
@@ -64,7 +64,7 @@ $section = PluginVehicleschedulerProfile::canViewManagement()
     : '';
 
 Html::header(
-    'Informar Sinistro',
+    __('Report Claim', 'vehiclescheduler'),
     $_SERVER['PHP_SELF'],
     PluginVehicleschedulerProfile::canViewManagement() ? 'tools' : 'helpdesk',
     $menuClass,

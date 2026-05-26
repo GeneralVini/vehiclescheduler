@@ -11,6 +11,7 @@ PluginVehicleschedulerDriverfine::requireAdminFines();
 $h = static function ($value): string {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
 };
+$t = static fn(string $text): string => __($text, 'vehiclescheduler');
 
 $formAction = plugin_vehiclescheduler_get_front_url('driverfine.form.php');
 $listUrl = plugin_vehiclescheduler_get_front_url('fines.php');
@@ -62,12 +63,12 @@ if (isset($_POST['add']) || isset($_POST['update'])) {
     if (isset($_POST['add'])) {
         $newId = $fine->add($input);
         if ($newId) {
-            Session::addMessageAfterRedirect('Multa registrada com sucesso.', false, INFO);
+            Session::addMessageAfterRedirect($t('Fine registered successfully.'), false, INFO);
             $redirectAfterSave($input['plugin_vehiclescheduler_drivers_id'], (int) $newId);
         }
     } else {
         $fine->update($input);
-        Session::addMessageAfterRedirect('Multa atualizada com sucesso.', false, INFO);
+        Session::addMessageAfterRedirect($t('Fine updated successfully.'), false, INFO);
         $redirectAfterSave($input['plugin_vehiclescheduler_drivers_id'], $input['id']);
     }
 
@@ -83,7 +84,7 @@ if (isset($_POST['delete'])) {
     if ($fineId > 0 && $fine->getFromDB($fineId)) {
         $driverId = (int) ($fine->fields['plugin_vehiclescheduler_drivers_id'] ?? $driverId);
         $fine->delete(['id' => $fineId], true);
-        Session::addMessageAfterRedirect('Multa excluída com sucesso.', false, INFO);
+        Session::addMessageAfterRedirect($t('Fine deleted successfully.'), false, INFO);
     }
 
     $redirectAfterSave($driverId, 0);
@@ -94,7 +95,7 @@ $driverId = PluginVehicleschedulerInput::int($_GET, 'plugin_vehiclescheduler_dri
 
 if ($fineId > 0) {
     if (!$fine->getFromDB($fineId)) {
-        Session::addMessageAfterRedirect('Multa não encontrada.', false, ERROR);
+        Session::addMessageAfterRedirect($t('Fine not found.'), false, ERROR);
         Html::redirect($listUrl);
     }
 
@@ -126,14 +127,14 @@ $values = [
 
 $renainfCatalogUrl = plugin_vehiclescheduler_get_public_asset_url('data/renainf-infractions.json');
 
-Html::header('Multa', $formAction, 'tools', PluginVehicleschedulerMenu::class, 'management');
+Html::header(__('Traffic fine', 'vehiclescheduler'), $formAction, 'tools', PluginVehicleschedulerMenu::class, 'management');
 
 plugin_vehiclescheduler_load_css([
     'css/pages/driverfine-form.css',
 ]);
 plugin_vehiclescheduler_enhance_ui();
 plugin_vehiclescheduler_load_script('js/driverfine-form.js');
-plugin_vehiclescheduler_render_back_to_management('Voltar para Gestão de Frota');
+plugin_vehiclescheduler_render_back_to_management();
 
 ?>
 <div class="vs-driverfine-page">
@@ -144,16 +145,16 @@ plugin_vehiclescheduler_render_back_to_management('Voltar para Gestão de Frota'
                     <i class="ti ti-file-alert vs-header-icon"></i>
                 </div>
                 <div>
-                    <h2><?= $fineId > 0 ? 'Editar Multa' : 'Nova Multa' ?></h2>
+                    <h2><?= $h($fineId > 0 ? $t('Edit fine') : $t('New fine')) ?></h2>
                     <p class="vs-page-subtitle">
-                        <?= $driverName !== '' ? 'Motorista: ' . $h($driverName) : 'Informe motorista, veículo, data e infração RENAINF.' ?>
+                        <?= $driverName !== '' ? $h(sprintf($t('Driver: %s'), $driverName)) : $h($t('Inform driver, vehicle, date, and RENAINF infraction.')) ?>
                     </p>
                 </div>
             </div>
 
             <a href="<?= $h($listUrl) ?>" class="vs-btn-add vs-btn-secondary">
                 <i class="ti ti-list-details"></i>
-                <span>Lista</span>
+                <span><?= $h($t('List')) ?></span>
             </a>
         </div>
     </div>
@@ -176,7 +177,7 @@ plugin_vehiclescheduler_render_back_to_management('Voltar para Gestão de Frota'
 
             <div class="vs-driverfine-grid">
                 <div class="vs-driverfine-field">
-                    <label class="vs-driverfine-label">Motorista *</label>
+                    <label class="vs-driverfine-label"><?= $h($t('Driver')) ?> *</label>
                     <?php
                     PluginVehicleschedulerDriver::dropdown([
                         'name'                => 'plugin_vehiclescheduler_drivers_id',
@@ -189,7 +190,7 @@ plugin_vehiclescheduler_render_back_to_management('Voltar para Gestão de Frota'
                 </div>
 
                 <div class="vs-driverfine-field">
-                    <label class="vs-driverfine-label">Veículo</label>
+                    <label class="vs-driverfine-label"><?= $h($t('Vehicle')) ?></label>
                     <?php
                     PluginVehicleschedulerVehicle::dropdown([
                         'name'   => 'plugin_vehiclescheduler_vehicles_id',
@@ -201,12 +202,12 @@ plugin_vehiclescheduler_render_back_to_management('Voltar para Gestão de Frota'
                 </div>
 
                 <div class="vs-driverfine-field">
-                    <label class="vs-driverfine-label">Data *</label>
+                    <label class="vs-driverfine-label"><?= $h($t('Date')) ?> *</label>
                     <?php Html::showDateField('fine_date', ['value' => $values['fine_date']]); ?>
                 </div>
 
                 <div class="vs-driverfine-field vs-driverfine-grid__full">
-                    <label class="vs-driverfine-label" for="vs-renainf-search">Infração RENAINF</label>
+                    <label class="vs-driverfine-label" for="vs-renainf-search"><?= $h($t('RENAINF infraction')) ?></label>
                     <div class="vs-renainf-picker" data-renainf-picker>
                         <div class="vs-renainf-search-row">
                             <i class="ti ti-search"></i>
@@ -214,12 +215,12 @@ plugin_vehiclescheduler_render_back_to_management('Voltar para Gestão de Frota'
                                 id="vs-renainf-search"
                                 type="search"
                                 class="vs-renainf-search"
-                                placeholder="Buscar por código, descrição, artigo, infrator ou órgão..."
+                                placeholder="<?= $h($t('Search by code, description, article, offender, or authority...')) ?>"
                                 autocomplete="off"
                                 data-renainf-search>
                             <button type="button" class="vs-renainf-clear" data-renainf-clear>
                                 <i class="ti ti-eraser"></i>
-                                <span>Limpar</span>
+                                <span><?= $h($t('Clear')) ?></span>
                             </button>
                         </div>
                         <button
@@ -227,7 +228,7 @@ plugin_vehiclescheduler_render_back_to_management('Voltar para Gestão de Frota'
                             class="vs-renainf-trigger"
                             data-renainf-trigger
                             aria-expanded="false">
-                            <span data-renainf-trigger-label>Carregando tabela RENAINF...</span>
+                            <span data-renainf-trigger-label><?= $h($t('Loading RENAINF table...')) ?></span>
                             <i class="ti ti-chevron-down"></i>
                         </button>
                         <div class="vs-renainf-selected" data-renainf-selected>
@@ -235,32 +236,32 @@ plugin_vehiclescheduler_render_back_to_management('Voltar para Gestão de Frota'
                                 <strong><?= $h($values['violation_code'] . '-' . $values['violation_split']) ?></strong>
                                 <span><?= $h($values['description']) ?></span>
                             <?php else: ?>
-                                <span>Nenhuma infração selecionada.</span>
+                                <span><?= $h($t('No infraction selected.')) ?></span>
                             <?php endif; ?>
                         </div>
-                        <div class="vs-renainf-results" data-renainf-results aria-label="Infrações RENAINF filtradas"></div>
+                        <div class="vs-renainf-results" data-renainf-results aria-label="<?= $h($t('Filtered RENAINF infractions')) ?>"></div>
                     </div>
                 </div>
 
                 <div class="vs-driverfine-field">
-                    <label class="vs-driverfine-label">Gravidade e pontuação</label>
+                    <label class="vs-driverfine-label"><?= $h($t('Severity and points')) ?></label>
                     <div class="vs-renainf-readonly" data-renainf-severity-display>
-                        <?= $h(PluginVehicleschedulerDriverfine::getAllSeverities()[$values['severity']] ?? 'Definida pela infração') ?>
+                        <?= $h(PluginVehicleschedulerDriverfine::getAllSeverities()[$values['severity']] ?? $t('Defined by infraction')) ?>
                     </div>
                 </div>
 
                 <div class="vs-driverfine-field">
-                    <label class="vs-driverfine-label">Status</label>
+                    <label class="vs-driverfine-label"><?= $h($t('Status')) ?></label>
                     <?php Dropdown::showFromArray('status', PluginVehicleschedulerDriverfine::getAllStatus(), ['value' => $values['status']]); ?>
                 </div>
 
                 <div class="vs-driverfine-field vs-driverfine-grid__full">
-                    <label class="vs-driverfine-label">Descrição *</label>
+                    <label class="vs-driverfine-label"><?= $h($t('Description')) ?> *</label>
                     <textarea
                         name="description"
                         rows="5"
                         class="vs-driverfine-textarea"
-                        placeholder="Descreva a infração, local, auto ou observações administrativas relevantes."
+                        placeholder="<?= $h($t('Describe the infraction, location, notice, or relevant administrative notes.')) ?>"
                         data-renainf-description
                         required><?= $h($values['description']) ?></textarea>
                 </div>
@@ -272,16 +273,16 @@ plugin_vehiclescheduler_render_back_to_management('Voltar para Gestão de Frota'
                         type="submit"
                         name="delete"
                         class="vs-driverfine-btn vs-driverfine-btn--danger"
-                        data-confirm-message="Excluir esta multa?">
+                        data-confirm-message="<?= $h($t('Delete this fine?')) ?>">
                         <i class="ti ti-trash"></i>
-                        <span>Excluir</span>
+                        <span><?= $h($t('Delete')) ?></span>
                     </button>
                 <?php endif; ?>
 
                 <div class="vs-driverfine-actions__primary">
                     <button type="submit" name="<?= $fineId > 0 ? 'update' : 'add' ?>" class="vs-driverfine-btn">
                         <i class="ti ti-device-floppy"></i>
-                        <span><?= $fineId > 0 ? 'Salvar multa' : 'Registrar multa' ?></span>
+                        <span><?= $h($fineId > 0 ? $t('Save fine') : $t('Register fine')) ?></span>
                     </button>
                 </div>
             </footer>

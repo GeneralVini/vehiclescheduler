@@ -146,6 +146,7 @@ if (isset($_POST['add'])) {
     Session::checkRight('plugin_vehiclescheduler_management', READ);
     $vehicle->checkGlobal(READ);
 
+    plugin_vehiclescheduler_apply_configured_locale();
     plugin_vehiclescheduler_load_css();
     plugin_vehiclescheduler_enhance_ui();
 
@@ -156,6 +157,7 @@ if (isset($_POST['add'])) {
         PluginVehicleschedulerVehicle::class,
         'vehicles'
     );
+    plugin_vehiclescheduler_apply_configured_locale();
 
     $back_url = plugin_vehiclescheduler_get_front_url('vehicle.php');
 

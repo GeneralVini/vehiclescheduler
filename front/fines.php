@@ -49,7 +49,7 @@ $severities = PluginVehicleschedulerDriverfine::getAllSeverities();
 $statuses = PluginVehicleschedulerDriverfine::getAllStatus();
 $pointsMap = PluginVehicleschedulerDriverfine::getSeverityPoints();
 
-Html::header('Multas', $self, 'tools', PluginVehicleschedulerMenu::class, 'management');
+Html::header(__('Fines', 'vehiclescheduler'), $self, 'tools', PluginVehicleschedulerMenu::class, 'management');
 
 plugin_vehiclescheduler_load_css([
     'css/pages/fines.css',

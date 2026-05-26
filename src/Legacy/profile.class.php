@@ -213,21 +213,12 @@ class PluginVehicleschedulerProfile extends CommonDBTM
         return Session::haveRight(self::RIGHT_APPROVE, READ);
     }
 
-    /**
-     * Sanitização/normalização centralizada do POST.
-     * No próximo passo isso pode virar um helper dedicado do plugin.
-     */
     public static function normalizeProfileInput(array $input): array
     {
-        $profiles_id = max(0, (int)($input['profiles_id'] ?? 0));
-
-        $requester_access = ((int)($input['requester_access'] ?? 0) === 1) ? 1 : 0;
-        $can_approve      = ((int)($input['can_approve'] ?? 0) === 1) ? 1 : 0;
-
-        $management_access = (string)($input['management_access'] ?? '');
-        if (!in_array($management_access, ['', 'r', 'w'], true)) {
-            $management_access = '';
-        }
+        $profiles_id = PluginVehicleschedulerInput::int($input, 'profiles_id', 0, 0);
+        $requester_access = PluginVehicleschedulerInput::bool($input, 'requester_access', false);
+        $can_approve = PluginVehicleschedulerInput::bool($input, 'can_approve', false);
+        $management_access = PluginVehicleschedulerInput::enum($input, 'management_access', ['', 'r', 'w'], '');
 
         return [
             'profiles_id'       => $profiles_id,

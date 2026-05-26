@@ -35,7 +35,9 @@ class PluginVehicleschedulerDriverfine extends CommonDBChild
      */
     public static function getTypeName($nb = 0)
     {
-        return ($nb === 1) ? 'Infração de Trânsito' : 'Infrações de Trânsito';
+        return ($nb === 1)
+            ? __('Traffic fine', 'vehiclescheduler')
+            : __('Traffic fines', 'vehiclescheduler');
     }
 
     /**
@@ -56,11 +58,11 @@ class PluginVehicleschedulerDriverfine extends CommonDBChild
     public static function getAllSeverities(): array
     {
         return [
-            self::SEVERITY_NONE       => 'Sem pontuação',
-            self::SEVERITY_MILD       => 'Leve - 3 pts',
-            self::SEVERITY_MEDIUM     => 'Média - 4 pts',
-            self::SEVERITY_SEVERE     => 'Grave - 5 pts',
-            self::SEVERITY_VERYSEVERE => 'Gravíssima - 7 pts',
+            self::SEVERITY_NONE       => __('No points', 'vehiclescheduler'),
+            self::SEVERITY_MILD       => __('Mild - 3 pts', 'vehiclescheduler'),
+            self::SEVERITY_MEDIUM     => __('Medium - 4 pts', 'vehiclescheduler'),
+            self::SEVERITY_SEVERE     => __('Severe - 5 pts', 'vehiclescheduler'),
+            self::SEVERITY_VERYSEVERE => __('Very severe - 7 pts', 'vehiclescheduler'),
         ];
     }
 
@@ -88,10 +90,10 @@ class PluginVehicleschedulerDriverfine extends CommonDBChild
     public static function getAllStatus(): array
     {
         return [
-            self::STATUS_OPEN      => 'Em aberto',
-            self::STATUS_PAID      => 'Paga',
-            self::STATUS_APPEALED  => 'Recurso',
-            self::STATUS_CANCELLED => 'Cancelada',
+            self::STATUS_OPEN      => __('Open', 'vehiclescheduler'),
+            self::STATUS_PAID      => __('Paid', 'vehiclescheduler'),
+            self::STATUS_APPEALED  => __('Appealed', 'vehiclescheduler'),
+            self::STATUS_CANCELLED => __('Cancelled', 'vehiclescheduler'),
         ];
     }
 
@@ -227,7 +229,7 @@ class PluginVehicleschedulerDriverfine extends CommonDBChild
             return false;
         }
 
-        require_once GLPI_ROOT . '/plugins/vehiclescheduler/front/driverfine.render.php';
+        require_once dirname(__DIR__, 2) . '/front/driverfine.render.php';
 
         vs_render_driverfine_tab($item);
 
@@ -476,22 +478,22 @@ class PluginVehicleschedulerDriverfine extends CommonDBChild
         $input = self::normalizeInput($input);
 
         if ($input['plugin_vehiclescheduler_drivers_id'] <= 0) {
-            Session::addMessageAfterRedirect('O motorista é obrigatório.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Driver is required.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
         if ($input['fine_date'] === null) {
-            Session::addMessageAfterRedirect('A data da infração é obrigatória.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Fine date is required.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
         if ($input['violation_code'] === '') {
-            Session::addMessageAfterRedirect('Selecione uma infração RENAINF.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Select a RENAINF infraction.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
         if ($input['description'] === '') {
-            Session::addMessageAfterRedirect('A descrição é obrigatória.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Description is required.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 
@@ -514,7 +516,7 @@ class PluginVehicleschedulerDriverfine extends CommonDBChild
         $input = self::normalizeInput($input);
 
         if ($input['id'] <= 0) {
-            Session::addMessageAfterRedirect('ID da infração inválido.', false, ERROR);
+            Session::addMessageAfterRedirect(__('Invalid fine ID.', 'vehiclescheduler'), false, ERROR);
             return false;
         }
 

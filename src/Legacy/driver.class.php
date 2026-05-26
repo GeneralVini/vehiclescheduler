@@ -1,10 +1,13 @@
-﻿<?php
+<?php
 
 /**
  * Driver entity for Vehicle Scheduler.
  *
  * Stores only the minimum data required for fleet operation and driver allocation.
  * Sensitive personal data unrelated to fleet control must not be stored here.
+ *
+ * @method void addDefaultFormTab(array &$ong)
+ * @method void addStandardTab(string $itemtype, array &$ong, array $options = [])
  */
 if (!defined('GLPI_ROOT')) {
     die("Sorry. You can't access this file directly");
@@ -490,10 +493,18 @@ class PluginVehicleschedulerDriver extends CommonDBTM
      */
     public function showForm($ID, array $options = [])
     {
+        if (!function_exists('plugin_vehiclescheduler_apply_configured_locale')) {
+            require_once dirname(__DIR__, 2) . '/src/Bootstrap/common.php';
+        }
+
+        plugin_vehiclescheduler_apply_configured_locale();
+
         $this->initForm($ID, $options);
         $this->showFormHeader($options);
 
-        require_once GLPI_ROOT . '/plugins/vehiclescheduler/front/driver.render.php';
+        plugin_vehiclescheduler_apply_configured_locale();
+
+        require_once dirname(__DIR__, 2) . '/front/driver.render.php';
 
         echo "<tr><td colspan='4'>";
         vs_render_driver_form($this, (int) $ID);

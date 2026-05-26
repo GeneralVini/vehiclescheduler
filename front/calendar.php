@@ -4,7 +4,7 @@ include_once __DIR__ . '/../src/Bootstrap/common.php';
 
 Session::checkRight('plugin_vehiclescheduler_management', READ);
 
-plugin_vehiclescheduler_redirect_future_plan('CALENDAR', 'EM OMRAS !!!');
+plugin_vehiclescheduler_redirect_future_plan('Calendar');
 exit;
 
 global $DB;
@@ -216,7 +216,7 @@ $stats = [
     'incidents'    => count($incidents),
 ];
 
-Html::header('Calendario de Eventos', $_SERVER['PHP_SELF'], 'tools', 'PluginVehicleschedulerMenug', 'calendar');
+Html::header(__('Event Calendar', 'vehiclescheduler'), $_SERVER['PHP_SELF'], 'tools', 'PluginVehicleschedulerMenug', 'calendar');
 
 plugin_vehiclescheduler_load_css();
 plugin_vehiclescheduler_enhance_ui();

@@ -319,7 +319,7 @@ if (isset($_POST['add'])) {
 
     $schedule->check($post_id, DELETE, $request_post);
     $schedule->delete($request_post);
-    $schedule->redirectToList();
+    \Html::redirect(plugin_vehiclescheduler_get_front_url('schedule.php'));
 } elseif (isset($_POST['save_and_approve'])) {
     if ($post_id <= 0) {
         \Session::addMessageAfterRedirect('ID da reserva inválido.', true, ERROR);

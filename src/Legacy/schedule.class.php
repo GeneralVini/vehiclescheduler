@@ -29,9 +29,9 @@ class PluginVehicleschedulerSchedule extends \CommonDBTM
     public static function getStatusOptions(): array
     {
         return [
-            self::STATUS_PENDING  => 'Pendente',
-            self::STATUS_APPROVED => 'Aprovada',
-            self::STATUS_REJECTED => 'Recusada',
+            self::STATUS_PENDING  => __('Pending', 'vehiclescheduler'),
+            self::STATUS_APPROVED => __('Approved', 'vehiclescheduler'),
+            self::STATUS_REJECTED => __('Rejected', 'vehiclescheduler'),
         ];
     }
 
@@ -39,7 +39,7 @@ class PluginVehicleschedulerSchedule extends \CommonDBTM
     {
         $options = self::getStatusOptions();
 
-        return $options[$status] ?? 'Desconhecido';
+        return $options[$status] ?? __('Unknown', 'vehiclescheduler');
     }
 
     public static function getStatusSearchOptionId(): int
@@ -240,15 +240,6 @@ class PluginVehicleschedulerSchedule extends \CommonDBTM
     public static function canCreate(): bool
     {
         return self::canCreateRequest();
-    }
-
-    public function redirectToList(): void
-    {
-        global $CFG_GLPI;
-
-        $rootDoc = plugin_vehiclescheduler_get_root_doc();
-
-        \Html::redirect(plugin_vehiclescheduler_get_front_url('schedule.php'));
     }
 
     public function rawSearchOptions()
