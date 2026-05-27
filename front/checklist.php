@@ -9,6 +9,7 @@ require_once(__DIR__ . '/checklist.render.php');
 global $DB;
 
 $rootDoc = plugin_vehiclescheduler_get_root_doc();
+$t = static fn(string $message): string => __($message, 'vehiclescheduler');
 
 $checklists = iterator_to_array($DB->request([
     'FROM'  => PluginVehicleschedulerChecklist::getTable(),
@@ -47,7 +48,11 @@ foreach ($checklists as $checklist) {
     );
 }
 
-Html::header(__('Checklists', 'vehiclescheduler'), $_SERVER['PHP_SELF'], 'tools', 'PluginVehicleschedulerMenug', 'checklist');
+plugin_vehiclescheduler_apply_configured_locale();
+
+Html::header($t('Checklists'), $_SERVER['PHP_SELF'], 'tools', 'PluginVehicleschedulerMenug', 'checklist');
+
+plugin_vehiclescheduler_apply_configured_locale();
 
 plugin_vehiclescheduler_load_css();
 plugin_vehiclescheduler_enhance_ui();
@@ -58,14 +63,14 @@ plugin_vehiclescheduler_enhance_ui();
         <div class="vs-checklist-list-card">
             <div class="vs-checklist-list-header">
                 <div>
-                    <h1><i class="ti ti-checkbox"></i> Gestao de Checklists</h1>
-                    <p class="vs-checklist-list-subtitle">Templates de verificacao para saida e chegada de veiculos</p>
+                    <h1><i class="ti ti-checkbox"></i> <?= plugin_vehiclescheduler_escape($t('Checklist Management')) ?></h1>
+                    <p class="vs-checklist-list-subtitle"><?= plugin_vehiclescheduler_escape($t('Verification templates for vehicle departure and arrival.')) ?></p>
                 </div>
 
                 <?php if (Session::haveRight('plugin_vehiclescheduler', CREATE)): ?>
                     <a href="<?= plugin_vehiclescheduler_escape(plugin_vehiclescheduler_get_front_url('checklist.form.php')) ?>" class="vs-checklist-list-create">
                         <i class="ti ti-plus"></i>
-                        Novo Template
+                        <?= plugin_vehiclescheduler_escape($t('New template')) ?>
                     </a>
                 <?php endif; ?>
             </div>
@@ -73,19 +78,19 @@ plugin_vehiclescheduler_enhance_ui();
             <div class="vs-checklist-list-kpis">
                 <div class="vs-checklist-list-kpi">
                     <div class="vs-checklist-list-kpi-value"><?= (int) $stats['total'] ?></div>
-                    <div class="vs-checklist-list-kpi-label">Total de Templates</div>
+                    <div class="vs-checklist-list-kpi-label"><?= plugin_vehiclescheduler_escape($t('Total templates')) ?></div>
                 </div>
                 <div class="vs-checklist-list-kpi">
                     <div class="vs-checklist-list-kpi-value"><?= (int) $stats['active'] ?></div>
-                    <div class="vs-checklist-list-kpi-label">Templates Ativos</div>
+                    <div class="vs-checklist-list-kpi-label"><?= plugin_vehiclescheduler_escape($t('Active templates')) ?></div>
                 </div>
                 <div class="vs-checklist-list-kpi">
                     <div class="vs-checklist-list-kpi-value"><?= (int) $stats['departure'] ?></div>
-                    <div class="vs-checklist-list-kpi-label">Checklists de Saida</div>
+                    <div class="vs-checklist-list-kpi-label"><?= plugin_vehiclescheduler_escape($t('Departure checklists')) ?></div>
                 </div>
                 <div class="vs-checklist-list-kpi">
                     <div class="vs-checklist-list-kpi-value"><?= (int) $stats['arrival'] ?></div>
-                    <div class="vs-checklist-list-kpi-label">Checklists de Chegada</div>
+                    <div class="vs-checklist-list-kpi-label"><?= plugin_vehiclescheduler_escape($t('Arrival checklists')) ?></div>
                 </div>
             </div>
 
@@ -93,12 +98,12 @@ plugin_vehiclescheduler_enhance_ui();
                 <?php if ($checklists === []): ?>
                     <div class="vs-checklist-list-empty">
                         <div class="vs-checklist-list-empty-icon"><i class="ti ti-checkbox"></i></div>
-                        <div class="vs-checklist-list-empty-text">Nenhum template de checklist criado ainda</div>
+                        <div class="vs-checklist-list-empty-text"><?= plugin_vehiclescheduler_escape($t('No checklist template created yet.')) ?></div>
 
                         <?php if (Session::haveRight('plugin_vehiclescheduler', CREATE)): ?>
                             <a href="<?= plugin_vehiclescheduler_escape(plugin_vehiclescheduler_get_front_url('checklist.form.php')) ?>" class="vs-checklist-list-action">
                                 <i class="ti ti-plus"></i>
-                                Criar Primeiro Template
+                                <?= plugin_vehiclescheduler_escape($t('Create first template')) ?>
                             </a>
                         <?php endif; ?>
                     </div>
@@ -129,7 +134,7 @@ plugin_vehiclescheduler_enhance_ui();
                                     <div class="vs-checklist-list-meta">
                                         <div class="vs-checklist-list-meta-item">
                                             <i class="ti ti-list-check"></i>
-                                            <strong><?= (int) ($itemCounts[$checklistId] ?? 0) ?></strong> itens
+                                            <strong><?= (int) ($itemCounts[$checklistId] ?? 0) ?></strong> <?= plugin_vehiclescheduler_escape($t('items')) ?>
                                         </div>
 
                                         <span class="vs-checklist-list-badge <?= plugin_vehiclescheduler_escape($typeClass) ?>">
@@ -137,12 +142,12 @@ plugin_vehiclescheduler_enhance_ui();
                                         </span>
 
                                         <span class="vs-checklist-list-badge <?= (int) ($checklist['is_active'] ?? 0) === 1 ? 'vs-checklist-list-badge--active' : 'vs-checklist-list-badge--inactive' ?>">
-                                            <?= (int) ($checklist['is_active'] ?? 0) === 1 ? 'Ativo' : 'Inativo' ?>
+                                            <?= plugin_vehiclescheduler_escape((int) ($checklist['is_active'] ?? 0) === 1 ? $t('Active') : $t('Inactive')) ?>
                                         </span>
 
                                         <?php if ((int) ($checklist['is_mandatory'] ?? 0) === 1): ?>
                                             <span class="vs-checklist-list-badge vs-checklist-list-badge--mandatory">
-                                                Obrigatorio
+                                                <?= plugin_vehiclescheduler_escape($t('Mandatory')) ?>
                                             </span>
                                         <?php endif; ?>
                                     </div>
@@ -151,7 +156,7 @@ plugin_vehiclescheduler_enhance_ui();
                                 <div class="vs-checklist-list-actions">
                                     <a href="<?= plugin_vehiclescheduler_escape(plugin_vehiclescheduler_get_front_url('checklist.form.php') . '?id=' . $checklistId) ?>" class="vs-checklist-list-action">
                                         <i class="ti ti-edit"></i>
-                                        Editar
+                                        <?= plugin_vehiclescheduler_escape($t('Edit')) ?>
                                     </a>
                                 </div>
                             </div>

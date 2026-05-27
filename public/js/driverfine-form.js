@@ -8,13 +8,7 @@
         verysevere: '4'
     };
 
-    var severityLabelByValue = {
-        '0': 'Sem pontuação',
-        '1': 'Leve - 3 pts',
-        '2': 'Média - 4 pts',
-        '3': 'Grave - 5 pts',
-        '4': 'Gravíssima - 7 pts'
-    };
+    var severityLabelByValue = {};
 
     function normalize(value) {
         return String(value || '')
@@ -54,15 +48,15 @@
         }
 
         if (!item) {
-            node.innerHTML = '<span>Nenhuma infração selecionada.</span>';
+            node.innerHTML = '<span>' + escapeHtml(node.dataset.noInfractionSelected || 'No infraction selected.') + '</span>';
             return;
         }
 
         node.innerHTML = ''
             + '<strong>' + escapeHtml(buildKey(item)) + '</strong>'
             + '<span>' + escapeHtml(item.description) + '</span>'
-            + '<small>' + escapeHtml(item.legal_basis || 'Sem amparo legal informado')
-            + ' · ' + escapeHtml(item.severity_label || 'Sem gravidade') + '</small>';
+            + '<small>' + escapeHtml(item.legal_basis || node.dataset.noLegalBasis || 'No legal basis informed')
+            + ' · ' + escapeHtml(item.severity_label || node.dataset.noSeverity || 'No severity') + '</small>';
     }
 
     function renderResults(resultsNode, items, shouldShowEmpty) {
@@ -71,7 +65,9 @@
         }
 
         if (!items.length) {
-            resultsNode.innerHTML = shouldShowEmpty ? '<div class="vs-renainf-empty">Nenhuma infração encontrada.</div>' : '';
+            resultsNode.innerHTML = shouldShowEmpty
+                ? '<div class="vs-renainf-empty">' + escapeHtml(resultsNode.dataset.noInfractionFound || 'No infraction found.') + '</div>'
+                : '';
             return;
         }
 
@@ -81,9 +77,9 @@
                 + '  <span class="vs-renainf-option__code">' + escapeHtml(buildKey(item)) + '</span>'
                 + '  <span class="vs-renainf-option__body">'
                 + '    <strong>' + escapeHtml(item.description) + '</strong>'
-                + '    <small>' + escapeHtml(item.legal_basis || 'Sem amparo legal') + ' · '
-                + escapeHtml(item.offender || 'Infrator não informado') + ' · '
-                + escapeHtml(item.severity_label || 'Sem gravidade') + '</small>'
+                + '    <small>' + escapeHtml(item.legal_basis || resultsNode.dataset.noLegalBasisShort || 'No legal basis') + ' · '
+                + escapeHtml(item.offender || resultsNode.dataset.noOffender || 'Offender not informed') + ' · '
+                + escapeHtml(item.severity_label || resultsNode.dataset.noSeverity || 'No severity') + '</small>'
                 + '  </span>'
                 + '</button>';
         }).join('');
@@ -99,7 +95,9 @@
             return;
         }
 
-        triggerLabel.textContent = loaded ? 'Selecione uma infração RENAINF' : 'Carregando tabela RENAINF...';
+        triggerLabel.textContent = loaded
+            ? (triggerLabel.dataset.selectRenainfInfraction || 'Select a RENAINF infraction.')
+            : (triggerLabel.dataset.loadingRenainfTable || 'Loading RENAINF table...');
     }
 
     function initForm(form) {
@@ -121,6 +119,30 @@
         var catalog = [];
         var byKey = {};
         var currentKey = code.value ? code.value + '-' + split.value : '';
+
+        try {
+            severityLabelByValue = JSON.parse(form.dataset.severityLabels || '{}');
+        } catch (e) {
+            severityLabelByValue = {};
+        }
+
+        if (selected) {
+            selected.dataset.noInfractionSelected = form.dataset.noInfractionSelected || '';
+            selected.dataset.noLegalBasis = form.dataset.noLegalBasis || '';
+            selected.dataset.noSeverity = form.dataset.noSeverity || '';
+        }
+
+        if (results) {
+            results.dataset.noInfractionFound = form.dataset.noInfractionFound || '';
+            results.dataset.noLegalBasisShort = form.dataset.noLegalBasisShort || '';
+            results.dataset.noOffender = form.dataset.noOffender || '';
+            results.dataset.noSeverity = form.dataset.noSeverity || '';
+        }
+
+        if (triggerLabel) {
+            triggerLabel.dataset.selectRenainfInfraction = form.dataset.selectRenainfInfraction || '';
+            triggerLabel.dataset.loadingRenainfTable = triggerLabel.textContent || '';
+        }
 
         function openResults() {
             if (results) {
@@ -152,7 +174,7 @@
             if (severityDisplay) {
                 severityDisplay.textContent = item && item.severity_label
                     ? item.severity_label
-                    : (severityLabelByValue[severity.value] || 'Definida pela infração');
+                    : (severityLabelByValue[severity.value] || form.dataset.definedByInfraction || 'Defined by infraction');
             }
         }
 
@@ -194,7 +216,7 @@
             currentKey = '';
             severity.value = '3';
             if (severityDisplay) {
-                severityDisplay.textContent = 'Definida pela infração';
+                severityDisplay.textContent = form.dataset.definedByInfraction || 'Defined by infraction';
             }
             renderSelected(selected, null);
             renderResults(results, [], false);
@@ -253,7 +275,7 @@
                 }
             })
             .catch(function () {
-                results.innerHTML = '<div class="vs-renainf-empty">Não foi possível carregar a tabela RENAINF.</div>';
+                results.innerHTML = '<div class="vs-renainf-empty">' + escapeHtml(form.dataset.renainfLoadError || 'Unable to load RENAINF table.') + '</div>';
                 renderTrigger(triggerLabel, null, true);
             });
 

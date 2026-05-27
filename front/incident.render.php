@@ -250,7 +250,7 @@ function plugin_vehiclescheduler_render_incident_yes_no_options(int $selected): 
 {
     $html = '';
 
-    foreach ([1 => 'Sim', 0 => 'Não'] as $value => $label) {
+    foreach ([1 => __('Yes', 'vehiclescheduler'), 0 => __('No', 'vehiclescheduler')] as $value => $label) {
         $isSelected = $selected === $value ? ' selected' : '';
         $html .= "<option value='" . $value . "'" . $isSelected . '>'
             . plugin_vehiclescheduler_incident_escape($label)

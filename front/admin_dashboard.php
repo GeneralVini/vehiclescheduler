@@ -34,6 +34,10 @@ $management_url = plugin_vehiclescheduler_get_front_url('management.php');
 $normal_url     = plugin_vehiclescheduler_get_front_url('admin_dashboard.php');
 $standalone_url = plugin_vehiclescheduler_get_front_url('admin_dashboard.php') . '?standalone=1';
 $pageTitle = __('Executive Fleet View', 'vehiclescheduler');
+$t = static fn(string $message): string => __($message, 'vehiclescheduler');
+$h = static fn(?string $value): string => htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+
+plugin_vehiclescheduler_apply_configured_locale();
 
 if ($standalone) {
     Html::nullHeader($pageTitle, $management_url);
@@ -41,6 +45,8 @@ if ($standalone) {
 } else {
     Html::header($pageTitle, $_SERVER['PHP_SELF'], 'tools');
 }
+
+plugin_vehiclescheduler_apply_configured_locale();
 
 plugin_vehiclescheduler_load_css();
 plugin_vehiclescheduler_enhance_ui();
@@ -55,19 +61,22 @@ if ($standalone) {
 }
 
 ?>
-<div class="<?php echo htmlspecialchars($page_classes, ENT_QUOTES, 'UTF-8'); ?>">
+<div
+    class="<?php echo $h($page_classes); ?>"
+    data-next-refresh-at="<?php echo $h($t('Next refresh at %s')); ?>"
+    data-time-locale="<?php echo $h(str_replace('_', '-', (string) ($_SESSION['glpilanguage'] ?? 'en_GB'))); ?>">
     <div class="vs-wallboard-shell">
 
         <section class="vs-wallboard-hero">
             <div class="vs-wallboard-hero__top">
                 <div class="vs-wallboard-pill">
                     <i class="ti ti-broadcast"></i>
-                    <span>Central de Monitoramento da Frota</span>
+                    <span><?php echo $h($t('Fleet Monitoring Center')); ?></span>
                 </div>
 
                 <div class="vs-wallboard-controls">
-                    <div class="vs-theme-toggle" title="Alternar tema">
-                        <input type="checkbox" id="vsExecThemeToggle" aria-label="Alternar tema">
+                    <div class="vs-theme-toggle" title="<?php echo $h($t('Toggle theme')); ?>">
+                        <input type="checkbox" id="vsExecThemeToggle" aria-label="<?php echo $h($t('Toggle theme')); ?>">
                         <label for="vsExecThemeToggle">
                             <svg class="sun" viewBox="0 0 24 24" aria-hidden="true">
                                 <path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zM1 11h3v2H1v-2zm10-10h2v3h-2V1zm9.66 3.46l-1.41-1.41-1.8 1.79 1.42 1.42 1.79-1.8zM20 11h3v2h-3v-2zM11 20h2v3h-2v-3zm7.24-1.84l1.8 1.79 1.41-1.41-1.79-1.8-1.42 1.42zM4.34 19.54l1.41 1.41 1.8-1.79-1.42-1.42-1.79 1.8zM12 6a6 6 0 100 12 6 6 0 000-12z" />
@@ -78,39 +87,39 @@ if ($standalone) {
                         </label>
                     </div>
 
-                    <div class="vs-control-group" aria-label="Controles de fonte">
-                        <button type="button" class="vs-control-btn" id="vsFontDecrease" title="Diminuir fonte" aria-label="Diminuir fonte">
+                    <div class="vs-control-group" aria-label="<?php echo $h($t('Font controls')); ?>">
+                        <button type="button" class="vs-control-btn" id="vsFontDecrease" title="<?php echo $h($t('Decrease font')); ?>" aria-label="<?php echo $h($t('Decrease font')); ?>">
                             <i class="ti ti-minus"></i>
                         </button>
-                        <button type="button" class="vs-control-btn" id="vsFontReset" title="Resetar fonte" aria-label="Resetar fonte">
+                        <button type="button" class="vs-control-btn" id="vsFontReset" title="<?php echo $h($t('Reset font')); ?>" aria-label="<?php echo $h($t('Reset font')); ?>">
                             <i class="ti ti-refresh"></i>
                         </button>
-                        <button type="button" class="vs-control-btn" id="vsFontIncrease" title="Aumentar fonte" aria-label="Aumentar fonte">
+                        <button type="button" class="vs-control-btn" id="vsFontIncrease" title="<?php echo $h($t('Increase font')); ?>" aria-label="<?php echo $h($t('Increase font')); ?>">
                             <i class="ti ti-plus"></i>
                         </button>
                     </div>
 
-                    <div class="vs-control-group" aria-label="Controles extras de visual">
-                        <button type="button" class="vs-control-btn vs-control-btn--label" id="vsVisualReset" title="Resetar visual" aria-label="Resetar visual">
-                            Reset visual
+                    <div class="vs-control-group" aria-label="<?php echo $h($t('Visual controls')); ?>">
+                        <button type="button" class="vs-control-btn vs-control-btn--label" id="vsVisualReset" title="<?php echo $h($t('Reset visual')); ?>" aria-label="<?php echo $h($t('Reset visual')); ?>">
+                            <?php echo $h($t('Reset visual')); ?>
                         </button>
                     </div>
 
                     <div class="vs-wallboard-actions">
                         <?php if (!$standalone): ?>
-                            <a href="<?php echo htmlspecialchars($standalone_url, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" class="vs-action-btn">
+                            <a href="<?php echo $h($standalone_url); ?>" target="_blank" rel="noopener" class="vs-action-btn">
                                 <i class="ti ti-screen-share"></i>
-                                <span>Abrir telão</span>
+                                <span><?php echo $h($t('Open wallboard')); ?></span>
                             </a>
 
-                            <a href="<?php echo htmlspecialchars($management_url, ENT_QUOTES, 'UTF-8'); ?>" class="vs-action-btn">
+                            <a href="<?php echo $h($management_url); ?>" class="vs-action-btn">
                                 <i class="ti ti-arrow-left"></i>
-                                <span>Voltar ao operacional</span>
+                                <span><?php echo $h($t('Back to operations')); ?></span>
                             </a>
                         <?php else: ?>
-                            <a href="<?php echo htmlspecialchars($normal_url, ENT_QUOTES, 'UTF-8'); ?>" class="vs-action-btn">
+                            <a href="<?php echo $h($normal_url); ?>" class="vs-action-btn">
                                 <i class="ti ti-layout-sidebar"></i>
-                                <span>Modo normal</span>
+                                <span><?php echo $h($t('Normal mode')); ?></span>
                             </a>
                         <?php endif; ?>
                     </div>
@@ -121,27 +130,27 @@ if ($standalone) {
                 <div class="vs-wallboard-hero__main">
                     <h1 class="vs-dashboard-title">
                         <i class="ti ti-layout-dashboard"></i>
-                        <span>Telão Executivo da Frota</span>
+                        <span><?php echo $h($t('Executive Fleet Wallboard')); ?></span>
                     </h1>
                     <p class="vs-dashboard-subtitle">
-                        Visão contínua da disponibilidade, solicitações, viagens, incidentes e operação da frota.
+                        <?php echo $h($t('Continuous view of availability, requests, trips, incidents, and fleet operations.')); ?>
                     </p>
                 </div>
 
                 <div class="vs-wallboard-status">
                     <div class="vs-wallboard-clock">
-                        <div class="vs-wallboard-clock__label">Relógio</div>
+                        <div class="vs-wallboard-clock__label"><?php echo $h($t('Clock')); ?></div>
                         <div id="vsWallClock" class="vs-wallboard-clock__value">--:--:--</div>
                     </div>
 
                     <div class="vs-wallboard-status-pill">
-                        <strong>Atualiza em</strong>
+                        <strong><?php echo $h($t('Refreshes in')); ?></strong>
                         <span id="vsRefreshCountdown">15s</span>
                     </div>
 
                     <div class="vs-wallboard-status-pill">
-                        <strong>Última atualização</strong>
-                        <span><?php echo htmlspecialchars((string) $realtime['generated_at'], ENT_QUOTES, 'UTF-8'); ?></span>
+                        <strong><?php echo $h($t('Last update')); ?></strong>
+                        <span><?php echo $h((string) $realtime['generated_at']); ?></span>
                     </div>
                 </div>
             </div>
@@ -150,7 +159,7 @@ if ($standalone) {
         <section class="vs-wallboard-kpi-grid">
             <div class="vs-wallboard-kpi vs-wallboard-kpi--primary">
                 <div class="vs-wallboard-kpi__head">
-                    <div class="vs-wallboard-kpi__label">Disponibilidade</div>
+                    <div class="vs-wallboard-kpi__label"><?php echo $h($t('Availability')); ?></div>
                     <div class="vs-wallboard-kpi__icon"><i class="ti ti-car-suv"></i></div>
                 </div>
                 <div class="vs-wallboard-kpi__value"><?php echo number_format((float) $summary['availability_pct'], 1, ',', '.'); ?>%</div>
@@ -158,7 +167,7 @@ if ($standalone) {
 
             <div class="vs-wallboard-kpi vs-wallboard-kpi--warning">
                 <div class="vs-wallboard-kpi__head">
-                    <div class="vs-wallboard-kpi__label">Solicitações pendentes</div>
+                    <div class="vs-wallboard-kpi__label"><?php echo $h($t('Pending requests')); ?></div>
                     <div class="vs-wallboard-kpi__icon"><i class="ti ti-calendar-plus"></i></div>
                 </div>
                 <div class="vs-wallboard-kpi__value"><?php echo (int) $summary['pending_requests']; ?></div>
@@ -166,7 +175,7 @@ if ($standalone) {
 
             <div class="vs-wallboard-kpi vs-wallboard-kpi--info">
                 <div class="vs-wallboard-kpi__head">
-                    <div class="vs-wallboard-kpi__label">Viagens em andamento</div>
+                    <div class="vs-wallboard-kpi__label"><?php echo $h($t('Trips in progress')); ?></div>
                     <div class="vs-wallboard-kpi__icon"><i class="ti ti-route-2"></i></div>
                 </div>
                 <div class="vs-wallboard-kpi__value"><?php echo (int) $summary['trips_in_progress']; ?></div>
@@ -174,7 +183,7 @@ if ($standalone) {
 
             <div class="vs-wallboard-kpi vs-wallboard-kpi--neutral">
                 <div class="vs-wallboard-kpi__head">
-                    <div class="vs-wallboard-kpi__label">Viaturas indisponíveis</div>
+                    <div class="vs-wallboard-kpi__label"><?php echo $h($t('Unavailable vehicles')); ?></div>
                     <div class="vs-wallboard-kpi__icon"><i class="ti ti-car-off"></i></div>
                 </div>
                 <div class="vs-wallboard-kpi__value"><?php echo (int) $summary['vehicles_unavailable']; ?></div>
@@ -182,7 +191,7 @@ if ($standalone) {
 
             <div class="vs-wallboard-kpi vs-wallboard-kpi--warning">
                 <div class="vs-wallboard-kpi__head">
-                    <div class="vs-wallboard-kpi__label">CNHs críticas</div>
+                    <div class="vs-wallboard-kpi__label"><?php echo $h($t('Critical CNHs')); ?></div>
                     <div class="vs-wallboard-kpi__icon"><i class="ti ti-id-badge"></i></div>
                 </div>
                 <div class="vs-wallboard-kpi__value"><?php echo (int) $summary['cnh_critical']; ?></div>
@@ -190,7 +199,7 @@ if ($standalone) {
 
             <div class="vs-wallboard-kpi vs-wallboard-kpi--danger">
                 <div class="vs-wallboard-kpi__head">
-                    <div class="vs-wallboard-kpi__label">Incidentes abertos</div>
+                    <div class="vs-wallboard-kpi__label"><?php echo $h($t('Open incidents')); ?></div>
                     <div class="vs-wallboard-kpi__icon"><i class="ti ti-alert-triangle"></i></div>
                 </div>
                 <div class="vs-wallboard-kpi__value"><?php echo (int) $summary['incidents_open']; ?></div>
@@ -198,7 +207,7 @@ if ($standalone) {
 
             <div class="vs-wallboard-kpi vs-wallboard-kpi--warning">
                 <div class="vs-wallboard-kpi__head">
-                    <div class="vs-wallboard-kpi__label">Checklist pendente</div>
+                    <div class="vs-wallboard-kpi__label"><?php echo $h($t('Pending checklist')); ?></div>
                     <div class="vs-wallboard-kpi__icon"><i class="ti ti-checklist"></i></div>
                 </div>
                 <div class="vs-wallboard-kpi__value"><?php echo (int) $summary['checklist_pending']; ?></div>
@@ -208,13 +217,13 @@ if ($standalone) {
         <section class="vs-wallboard-main">
             <div class="vs-card">
                 <div class="vs-card-header">
-                    <span class="vs-card-title"><i class="ti ti-chart-pie"></i> Reservas por status</span>
+                    <span class="vs-card-title"><i class="ti ti-chart-pie"></i> <?php echo $h($t('Reservations by status')); ?></span>
                 </div>
 
                 <div class="vs-wallboard-status-kpi-grid">
                     <div class="vs-wallboard-kpi vs-wallboard-kpi--primary">
                         <div class="vs-wallboard-kpi__head">
-                            <div class="vs-wallboard-kpi__label">Novas</div>
+                            <div class="vs-wallboard-kpi__label"><?php echo $h($t('New')); ?></div>
                             <div class="vs-wallboard-kpi__icon"><i class="ti ti-file-plus"></i></div>
                         </div>
                         <div class="vs-wallboard-kpi__value"><?php echo (int) $reservations_chart['new']; ?></div>
@@ -222,7 +231,7 @@ if ($standalone) {
 
                     <div class="vs-wallboard-kpi vs-wallboard-kpi--success">
                         <div class="vs-wallboard-kpi__head">
-                            <div class="vs-wallboard-kpi__label">Aprovadas</div>
+                            <div class="vs-wallboard-kpi__label"><?php echo $h($t('Approved')); ?></div>
                             <div class="vs-wallboard-kpi__icon"><i class="ti ti-circle-check"></i></div>
                         </div>
                         <div class="vs-wallboard-kpi__value"><?php echo (int) $reservations_chart['approved']; ?></div>
@@ -230,7 +239,7 @@ if ($standalone) {
 
                     <div class="vs-wallboard-kpi vs-wallboard-kpi--danger">
                         <div class="vs-wallboard-kpi__head">
-                            <div class="vs-wallboard-kpi__label">Recusadas</div>
+                            <div class="vs-wallboard-kpi__label"><?php echo $h($t('Rejected')); ?></div>
                             <div class="vs-wallboard-kpi__icon"><i class="ti ti-circle-x"></i></div>
                         </div>
                         <div class="vs-wallboard-kpi__value"><?php echo (int) $reservations_chart['rejected']; ?></div>
@@ -238,7 +247,7 @@ if ($standalone) {
 
                     <div class="vs-wallboard-kpi vs-wallboard-kpi--neutral">
                         <div class="vs-wallboard-kpi__head">
-                            <div class="vs-wallboard-kpi__label">Canceladas</div>
+                            <div class="vs-wallboard-kpi__label"><?php echo $h($t('Cancelled')); ?></div>
                             <div class="vs-wallboard-kpi__icon"><i class="ti ti-ban"></i></div>
                         </div>
                         <div class="vs-wallboard-kpi__value"><?php echo (int) $reservations_chart['cancelled']; ?></div>
@@ -249,18 +258,18 @@ if ($standalone) {
             <div class="vs-wallboard-side">
                 <div class="vs-card">
                     <div class="vs-card-header">
-                        <span class="vs-card-title"><i class="ti ti-timeline-event"></i> Últimas solicitações</span>
+                        <span class="vs-card-title"><i class="ti ti-timeline-event"></i> <?php echo $h($t('Latest requests')); ?></span>
                     </div>
 
                     <?php if (empty($recent_requests)): ?>
-                        <div class="vs-empty-state">Nenhuma solicitação registrada.</div>
+                        <div class="vs-empty-state"><?php echo $h($t('No requests registered.')); ?></div>
                     <?php else: ?>
                         <table class="vs-table">
                             <thead>
                                 <tr>
-                                    <th>Solicitante</th>
-                                    <th>Viatura</th>
-                                    <th>Destino</th>
+                                    <th><?php echo $h($t('Requester')); ?></th>
+                                    <th><?php echo $h($t('Vehicle')); ?></th>
+                                    <th><?php echo $h($t('Destination')); ?></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -278,18 +287,18 @@ if ($standalone) {
 
                 <div class="vs-card">
                     <div class="vs-card-header">
-                        <span class="vs-card-title"><i class="ti ti-trophy"></i> Top viaturas</span>
+                        <span class="vs-card-title"><i class="ti ti-trophy"></i> <?php echo $h($t('Top vehicles')); ?></span>
                     </div>
 
                     <?php if (empty($top_vehicles)): ?>
-                        <div class="vs-empty-state">Sem dados de uso de viaturas.</div>
+                        <div class="vs-empty-state"><?php echo $h($t('No vehicle usage data.')); ?></div>
                     <?php else: ?>
                         <table class="vs-table">
                             <thead>
                                 <tr>
-                                    <th>Viatura</th>
-                                    <th>Reservas</th>
-                                    <th>Último uso</th>
+                                    <th><?php echo $h($t('Vehicle')); ?></th>
+                                    <th><?php echo $h($t('Reservations')); ?></th>
+                                    <th><?php echo $h($t('Last use')); ?></th>
                                 </tr>
                             </thead>
                             <tbody>

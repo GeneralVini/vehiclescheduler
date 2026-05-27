@@ -62,6 +62,8 @@ $h = static function ($value): string {
     return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
 };
 
+$t = static fn(string $message): string => __($message, 'vehiclescheduler');
+
 $json_attr = static function ($value): string {
     $encoded = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
@@ -178,18 +180,18 @@ $get_user_label = static function (int $user_id): string {
     return $label !== '' ? $label : 'Não informado';
 };
 
-$get_status_meta = static function (int $status): array {
+$get_status_meta = static function (int $status) use ($t): array {
     switch ($status) {
         case \PluginVehicleschedulerSchedule::STATUS_APPROVED:
             return [
-                'label' => 'Aprovada',
+                'label' => $t('Approved'),
                 'class' => 'vs-status-badge--approved',
                 'icon'  => 'ti ti-check',
             ];
 
         case \PluginVehicleschedulerSchedule::STATUS_REJECTED:
             return [
-                'label' => 'Recusada',
+                'label' => $t('Rejected'),
                 'class' => 'vs-status-badge--rejected',
                 'icon'  => 'ti ti-x',
             ];
@@ -197,7 +199,7 @@ $get_status_meta = static function (int $status): array {
         case \PluginVehicleschedulerSchedule::STATUS_PENDING:
         default:
             return [
-                'label' => 'Pendente',
+                'label' => $t('Pending'),
                 'class' => 'vs-status-badge--pending',
                 'icon'  => 'ti ti-hourglass',
             ];
@@ -210,11 +212,11 @@ $validate_assignment_requirement = static function (array $post, bool $assignmen
     }
 
     if ((int)($post['plugin_vehiclescheduler_vehicles_id'] ?? 0) <= 0) {
-        return 'Selecione a viatura.';
+        return __('Select a vehicle.', 'vehiclescheduler');
     }
 
     if ((int)($post['plugin_vehiclescheduler_drivers_id'] ?? 0) <= 0) {
-        return 'Selecione o motorista.';
+        return __('Select a driver.', 'vehiclescheduler');
     }
 
     return null;
@@ -264,12 +266,12 @@ if (isset($_POST['add'])) {
     \Html::redirect($getSuccessRedirect());
 } elseif (isset($_POST['update'])) {
     if ($post_id <= 0) {
-        \Session::addMessageAfterRedirect('ID da reserva inválido.', true, ERROR);
+        \Session::addMessageAfterRedirect($t('Invalid reservation ID.'), true, ERROR);
         \Html::back();
     }
 
     if (!$schedule->getFromDB($post_id)) {
-        \Session::addMessageAfterRedirect('Reserva não encontrada.', true, ERROR);
+        \Session::addMessageAfterRedirect($t('Reservation not found.'), true, ERROR);
         \Html::back();
     }
 
@@ -296,14 +298,14 @@ if (isset($_POST['add'])) {
         ];
 
         $schedule->update($update_input);
-        \Session::addMessageAfterRedirect('Atribuição atualizada com sucesso.');
+        \Session::addMessageAfterRedirect($t('Assignment updated successfully.'));
     } else {
         $input = $merge_schedule_input($schedule->fields, $request_post, $current_user_id, $current_entity);
         $input['id'] = $post_id;
 
         $schedule->check($post_id, UPDATE, $input);
         $schedule->update($input);
-        \Session::addMessageAfterRedirect('Reserva atualizada com sucesso.');
+        \Session::addMessageAfterRedirect($t('Reservation updated successfully.'));
     }
 
     \Html::redirect($getSuccessRedirect());
@@ -313,7 +315,7 @@ if (isset($_POST['add'])) {
     }
 
     if ($post_id <= 0) {
-        \Session::addMessageAfterRedirect('ID da reserva inválido.', true, ERROR);
+        \Session::addMessageAfterRedirect($t('Invalid reservation ID.'), true, ERROR);
         \Html::back();
     }
 
@@ -322,12 +324,12 @@ if (isset($_POST['add'])) {
     \Html::redirect(plugin_vehiclescheduler_get_front_url('schedule.php'));
 } elseif (isset($_POST['save_and_approve'])) {
     if ($post_id <= 0) {
-        \Session::addMessageAfterRedirect('ID da reserva inválido.', true, ERROR);
+        \Session::addMessageAfterRedirect($t('Invalid reservation ID.'), true, ERROR);
         \Html::back();
     }
 
     if (!$schedule->getFromDB($post_id)) {
-        \Session::addMessageAfterRedirect('Reserva não encontrada.', true, ERROR);
+        \Session::addMessageAfterRedirect($t('Reservation not found.'), true, ERROR);
         \Html::back();
     }
 
@@ -357,7 +359,7 @@ if (isset($_POST['add'])) {
         }
 
         $schedule->approveReservation($post_id);
-        \Session::addMessageAfterRedirect('Reserva aprovada com sucesso.');
+        \Session::addMessageAfterRedirect($t('Reservation approved successfully.'));
     } catch (\RuntimeException $exception) {
         \Session::addMessageAfterRedirect($exception->getMessage(), true, ERROR);
     }
@@ -367,12 +369,12 @@ if (isset($_POST['add'])) {
     );
 } elseif (isset($_POST['reject_reservation'])) {
     if ($post_id <= 0) {
-        \Session::addMessageAfterRedirect('ID da reserva inválido.', true, ERROR);
+        \Session::addMessageAfterRedirect($t('Invalid reservation ID.'), true, ERROR);
         \Html::back();
     }
 
     if (!$schedule->getFromDB($post_id)) {
-        \Session::addMessageAfterRedirect('Reserva não encontrada.', true, ERROR);
+        \Session::addMessageAfterRedirect($t('Reservation not found.'), true, ERROR);
         \Html::back();
     }
 
@@ -384,7 +386,7 @@ if (isset($_POST['add'])) {
 
     try {
         $schedule->rejectReservation($post_id, $justification);
-        \Session::addMessageAfterRedirect('Reserva recusada com sucesso.');
+        \Session::addMessageAfterRedirect($t('Reservation rejected successfully.'));
     } catch (\RuntimeException $exception) {
         \Session::addMessageAfterRedirect($exception->getMessage(), true, ERROR);
     }
@@ -423,7 +425,7 @@ if (isset($_POST['add'])) {
 
     if ($id > 0) {
         if (!$schedule->getFromDB($id)) {
-            \Session::addMessageAfterRedirect('Reserva não encontrada.', true, ERROR);
+            \Session::addMessageAfterRedirect($t('Reservation not found.'), true, ERROR);
             \Html::redirect(plugin_vehiclescheduler_get_front_url('schedule.php'));
         }
 
@@ -444,7 +446,7 @@ if (isset($_POST['add'])) {
         : [];
 
     \Html::header(
-        'Reservas',
+        $t('Reservations'),
         $form_action,
         'tools',
         \PluginVehicleschedulerMenu::class,
@@ -475,12 +477,18 @@ if (isset($_POST['add'])) {
     echo "<script src='" . $h($feedback_js_url) . "' defer></script>";
     echo "<script src='" . $h($js_url) . "' defer></script>";
 
-    $page_title = $id > 0 ? 'Reserva #' . (int)$id : 'Nova solicitação';
+    $page_title = $id > 0 ? sprintf($t('Reservation #%d'), (int)$id) : $t('New request');
     $page_subtitle = $can_show_assignment_focus
-        ? 'Revise os dados e atribua viatura e motorista antes da decisão.'
-        : 'Dados da viagem, solicitante, período e finalidade.';
+        ? $t('Review the data and assign vehicle and driver before the decision.')
+        : $t('Trip data, requester, period, and purpose.');
 
-    echo "<div id='vs-schedule-form-root' class='vs-page vs-page-schedule-form'>";
+    echo "<div id='vs-schedule-form-root' class='vs-page vs-page-schedule-form'";
+    echo " data-vs-begin-required='" . $h($t('Inform the departure date and time.')) . "'";
+    echo " data-vs-begin-invalid='" . $h($t('The departure date/time is outside the expected format.')) . "'";
+    echo " data-vs-end-required='" . $h($t('Inform the return date and time.')) . "'";
+    echo " data-vs-end-invalid='" . $h($t('The return date/time is outside the expected format.')) . "'";
+    echo " data-vs-date-order-invalid='" . $h($t('The departure date/time must be earlier than the return date/time.')) . "'";
+    echo ">";
     echo "    <div class='vs-page-header'>";
     echo "        <div class='vs-header-content'>";
     echo "            <div class='vs-header-title'>";
@@ -510,33 +518,33 @@ if (isset($_POST['add'])) {
         echo "    <section class='vs-approval-card vs-approval-card--top'>";
         echo "        <div class='vs-approval-card__header'>";
         echo "            <div>";
-        echo "                <h3>Aprovação da reserva</h3>";
-        echo "                <p>Como aprovador, defina viatura e motorista e então use Salvar e aprovar, ou recuse com justificativa.</p>";
+        echo "                <h3>" . $h($t('Reservation approval')) . "</h3>";
+        echo "                <p>" . $h($t('As approver, assign vehicle and driver, then save and approve or reject with justification.')) . "</p>";
         echo "            </div>";
         echo "            <div class='vs-approval-actions'>";
         echo "                <button type='submit' name='save_and_approve' value='1' class='vs-btn-approve' form='vs-schedule-main-form'>";
         echo "                    <i class='ti ti-check'></i>";
-        echo "                    <span>Salvar e aprovar</span>";
+        echo "                    <span>" . $h($t('Save and approve')) . "</span>";
         echo "                </button>";
         echo "                <button type='button' class='vs-btn-reject-toggle' data-vs-toggle-rejection>";
         echo "                    <i class='ti ti-x'></i>";
-        echo "                    <span>Recusar</span>";
+        echo "                    <span>" . $h($t('Reject')) . "</span>";
         echo "                </button>";
         echo "            </div>";
         echo "        </div>";
         echo "        <form method='post' action='" . $h($form_action) . "' class='vs-rejection-form' data-vs-rejection-form hidden>";
         echo "            <input type='hidden' name='_glpi_csrf_token' value='" . $h($csrf_token) . "'>";
         echo "            <input type='hidden' name='id' value='" . (int)$id . "'>";
-        echo "            <label for='vs-rejection-justification'><strong>Justificativa da recusa</strong></label>";
-        echo "            <textarea id='vs-rejection-justification' name='rejection_justification' rows='2' class='vs-input-glass' placeholder='Informe o motivo da recusa.' required></textarea>";
+        echo "            <label for='vs-rejection-justification'><strong>" . $h($t('Rejection reason')) . "</strong></label>";
+        echo "            <textarea id='vs-rejection-justification' name='rejection_justification' rows='2' class='vs-input-glass' placeholder='" . $h($t('Inform the rejection reason.')) . "' required></textarea>";
         echo "            <div class='vs-rejection-form__actions'>";
         echo "                <button type='submit' name='reject_reservation' class='vs-btn-reject'>";
         echo "                    <i class='ti ti-alert-circle'></i>";
-        echo "                    <span>Confirmar recusa</span>";
+        echo "                    <span>" . $h($t('Confirm rejection')) . "</span>";
         echo "                </button>";
         echo "                <button type='button' class='vs-btn-reject-cancel' data-vs-cancel-rejection>";
         echo "                    <i class='ti ti-arrow-back-up'></i>";
-        echo "                    <span>Cancelar</span>";
+        echo "                    <span>" . $h($t('Cancel')) . "</span>";
         echo "                </button>";
         echo "            </div>";
         echo "        </form>";
@@ -561,13 +569,21 @@ if (isset($_POST['add'])) {
         echo "    <div class='vs-schedule-compatibility-data' data-vs-schedule-compatibility";
         echo " data-vs-vehicle-map='" . $json_attr($vehicleCompatibilityMap) . "'";
         echo " data-vs-driver-map='" . $json_attr($driverCompatibilityMap) . "'";
+        echo " data-vs-required-licence-template='" . $h($t('Required licence for this vehicle: %s. Cars accept B or D.')) . "'";
+        echo " data-vs-eligible-drivers-template='" . $h($t('%d eligible drivers for this vehicle.')) . "'";
+        echo " data-vs-eligible-drivers-label='" . $h($t('Eligible drivers')) . "'";
+        echo " data-vs-unnamed-driver='" . $h($t('Unnamed driver')) . "'";
+        echo " data-vs-no-compatible-drivers='" . $h($t('No active/approved driver matches this vehicle rule.')) . "'";
+        echo " data-vs-driver-incompatible='" . $h($t('The selected driver does not have a compatible licence for this vehicle.')) . "'";
+        echo " data-vs-driver-compatible-template='" . $h($t('Compatible driver. Enabled categories: %s.')) . "'";
+        echo " data-vs-invalid-compatibility='" . $h($t('Invalid compatibility. Motorcycles require A, cars accept B or D, and trucks/vans require D.')) . "'";
         echo " hidden></div>";
     }
 
     echo "    <div class='vs-form-section-header'>";
     echo "        <div>";
-    echo "            <h3>Detalhes da reserva</h3>";
-    echo "            <p>Preencha os dados da solicitação e, no fluxo de aprovação, faça a atribuição de recursos antes da decisão final.</p>";
+    echo "            <h3>" . $h($t('Reservation details')) . "</h3>";
+    echo "            <p>" . $h($t('Fill in the request data and, in the approval flow, assign resources before the final decision.')) . "</p>";
     echo "        </div>";
     echo "        <span class='vs-status-badge " . $h($status_meta['class']) . "'>";
     echo "            <i class='" . $h($status_meta['icon']) . "'></i>";
@@ -591,14 +607,14 @@ if (isset($_POST['add'])) {
     if (!empty($fields['date_mod'])) {
         echo "    <div class='vs-form-info-chip'>";
         echo "        <i class='ti ti-refresh'></i>";
-        echo "        <span><strong>Atualizado em:</strong> " . $h(\Html::convDateTime($fields['date_mod'])) . "</span>";
+        echo "        <span><strong>" . $h($t('Updated at')) . ":</strong> " . $h(\Html::convDateTime($fields['date_mod'])) . "</span>";
         echo "    </div>";
     }
 
     if ((int)$fields['approved_by'] > 0 && !empty($fields['approval_date'])) {
         echo "    <div class='vs-form-info-chip'>";
         echo "        <i class='ti ti-user-check'></i>";
-        echo "        <span><strong>Aprovador:</strong> " . $h($get_user_label((int)$fields['approved_by'])) . " em " . $h(\Html::convDateTime($fields['approval_date'])) . "</span>";
+        echo "        <span><strong>" . $h($t('Approver')) . ":</strong> " . $h(sprintf($t('%s on %s'), $get_user_label((int)$fields['approved_by']), \Html::convDateTime($fields['approval_date']))) . "</span>";
         echo "    </div>";
     }
 
@@ -684,18 +700,18 @@ if (isset($_POST['add'])) {
     echo "    </div>";
 
     if (($id === 0 && $can_create) || $can_update_own_request || ($is_existing && $can_edit) || ($is_existing && $can_assign)) {
-        $footer_title    = 'Ações da reserva';
-        $footer_subtitle = 'Revise os dados e conclua a operação desta reserva.';
+        $footer_title    = $t('Reservation actions');
+        $footer_subtitle = $t('Review the data and complete this reservation operation.');
 
         if ($id === 0) {
-            $footer_title    = 'Nova solicitação';
-            $footer_subtitle = 'Confira os dados antes de registrar a solicitação.';
+            $footer_title    = $t('New request');
+            $footer_subtitle = $t('Check the data before registering the request.');
         } elseif ($can_update_own_request) {
-            $footer_title    = 'Sua solicitação';
-            $footer_subtitle = 'Você pode ajustar os dados enquanto a reserva estiver pendente.';
+            $footer_title    = $t('Your request');
+            $footer_subtitle = $t('You can adjust the data while the reservation is pending.');
         } elseif ($is_existing && $can_assign && !$can_edit) {
-            $footer_title    = 'Atribuição de recursos';
-            $footer_subtitle = 'Defina viatura e motorista antes da aprovação final.';
+            $footer_title    = $t('Resource assignment');
+            $footer_subtitle = $t('Assign vehicle and driver before final approval.');
         }
 
         echo "    <div class='vs-content-card__footer'>";
@@ -708,27 +724,27 @@ if (isset($_POST['add'])) {
         if ($id === 0 && $can_create) {
             echo "        <button type='submit' name='add' class='vs-btn-save'>";
             echo "            <i class='ti ti-send'></i>";
-            echo "            <span>Solicitar viagem</span>";
+            echo "            <span>" . $h($t('Request trip')) . "</span>";
             echo "        </button>";
         } elseif ($can_update_own_request) {
             echo "        <button type='submit' name='update' class='vs-btn-save'>";
             echo "            <i class='ti ti-device-floppy'></i>";
-            echo "            <span>Salvar reserva</span>";
+            echo "            <span>" . $h($t('Save reservation')) . "</span>";
             echo "        </button>";
         } elseif ($is_existing && $can_assign && !$can_edit) {
             echo "        <button type='submit' name='update' class='vs-btn-save'>";
             echo "            <i class='ti ti-device-floppy'></i>";
-            echo "            <span>Salvar atribuição</span>";
+            echo "            <span>" . $h($t('Save assignment')) . "</span>";
             echo "        </button>";
         } elseif ($is_existing && $can_edit) {
             echo "        <button type='submit' name='update' class='vs-btn-save'>";
             echo "            <i class='ti ti-device-floppy'></i>";
-            echo "            <span>Salvar reserva</span>";
+            echo "            <span>" . $h($t('Save reservation')) . "</span>";
             echo "        </button>";
 
-            echo "        <button type='submit' name='delete' class='vs-btn-delete' data-confirm-message='Deseja excluir esta reserva?'>";
+            echo "        <button type='submit' name='delete' class='vs-btn-delete' data-confirm-message='" . $h($t('Delete this reservation?')) . "'>";
             echo "            <i class='ti ti-trash'></i>";
-            echo "            <span>Excluir reserva</span>";
+            echo "            <span>" . $h($t('Delete reservation')) . "</span>";
             echo "        </button>";
         }
 

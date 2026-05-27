@@ -23,9 +23,28 @@ document.addEventListener('DOMContentLoaded', function () {
     let clearButton = root.querySelector('[data-driver-clear-filters]');
     let resultCount = root.querySelector('[data-driver-result-count]');
     let emptyState = root.querySelector('[data-driver-empty]');
-    let resultLabel = resultCount && resultCount.dataset.resultLabel
-        ? resultCount.dataset.resultLabel
-        : 'motoristas';
+    let showingAllTemplate = resultCount && resultCount.dataset.showingAll
+        ? resultCount.dataset.showingAll
+        : 'Showing %d drivers';
+    let showingFilteredTemplate = resultCount && resultCount.dataset.showingFiltered
+        ? resultCount.dataset.showingFiltered
+        : 'Showing %d of %d drivers';
+
+    /**
+     * Formats simple gettext-style %d placeholders.
+     *
+     * @param {string} template Translated template.
+     * @param {...number} values Numeric values.
+     *
+     * @returns {string}
+     */
+    function formatCount(template) {
+        let values = Array.prototype.slice.call(arguments, 1);
+
+        return template.replace(/%d/g, function () {
+            return values.length ? values.shift() : '';
+        });
+    }
 
     /**
      * Normalizes a string for accent-insensitive and case-insensitive matching.
@@ -87,11 +106,11 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         if (visibleCount === totalCount) {
-            resultCount.textContent = 'Exibindo ' + totalCount + ' ' + resultLabel;
+            resultCount.textContent = formatCount(showingAllTemplate, totalCount);
             return;
         }
 
-        resultCount.textContent = 'Exibindo ' + visibleCount + ' de ' + totalCount + ' ' + resultLabel;
+        resultCount.textContent = formatCount(showingFilteredTemplate, visibleCount, totalCount);
     }
 
     /**

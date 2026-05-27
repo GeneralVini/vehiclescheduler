@@ -29,7 +29,16 @@ function vs_render_vehicle_form(PluginVehicleschedulerVehicle $vehicle): void
     $t = static fn(string $message): string => __($message, 'vehiclescheduler');
     $selectedRequiredCategory = (string) ($vehicle->fields['required_cnh_category'] ?? PluginVehicleschedulerVehicle::REQUIRED_CNH_B);
     ?>
-    <div class="vs-vehicle-wrap" data-vs-vehicle-form>
+    <div
+        class="vs-vehicle-wrap"
+        data-vs-vehicle-form
+        data-vehicle-name-required="<?= vs_vehicle_render_escape($t('Vehicle name is required.')) ?>"
+        data-vehicle-plate-required="<?= vs_vehicle_render_escape($t('Plate is required.')) ?>"
+        data-vehicle-plate-invalid="<?= vs_vehicle_render_escape($t('Enter a valid Brazilian registration number.')) ?>"
+        data-vehicle-year-invalid="<?= vs_vehicle_render_escape($t('Enter a valid year for the vehicle.')) ?>"
+        data-vehicle-seats-invalid="<?= vs_vehicle_render_escape($t('Passenger capacity must be between 1 and 100.')) ?>"
+        data-vehicle-required-licence="<?= vs_vehicle_render_escape($t('Select the required CNH category for the vehicle.')) ?>"
+    >
         <div class="vs-vehicle-surface">
             <div class="vs-vehicle-card">
                 <div class="vs-vehicle-head">

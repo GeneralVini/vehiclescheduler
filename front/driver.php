@@ -205,7 +205,9 @@ echo "            <i class='ti ti-search'></i>";
 echo "            <input type='search' placeholder='" . vs_driver_list_escape($t('Search driver...')) . "' aria-label='" . vs_driver_list_escape($t('Search drivers')) . "' data-driver-filter-search>";
 echo "        </div>";
 
-echo "        <div class='vs-driver-grid__results-text' data-driver-result-count>";
+echo "        <div class='vs-driver-grid__results-text' data-driver-result-count"
+    . " data-showing-all='" . vs_driver_list_escape($t('Showing %d drivers')) . "'"
+    . " data-showing-filtered='" . vs_driver_list_escape($t('Showing %d of %d drivers')) . "'>";
 echo              vs_driver_list_escape(sprintf($t('Showing %d drivers'), (int) count($drivers)));
 echo "        </div>";
 

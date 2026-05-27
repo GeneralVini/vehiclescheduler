@@ -12,6 +12,16 @@ function plugin_vehiclescheduler_get_root_doc(): string
     $rootDoc = (string) ($CFG_GLPI['root_doc'] ?? '');
 
     if ($rootDoc === '' || $rootDoc === '/') {
+        $urlBase = (string) ($CFG_GLPI['url_base'] ?? '');
+
+        if ($urlBase === '' && class_exists('Config')) {
+            $urlBase = (string) (Config::getConfigurationValue('core', 'url_base') ?? '');
+        }
+
+        $rootDoc = $urlBase !== '' ? (string) (parse_url($urlBase, PHP_URL_PATH) ?: '') : '';
+    }
+
+    if ($rootDoc === '' || $rootDoc === '/') {
         return '';
     }
 

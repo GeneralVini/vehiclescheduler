@@ -127,7 +127,11 @@ $values = [
 
 $renainfCatalogUrl = plugin_vehiclescheduler_get_public_asset_url('data/renainf-infractions.json');
 
-Html::header(__('Traffic fine', 'vehiclescheduler'), $formAction, 'tools', PluginVehicleschedulerMenu::class, 'management');
+plugin_vehiclescheduler_apply_configured_locale();
+
+Html::header($t('Traffic fine'), $formAction, 'tools', PluginVehicleschedulerMenu::class, 'management');
+
+plugin_vehiclescheduler_apply_configured_locale();
 
 plugin_vehiclescheduler_load_css([
     'css/pages/driverfine-form.css',
@@ -165,7 +169,17 @@ plugin_vehiclescheduler_render_back_to_management();
             action="<?= $h($formAction) ?>"
             class="vs-driverfine-form"
             data-vs-driverfine-form
-            data-renainf-catalog-url="<?= $h($renainfCatalogUrl) ?>">
+            data-renainf-catalog-url="<?= $h($renainfCatalogUrl) ?>"
+            data-no-infraction-selected="<?= $h($t('No infraction selected.')) ?>"
+            data-no-legal-basis="<?= $h($t('No legal basis informed')) ?>"
+            data-no-legal-basis-short="<?= $h($t('No legal basis')) ?>"
+            data-no-severity="<?= $h($t('No severity')) ?>"
+            data-no-offender="<?= $h($t('Offender not informed')) ?>"
+            data-no-infraction-found="<?= $h($t('No infraction found.')) ?>"
+            data-select-renainf-infraction="<?= $h($t('Select a RENAINF infraction.')) ?>"
+            data-renainf-load-error="<?= $h($t('Unable to load RENAINF table.')) ?>"
+            data-defined-by-infraction="<?= $h($t('Defined by infraction')) ?>"
+            data-severity-labels="<?= $h(json_encode(PluginVehicleschedulerDriverfine::getAllSeverities(), JSON_UNESCAPED_UNICODE)) ?>">
             <input type="hidden" name="_glpi_csrf_token" value="<?= Session::getNewCSRFToken() ?>">
             <input type="hidden" name="id" value="<?= (int) $values['id'] ?>">
             <input type="hidden" name="violation_code" value="<?= $h($values['violation_code']) ?>" data-renainf-code>

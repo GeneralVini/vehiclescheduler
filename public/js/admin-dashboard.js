@@ -17,6 +17,8 @@
     var visualReset = document.getElementById('vsVisualReset');
     var clockEl = document.getElementById('vsWallClock');
     var countdownEl = document.getElementById('vsRefreshCountdown');
+    var nextRefreshAtTemplate = page.dataset.nextRefreshAt || 'Next refresh at %s';
+    var timeLocale = page.dataset.timeLocale || document.documentElement.lang || navigator.language || 'en-GB';
     var minScale = 0.90;
     var maxScale = 1.18;
     var step = 0.04;
@@ -56,7 +58,11 @@
     }
 
     function formatTime(date) {
-        return date.toLocaleTimeString('pt-BR');
+        return date.toLocaleTimeString(timeLocale);
+    }
+
+    function formatMessage(template, value) {
+        return template.replace('%s', value);
     }
 
     function updateClock() {
@@ -83,7 +89,7 @@
         var remainingSeconds = Math.ceil(remainingMs / 1000);
 
         countdownEl.textContent = remainingSeconds + 's';
-        countdownEl.title = 'Próxima atualização às ' + formatTime(new Date(refreshDeadline));
+        countdownEl.title = formatMessage(nextRefreshAtTemplate, formatTime(new Date(refreshDeadline)));
     }
 
     function resyncDeadline() {

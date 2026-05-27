@@ -112,6 +112,7 @@
         var beginInput = document.querySelector('[name="begin_date"]');
         var endInput = document.querySelector('[name="end_date"]');
         var form = document.querySelector('#vs-schedule-main-form');
+        var root = document.querySelector('#vs-schedule-form-root');
         var validationNote = document.querySelector('[data-vs-date-validation]');
 
         if (!beginInput || !endInput || !form) {
@@ -192,16 +193,26 @@
             var message = '';
 
             if (!beginInput.value) {
-                message = 'Informe a data e hora de saida.';
+                message = root && root.dataset.vsBeginRequired
+                    ? root.dataset.vsBeginRequired
+                    : 'Inform the departure date and time.';
             } else if (!beginDate) {
-                message = 'A data/hora de saida esta fora do padrao esperado.';
+                message = root && root.dataset.vsBeginInvalid
+                    ? root.dataset.vsBeginInvalid
+                    : 'The departure date/time is outside the expected format.';
             } else if (!endInput.value) {
-                message = 'Informe a data e hora de retorno.';
+                message = root && root.dataset.vsEndRequired
+                    ? root.dataset.vsEndRequired
+                    : 'Inform the return date and time.';
             } else if (!endDate) {
-                message = 'A data/hora de retorno esta fora do padrao esperado.';
+                message = root && root.dataset.vsEndInvalid
+                    ? root.dataset.vsEndInvalid
+                    : 'The return date/time is outside the expected format.';
             } else
             if (beginDate && endDate && beginDate >= endDate) {
-                message = 'A data/hora de saida deve ser menor que a data/hora de retorno.';
+                message = root && root.dataset.vsDateOrderInvalid
+                    ? root.dataset.vsDateOrderInvalid
+                    : 'The departure date/time must be earlier than the return date/time.';
             }
 
             syncFieldValidity(beginInput, beginPicker, message);
@@ -351,6 +362,10 @@
             node.removeAttribute('hidden');
         }
 
+        function formatMessage(template, value) {
+            return String(template || '').replace(/%[sd]/, String(value));
+        }
+
         function refreshSelectUi(field) {
             if (!field) {
                 return;
@@ -456,13 +471,18 @@
 
             if (eligibleDrivers.length === 0) {
                 driverQuickList.hidden = false;
-                driverQuickList.innerHTML = '<div class="vs-schedule-driver-empty">Nenhum motorista compatÃ­vel encontrado para esta viatura.</div>';
+                driverQuickList.innerHTML = '<div class="vs-schedule-driver-empty">'
+                    + (compatibilityNode.dataset.vsNoCompatibleDrivers
+                        || 'No active/approved driver matches this vehicle rule.')
+                    + '</div>';
                 return;
             }
 
             var header = document.createElement('div');
             header.className = 'vs-schedule-driver-quick-list__head';
-            header.innerHTML = '<span>Motoristas elegÃ­veis</span><span>' + eligibleDrivers.length + '</span>';
+            header.innerHTML = '<span>'
+                + (compatibilityNode.dataset.vsEligibleDriversLabel || 'Eligible drivers')
+                + '</span><span>' + eligibleDrivers.length + '</span>';
             driverQuickList.appendChild(header);
 
             var grid = document.createElement('div');
@@ -478,7 +498,9 @@
 
                 card.setAttribute('data-driver-id', String(driverMeta.id));
                 card.innerHTML = [
-                    '<span class="vs-schedule-driver-card__name">' + String(driverMeta.name || 'Motorista') + '</span>',
+                    '<span class="vs-schedule-driver-card__name">'
+                        + String(driverMeta.name || compatibilityNode.dataset.vsUnnamedDriver || 'Unnamed driver')
+                        + '</span>',
                     '<span class="vs-schedule-driver-card__badges">' + renderCategoryBadges(driverMeta) + '</span>'
                 ].join('');
 
@@ -536,7 +558,11 @@
 
             setInlineNote(
                 vehicleNote,
-                'CNH exigida para esta viatura: ' + (vehicleMeta.requiredLabel || requiredCategory) + '. Carro aceita B ou D.',
+                formatMessage(
+                    compatibilityNode.dataset.vsRequiredLicenceTemplate
+                        || 'Required licence for this vehicle: %s. Cars accept B or D.',
+                    vehicleMeta.requiredLabel || requiredCategory
+                ),
                 'success'
             );
 
@@ -545,13 +571,18 @@
                 if (compatibleCount > 0) {
                     setInlineNote(
                         driverNote,
-                        compatibleCount + ' motorista(s) elegivel(is) para esta viatura.',
+                        formatMessage(
+                            compatibilityNode.dataset.vsEligibleDriversTemplate
+                                || '%d eligible drivers for this vehicle.',
+                            compatibleCount
+                        ),
                         'success'
                     );
                 } else {
                     setInlineNote(
                         driverNote,
-                        'Nenhum motorista ativo/aprovado atende a regra desta viatura.',
+                        compatibilityNode.dataset.vsNoCompatibleDrivers
+                            || 'No active/approved driver matches this vehicle rule.',
                         'warning'
                     );
                 }
@@ -567,13 +598,15 @@
                 if (formFeedback && typeof formFeedback.setFieldError === 'function') {
                     formFeedback.setFieldError(
                         driverField,
-                        'O motorista selecionado nao possui CNH compativel com a viatura.'
+                        compatibilityNode.dataset.vsDriverIncompatible
+                            || 'The selected driver does not have a compatible licence for this vehicle.'
                     );
                 }
 
                 setInlineNote(
                     driverNote,
-                    'Compatibilidade invalida. Moto exige A, carro aceita B ou D, e caminhao/van exige D.',
+                    compatibilityNode.dataset.vsInvalidCompatibility
+                        || 'Invalid compatibility. Motorcycles require A, cars accept B or D, and trucks/vans require D.',
                     'warning'
                 );
 
@@ -591,7 +624,11 @@
 
             setInlineNote(
                 driverNote,
-                'Motorista compativel. Categorias habilitadas: ' + driverCategories + '.',
+                formatMessage(
+                    compatibilityNode.dataset.vsDriverCompatibleTemplate
+                        || 'Compatible driver. Enabled categories: %s.',
+                    driverCategories
+                ),
                 'success'
             );
 
@@ -639,4 +676,3 @@
         init();
     }
 })();
-

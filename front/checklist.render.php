@@ -9,6 +9,7 @@ function plugin_vehiclescheduler_render_checklist_form(
     int $checklistId,
     string $rootDoc
 ): void {
+    $t = static fn(string $message): string => __($message, 'vehiclescheduler');
     $fields = $checklist->fields;
     $types = PluginVehicleschedulerChecklist::getChecklistTypes();
     $canEdit = $checklistId > 0
@@ -21,12 +22,12 @@ function plugin_vehiclescheduler_render_checklist_form(
     echo "<div class='vs-checklist-form-card'>";
     echo "<div class='vs-checklist-list-header'>";
     echo '<div>';
-    echo '<h1><i class="ti ti-checkbox"></i> Template de Checklist</h1>';
-    echo '<p class="vs-checklist-list-subtitle">Configure nome, tipo, status e itens do template.</p>';
+    echo '<h1><i class="ti ti-checkbox"></i> ' . plugin_vehiclescheduler_escape($t('Checklist template')) . '</h1>';
+    echo '<p class="vs-checklist-list-subtitle">' . plugin_vehiclescheduler_escape($t('Configure name, type, status, and template items.')) . '</p>';
     echo '</div>';
     echo "<a href='" . plugin_vehiclescheduler_escape($listUrl) . "' class='vs-checklist-list-create'>";
     echo '<i class="ti ti-arrow-left"></i>';
-    echo '<span>Voltar para Checklists</span>';
+    echo '<span>' . plugin_vehiclescheduler_escape($t('Back to checklists')) . '</span>';
     echo '</a>';
     echo '</div>';
 
@@ -41,13 +42,13 @@ function plugin_vehiclescheduler_render_checklist_form(
     echo "<div class='vs-checklist-form-grid'>";
 
     echo "<div class='vs-checklist-form-field'>";
-    echo "<label class='vs-checklist-form-label' for='vs-checklist-name'>Nome <span class='red'>*</span></label>";
+    echo "<label class='vs-checklist-form-label' for='vs-checklist-name'>" . plugin_vehiclescheduler_escape($t('Name')) . " <span class='red'>*</span></label>";
     echo "<input class='vs-checklist-form-input' type='text' id='vs-checklist-name' name='name' value='"
         . plugin_vehiclescheduler_escape((string) ($fields['name'] ?? '')) . "' maxlength='255' required>";
     echo '</div>';
 
     echo "<div class='vs-checklist-form-field'>";
-    echo "<label class='vs-checklist-form-label' for='vs-checklist-type'>Tipo <span class='red'>*</span></label>";
+    echo "<label class='vs-checklist-form-label' for='vs-checklist-type'>" . plugin_vehiclescheduler_escape($t('Type')) . " <span class='red'>*</span></label>";
     echo "<select class='vs-checklist-form-select' id='vs-checklist-type' name='checklist_type'>";
 
     foreach ($types as $typeId => $typeLabel) {
@@ -64,21 +65,21 @@ function plugin_vehiclescheduler_render_checklist_form(
     echo '</div>';
 
     echo "<div class='vs-checklist-form-field'>";
-    echo "<label class='vs-checklist-form-label' for='vs-checklist-active'>Ativo</label>";
+    echo "<label class='vs-checklist-form-label' for='vs-checklist-active'>" . plugin_vehiclescheduler_escape($t('Active')) . '</label>';
     echo "<select class='vs-checklist-form-select' id='vs-checklist-active' name='is_active'>";
     echo plugin_vehiclescheduler_render_yes_no_options((int) ($fields['is_active'] ?? 1));
     echo '</select>';
     echo '</div>';
 
     echo "<div class='vs-checklist-form-field'>";
-    echo "<label class='vs-checklist-form-label' for='vs-checklist-mandatory'>Obrigatorio</label>";
+    echo "<label class='vs-checklist-form-label' for='vs-checklist-mandatory'>" . plugin_vehiclescheduler_escape($t('Mandatory')) . '</label>';
     echo "<select class='vs-checklist-form-select' id='vs-checklist-mandatory' name='is_mandatory'>";
     echo plugin_vehiclescheduler_render_yes_no_options((int) ($fields['is_mandatory'] ?? 1));
     echo '</select>';
     echo '</div>';
 
     echo "<div class='vs-checklist-form-field vs-checklist-form-field--full'>";
-    echo "<label class='vs-checklist-form-label' for='vs-checklist-description'>Descricao</label>";
+    echo "<label class='vs-checklist-form-label' for='vs-checklist-description'>" . plugin_vehiclescheduler_escape($t('Description')) . '</label>';
     echo "<textarea class='vs-checklist-form-textarea' id='vs-checklist-description' name='description' rows='4'>"
         . plugin_vehiclescheduler_escape((string) ($fields['description'] ?? ''))
         . '</textarea>';
@@ -90,13 +91,13 @@ function plugin_vehiclescheduler_render_checklist_form(
         echo "<div class='vs-checklist-form-actions'>";
 
         if ($checklistId > 0) {
-            echo "<button type='submit' name='update' class='vs-checklist-form-button vs-checklist-form-button--primary'>Salvar</button>";
-            echo "<button type='submit' name='delete' class='vs-checklist-form-button vs-checklist-form-button--danger' data-confirm-message='Excluir este template?'>Excluir</button>";
+            echo "<button type='submit' name='update' class='vs-checklist-form-button vs-checklist-form-button--primary'>" . plugin_vehiclescheduler_escape($t('Save')) . '</button>';
+            echo "<button type='submit' name='delete' class='vs-checklist-form-button vs-checklist-form-button--danger' data-confirm-message='" . plugin_vehiclescheduler_escape($t('Delete this template?')) . "'>" . plugin_vehiclescheduler_escape($t('Delete')) . '</button>';
         } else {
-            echo "<button type='submit' name='add' class='vs-checklist-form-button vs-checklist-form-button--primary'>Criar template</button>";
+            echo "<button type='submit' name='add' class='vs-checklist-form-button vs-checklist-form-button--primary'>" . plugin_vehiclescheduler_escape($t('Create template')) . '</button>';
         }
 
-        echo "<a href='" . plugin_vehiclescheduler_escape($listUrl) . "' class='vs-checklist-form-button vs-checklist-form-button--secondary'>Cancelar</a>";
+        echo "<a href='" . plugin_vehiclescheduler_escape($listUrl) . "' class='vs-checklist-form-button vs-checklist-form-button--secondary'>" . plugin_vehiclescheduler_escape($t('Cancel')) . '</a>';
         echo '</div>';
     }
 
@@ -112,29 +113,30 @@ function plugin_vehiclescheduler_render_checklist_items_panel(
     string $rootDoc,
     bool $canEdit
 ): void {
+    $t = static fn(string $message): string => __($message, 'vehiclescheduler');
     $formAction = plugin_vehiclescheduler_get_front_url('checklistitem.form.php');
     $types = PluginVehicleschedulerChecklistitem::getItemTypes();
 
     echo "<div class='vs-checklist-form-card vs-checklist-items-panel'>";
     echo "<div class='vs-checklist-items-panel__header'>";
-    echo '<h2>Itens do checklist</h2>';
-    echo '<p>Monte a sequencia de verificacoes obrigatorias para o template.</p>';
+    echo '<h2>' . plugin_vehiclescheduler_escape($t('Checklist items')) . '</h2>';
+    echo '<p>' . plugin_vehiclescheduler_escape($t('Build the required verification sequence for the template.')) . '</p>';
     echo '</div>';
     echo "<div class='vs-checklist-items'>";
 
     if ($canEdit) {
         echo "<div class='vs-checklist-items__editor'>";
-        echo "<h3 class='vs-checklist-items__title'>Adicionar item</h3>";
+        echo "<h3 class='vs-checklist-items__title'>" . plugin_vehiclescheduler_escape($t('Add item')) . '</h3>';
         echo "<form method='post' action='" . plugin_vehiclescheduler_escape($formAction) . "'>";
         echo Html::hidden('plugin_vehiclescheduler_checklists_id', ['value' => $checklistId]);
         echo Html::hidden('_glpi_csrf_token', ['value' => Session::getNewCSRFToken()]);
         echo "<div class='vs-checklist-items__grid'>";
         echo "<div class='vs-checklist-items__field'>";
-        echo "<label for='vs-checklist-item-description'>Descricao <span class='red'>*</span></label>";
-        echo "<input type='text' id='vs-checklist-item-description' name='description' placeholder='Ex: Veiculo esta limpo?' maxlength='255' required>";
+        echo "<label for='vs-checklist-item-description'>" . plugin_vehiclescheduler_escape($t('Description')) . " <span class='red'>*</span></label>";
+        echo "<input type='text' id='vs-checklist-item-description' name='description' placeholder='" . plugin_vehiclescheduler_escape($t('Example: Is the vehicle clean?')) . "' maxlength='255' required>";
         echo '</div>';
         echo "<div class='vs-checklist-items__field'>";
-        echo "<label for='vs-checklist-item-type'>Tipo</label>";
+        echo "<label for='vs-checklist-item-type'>" . plugin_vehiclescheduler_escape($t('Type')) . '</label>';
         echo "<select id='vs-checklist-item-type' name='item_type' class='vs-checklist-items__select'>";
 
         foreach ($types as $typeId => $typeLabel) {
@@ -144,7 +146,7 @@ function plugin_vehiclescheduler_render_checklist_items_panel(
         echo '</select>';
         echo '</div>';
         echo "<div class='vs-checklist-items__field'>";
-        echo "<button type='submit' name='add' class='vs-checklist-items__button vs-checklist-items__button--primary'>Adicionar</button>";
+        echo "<button type='submit' name='add' class='vs-checklist-items__button vs-checklist-items__button--primary'>" . plugin_vehiclescheduler_escape($t('Add')) . '</button>';
         echo '</div>';
         echo '</div>';
         echo '</form>';
@@ -154,7 +156,7 @@ function plugin_vehiclescheduler_render_checklist_items_panel(
     if (empty($items)) {
         echo "<div class='vs-checklist-items__empty'>";
         echo "<div class='vs-checklist-items__empty-icon'>+</div>";
-        echo "<div class='vs-checklist-items__empty-title'>Nenhum item adicionado</div>";
+        echo "<div class='vs-checklist-items__empty-title'>" . plugin_vehiclescheduler_escape($t('No item added.')) . '</div>';
         echo '</div>';
         echo '</div>';
         echo '</div>';
@@ -178,11 +180,11 @@ function plugin_vehiclescheduler_render_checklist_items_panel(
             echo Html::hidden('_glpi_csrf_token', ['value' => Session::getNewCSRFToken()]);
             echo "<div class='vs-checklist-items__grid vs-checklist-items__grid--editing'>";
             echo "<div class='vs-checklist-items__field'>";
-            echo "<label for='vs-checklist-item-edit-" . $itemId . "'>Descricao</label>";
+            echo "<label for='vs-checklist-item-edit-" . $itemId . "'>" . plugin_vehiclescheduler_escape($t('Description')) . '</label>';
             echo "<input type='text' id='vs-checklist-item-edit-" . $itemId . "' name='description' value='" . $description . "' maxlength='255' required>";
             echo '</div>';
             echo "<div class='vs-checklist-items__field'>";
-            echo "<label for='vs-checklist-item-type-edit-" . $itemId . "'>Tipo</label>";
+            echo "<label for='vs-checklist-item-type-edit-" . $itemId . "'>" . plugin_vehiclescheduler_escape($t('Type')) . '</label>';
             echo "<select id='vs-checklist-item-type-edit-" . $itemId . "' name='item_type' class='vs-checklist-items__select'>";
 
             foreach ($types as $typeId => $label) {
@@ -198,10 +200,10 @@ function plugin_vehiclescheduler_render_checklist_items_panel(
             echo '</select>';
             echo '</div>';
             echo "<div class='vs-checklist-items__field'>";
-            echo "<button type='submit' name='update' class='vs-checklist-items__button vs-checklist-items__button--primary'>Salvar</button>";
+            echo "<button type='submit' name='update' class='vs-checklist-items__button vs-checklist-items__button--primary'>" . plugin_vehiclescheduler_escape($t('Save')) . '</button>';
             echo '</div>';
             echo "<div class='vs-checklist-items__field'>";
-            echo "<a href='" . plugin_vehiclescheduler_escape(plugin_vehiclescheduler_get_front_url('checklist.form.php') . '?id=' . $checklistId) . "' class='vs-checklist-items__link vs-checklist-items__link--secondary'>Cancelar</a>";
+            echo "<a href='" . plugin_vehiclescheduler_escape(plugin_vehiclescheduler_get_front_url('checklist.form.php') . '?id=' . $checklistId) . "' class='vs-checklist-items__link vs-checklist-items__link--secondary'>" . plugin_vehiclescheduler_escape($t('Cancel')) . '</a>';
             echo '</div>';
             echo '</div>';
             echo '</form>';
@@ -218,8 +220,8 @@ function plugin_vehiclescheduler_render_checklist_items_panel(
 
         if ($canEdit) {
             echo "<div class='vs-checklist-items__actions'>";
-            echo "<a href='" . plugin_vehiclescheduler_escape($editUrl) . "' class='vs-checklist-items__link vs-checklist-items__link--edit'>Editar</a>";
-            echo "<a href='" . plugin_vehiclescheduler_escape($deleteUrl) . "' class='vs-checklist-items__link vs-checklist-items__link--danger' data-confirm-message='Excluir este item?'>Excluir</a>";
+            echo "<a href='" . plugin_vehiclescheduler_escape($editUrl) . "' class='vs-checklist-items__link vs-checklist-items__link--edit'>" . plugin_vehiclescheduler_escape($t('Edit')) . '</a>';
+            echo "<a href='" . plugin_vehiclescheduler_escape($deleteUrl) . "' class='vs-checklist-items__link vs-checklist-items__link--danger' data-confirm-message='" . plugin_vehiclescheduler_escape($t('Delete this item?')) . "'>" . plugin_vehiclescheduler_escape($t('Delete')) . '</a>';
             echo '</div>';
         }
 
@@ -235,7 +237,7 @@ function plugin_vehiclescheduler_render_yes_no_options(int $selected): string
 {
     $html = '';
 
-    foreach ([1 => 'Sim', 0 => 'Nao'] as $value => $label) {
+    foreach ([1 => __('Yes', 'vehiclescheduler'), 0 => __('No', 'vehiclescheduler')] as $value => $label) {
         $isSelected = $selected === $value ? ' selected' : '';
         $html .= "<option value='" . $value . "'" . $isSelected . '>'
             . plugin_vehiclescheduler_escape($label)

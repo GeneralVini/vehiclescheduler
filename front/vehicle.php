@@ -198,7 +198,11 @@ plugin_vehiclescheduler_render_back_to_management();
                 data-vehicle-filter-search>
         </div>
 
-        <div class="vs-vehicle-grid__results-text" data-vehicle-result-count>
+        <div
+            class="vs-vehicle-grid__results-text"
+            data-vehicle-result-count
+            data-showing-all="<?= vs_vehicle_list_escape($t('Showing %d vehicles')) ?>"
+            data-showing-filtered="<?= vs_vehicle_list_escape($t('Showing %d of %d vehicles')) ?>">
             <?= vs_vehicle_list_escape(sprintf($t('Showing %d vehicles'), (int) count($vehicles))) ?>
         </div>
 
@@ -213,7 +217,7 @@ plugin_vehiclescheduler_render_back_to_management();
             </label>
 
             <label class="vs-vehicle-grid__filter">
-                <span>CNH</span>
+                <span><?= vs_vehicle_list_escape($t('Required CNH')) ?></span>
                 <select data-vehicle-filter-cnh>
                     <option value="all"><?= vs_vehicle_list_escape($t('All')) ?></option>
                     <option value="A"><?= vs_vehicle_list_escape($t('A - Motorcycle')) ?></option>

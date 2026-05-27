@@ -8,6 +8,7 @@
         return;
     }
 
+    var root = document.querySelector('[data-vs-vehicle-form]');
     var alertBox = feedback ? feedback.ensureFormAlert(form, 'vs-form-feedback') : null;
     var nameField = form.querySelector('[name="name"]');
     var plateField = form.querySelector('[name="plate"]');
@@ -71,22 +72,34 @@
         }
 
         if (nameField && !nameField.value.trim()) {
-            message = 'Informe o nome do veiculo.';
+            message = root && root.dataset.vehicleNameRequired
+                ? root.dataset.vehicleNameRequired
+                : 'Vehicle name is required.';
             setError(nameField, message);
         } else if (plateField && normalizedPlate === '') {
-            message = 'Informe a placa do veiculo.';
+            message = root && root.dataset.vehiclePlateRequired
+                ? root.dataset.vehiclePlateRequired
+                : 'Plate is required.';
             setError(plateField, message);
         } else if (plateField && !isValidPlate(normalizedPlate)) {
-            message = 'Informe uma placa valida no padrao brasileiro.';
+            message = root && root.dataset.vehiclePlateInvalid
+                ? root.dataset.vehiclePlateInvalid
+                : 'Enter a valid Brazilian registration number.';
             setError(plateField, message);
         } else if (yearField && (yearValue < 1900 || yearValue > 2100 || yearValue > currentYear + 1)) {
-            message = 'Informe um ano valido para o veiculo.';
+            message = root && root.dataset.vehicleYearInvalid
+                ? root.dataset.vehicleYearInvalid
+                : 'Enter a valid year for the vehicle.';
             setError(yearField, message);
         } else if (seatsField && (seatsValue < 1 || seatsValue > 100)) {
-            message = 'A capacidade de passageiros deve ficar entre 1 e 100.';
+            message = root && root.dataset.vehicleSeatsInvalid
+                ? root.dataset.vehicleSeatsInvalid
+                : 'Passenger capacity must be between 1 and 100.';
             setError(seatsField, message);
         } else if (requiredCnhField && !requiredCnhField.value) {
-            message = 'Selecione a categoria de CNH exigida para a viatura.';
+            message = root && root.dataset.vehicleRequiredLicence
+                ? root.dataset.vehicleRequiredLicence
+                : 'Select the required licence category for the vehicle.';
             setError(requiredCnhField, message);
         }
 
