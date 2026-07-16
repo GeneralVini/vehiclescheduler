@@ -48,6 +48,7 @@ phpstan-baseline.neon
 *.tgz
 dist/
 build/
+codex-chat-backups/
 
 # Local GLPI/plugin runtime artifacts
 files/
